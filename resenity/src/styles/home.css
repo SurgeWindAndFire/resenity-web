@@ -157,7 +157,7 @@ h1 {
 
 .card-header {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 12px;
@@ -190,12 +190,27 @@ h1 {
   margin-top: 18px;
 }
 
-.how-grid {
+.how-head {
+  margin-bottom: 18px;
+}
+
+.how-body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
-  align-items: start;
-  margin-top: 18px;
+  align-items: stretch;
+}
+
+.how-example-card {
+  display: flex;
+  flex-direction: column;
+  height: 397px;
+  min-width: 0;
+}
+
+.how-example-card .flow {
+  flex: 1;     
+  min-height: 0;
 }
 
 .steps {
@@ -227,7 +242,6 @@ h1 {
 }
 
 .flow {
-  height: 220px;
   border-radius: 14px;
   border: 1px dashed rgba(255,255,255,0.12);
 }
