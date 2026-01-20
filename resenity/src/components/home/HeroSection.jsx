@@ -6,7 +6,7 @@ export default function HeroSection() {
       <div className="container hero-grid">
         <div className="hero-copy">
           <div className="pill" role="note">
-            League of Legends Platform 1st • New Competitive Games Coming Soon
+            A League of Legends Analytics Platform • New Competitive Games Coming Soon
           </div>
 
           <h1>The Full Insights to Everything in Competitive Gaming.</h1>
