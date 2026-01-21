@@ -48,7 +48,23 @@ export default function HowItWorksSection() {
             <header className="card-header">
               <h3>Example</h3>
             </header>
-            <div className="flow" role="img" aria-label="Flow diagram placeholder" />
+              <div className="flow" role="img" aria-label="Flow diagram">
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  height: '100%',
+                  opacity: 0.6
+                }}>
+              <div style={{fontSize: '14px', color: 'rgba(232,238,252,0.7)'}}>Players Input</div>
+              <div style={{fontSize: '24px'}}>↓</div>
+              <div style={{fontSize: '14px', color: 'rgba(125,211,252,0.9)'}}>Analysis</div>
+              <div style={{fontSize: '24px'}}>↓</div>
+              <div style={{fontSize: '14px', color: 'rgba(232,238,252,0.7)'}}>Prediction Output</div>
+          </div>
+          </div>
           </div>
         </div>
       </div>
