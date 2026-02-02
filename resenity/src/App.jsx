@@ -7,6 +7,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
 import CreateMatch from "./pages/CreateMatch";
+import History from "./pages/History";
+import ViewPrediction from "./pages/ViewPrediction";
 
 export default function App() {
   return (
@@ -29,6 +31,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <CreateMatch />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard/prediction/:id" 
+            element={
+              <ProtectedRoute>
+                <ViewPrediction />
               </ProtectedRoute>
             } 
           />
