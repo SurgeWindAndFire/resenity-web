@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import Navbar from "../components/layout/Navbar";
 import TeamBuilder from "../components/match/TeamBuilder";
 import PredictionResult from "../components/match/PredictionResult";
 import { calculatePrediction } from "../utils/prediction";
+import { savePrediction } from "../services/predictionService";
 import "../styles/match.css";
 
 const emptyPlayer = { name: "", rank: "Gold", winRate: 50 };
@@ -12,16 +14,19 @@ const createEmptyTeam = () => Array(5).fill(null).map(() => ({ ...emptyPlayer })
 
 export default function CreateMatch() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   
   const [team1, setTeam1] = useState(createEmptyTeam());
   const [team2, setTeam2] = useState(createEmptyTeam());
   const [prediction, setPrediction] = useState(null);
   const [isCalculating, setIsCalculating] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const handleCalculate = () => {
     setIsCalculating(true);
+    setSaved(false);
     
-    // Simulate a brief calculation delay for UX
     setTimeout(() => {
       const result = calculatePrediction(team1, team2);
       setPrediction(result);
@@ -29,10 +34,31 @@ export default function CreateMatch() {
     }, 800);
   };
 
+  const handleSave = async () => {
+    if (!prediction || !currentUser) return;
+    
+    setIsSaving(true);
+    
+    const result = await savePrediction(currentUser.uid, {
+      team1,
+      team2,
+      result: prediction
+    });
+    
+    setIsSaving(false);
+    
+    if (result.success) {
+      setSaved(true);
+    } else {
+      alert("Failed to save prediction. Please try again.");
+    }
+  };
+
   const handleReset = () => {
     setTeam1(createEmptyTeam());
     setTeam2(createEmptyTeam());
     setPrediction(null);
+    setSaved(false);
   };
 
   const isTeamValid = (team) => {
@@ -104,7 +130,31 @@ export default function CreateMatch() {
           </div>
 
           {prediction && (
-            <PredictionResult prediction={prediction} />
+            <>
+              <PredictionResult prediction={prediction} />
+              
+              <div className="save-section">
+                {saved ? (
+                  <div className="save-success">
+                    <span>✓ Prediction saved!</span>
+                    <button 
+                      className="btn btn-ghost"
+                      onClick={() => navigate("/dashboard/history")}
+                    >
+                      View History
+                    </button>
+                  </div>
+                ) : (
+                  <button 
+                    className="btn btn-primary"
+                    onClick={handleSave}
+                    disabled={isSaving}
+                  >
+                    {isSaving ? "Saving..." : "Save Prediction"}
+                  </button>
+                )}
+              </div>
+            </>
           )}
         </div>
       </main>
