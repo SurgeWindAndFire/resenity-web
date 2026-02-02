@@ -35,9 +35,9 @@ export default function Dashboard() {
                 <Link to="/dashboard/create-match" className="btn btn-primary">
                   Create New Match
                 </Link>
-                <button className="btn btn-ghost">
+                <Link to="/dashboard/history" className="btn btn-ghost">
                   View History
-                </button>
+                </Link>
                 <button className="btn btn-ghost" onClick={handleLogout}>
                   Sign Out
                 </button>
@@ -48,7 +48,10 @@ export default function Dashboard() {
               <header className="card-header">
                 <h3>Recent Predictions</h3>
               </header>
-              <p className="muted">No predictions yet. Create your first match!</p>
+              <p className="muted">
+                Your saved predictions will appear here.{" "}
+                <Link to="/dashboard/history">View all →</Link>
+              </p>
             </div>
           </div>
         </div>
