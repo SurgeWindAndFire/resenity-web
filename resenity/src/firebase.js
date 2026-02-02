@@ -1,5 +1,7 @@
+import { get } from "express/lib/response";
 import { initializeApp} from "firebase/app";
 import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyATYPFBE432scrEoS5OMaZ-FNPsiBiM-MA",
@@ -13,4 +15,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
+
+export const db = getFirestore(app);
+
 export default app;
