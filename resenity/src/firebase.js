@@ -1,20 +1,19 @@
-import { initializeApp} from "firebase/app";
+import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyATYPFBE432scrEoS5OMaZ-FNPsiBiM-MA",
-    authDomain: "resenity-28203.firebaseapp.com",
-    projectId: "resenity-28203",
-    storageBucket: "resenity-28203.firebasestorage.app",
-    messagingSenderId: "391489603054",
-    appId: "1:391489603054:web:964013d619018a5573faff"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
 
 export const auth = getAuth(app);
-
 export const db = getFirestore(app);
 
 export default app;
