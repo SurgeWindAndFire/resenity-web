@@ -39,10 +39,15 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
     setLookupError('');
 
     const result = await lookupSummoner(gameName, tagLine);
+    
+    console.log('Lookup result:', result); // DEBUG: Let's see what we get
 
     setIsLooking(false);
 
     if (result.success) {
+      console.log('Updating rank to:', normalizeRank(result.player.rank)); // DEBUG
+      console.log('Updating winRate to:', result.player.winRate); // DEBUG
+      
       onUpdate('rank', normalizeRank(result.player.rank));
       onUpdate('winRate', result.player.winRate);
       setLookupError('');
