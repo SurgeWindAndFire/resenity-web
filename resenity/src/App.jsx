@@ -9,6 +9,7 @@ import CreateMatch from "./pages/CreateMatch";
 import History from "./pages/History";
 import ViewPrediction from "./pages/ViewPrediction";
 import LiveGame from "./pages/LiveGame";
+import Demo from "./pages/Demo";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
       <AuthProvider>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/demo" element={<Demo />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route 
