@@ -5,7 +5,7 @@ import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
 import { checkLiveGame } from "../services/liveGameService";
 import { calculatePrediction } from "../utils/prediction";
-import { savePrediction } from "../services/predictionService";
+import { savePrediction } from "../services/predictionServices";
 import "../styles/live-game.css";
 
 export default function LiveGame() {
