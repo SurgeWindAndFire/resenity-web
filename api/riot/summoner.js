@@ -49,96 +49,110 @@ export default async function handler(req, res) {
     const puuid = accountData.puuid;
     console.log(`[1] Got PUUID: ${puuid.substring(0, 20)}...`);
 
-    // Step 2: Get Summoner data from PUUID
-    console.log(`[2] Looking up summoner data...`);
+    // Step 2: Get Summoner data using the OLD endpoint that returns the ID
+    console.log(`[2] Looking up summoner by PUUID...`);
     const summonerUrl = `https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`;
     
+    let summonerLevel = 0;
+    let profileIconId = 0;
+    let summonerId = null;
+
     const summonerResponse = await fetch(summonerUrl, {
       headers: { 'X-Riot-Token': apiKey }
     });
 
-    if (!summonerResponse.ok) {
-      console.log(`[2] Summoner API failed: ${summonerResponse.status}`);
-      return res.status(200).json({
-        success: true,
-        data: {
-          name: accountData.gameName,
-          tag: accountData.tagLine,
-          puuid: puuid,
-          summonerLevel: 0,
-          rank: 'Unranked',
-          winRate: 50,
-          wins: 0,
-          losses: 0,
-          note: 'Summoner data not found'
-        }
-      });
+    if (summonerResponse.ok) {
+      const summonerData = await summonerResponse.json();
+      console.log(`[2] Summoner response keys: ${Object.keys(summonerData).join(', ')}`);
+      
+      summonerLevel = summonerData.summonerLevel || 0;
+      profileIconId = summonerData.profileIconId || 0;
+      
+      // Try to find summoner ID in response
+      summonerId = summonerData.id || summonerData.summonerId || null;
     }
 
-    const summonerData = await summonerResponse.json();
-    
-    // Log the full summoner response to see the structure
-    console.log(`[2] Full summoner data: ${JSON.stringify(summonerData)}`);
-    
-    // The encrypted summoner ID - try multiple possible field names
-    const summonerId = summonerData.id || summonerData.summonerId || summonerData.encryptedSummonerId;
-    console.log(`[2] Got summoner ID: ${summonerId}, Level: ${summonerData.summonerLevel}`);
-
+    // Step 2b: If no summoner ID, try the legacy summoner endpoint by name
     if (!summonerId) {
-      console.log(`[2] ERROR: No summoner ID found in response!`);
-      return res.status(200).json({
-        success: true,
-        data: {
-          name: accountData.gameName,
-          tag: accountData.tagLine,
-          puuid: puuid,
-          summonerLevel: summonerData.summonerLevel || 0,
-          rank: 'Unranked',
-          winRate: 50,
-          wins: 0,
-          losses: 0,
-          note: 'Could not get summoner ID for ranked lookup'
-        }
+      console.log(`[2b] Trying legacy summoner lookup by name...`);
+      const legacyUrl = `https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(name)}`;
+      
+      const legacyResponse = await fetch(legacyUrl, {
+        headers: { 'X-Riot-Token': apiKey }
       });
+
+      if (legacyResponse.ok) {
+        const legacyData = await legacyResponse.json();
+        console.log(`[2b] Legacy response keys: ${Object.keys(legacyData).join(', ')}`);
+        summonerId = legacyData.id || legacyData.summonerId || null;
+        
+        if (!summonerLevel && legacyData.summonerLevel) {
+          summonerLevel = legacyData.summonerLevel;
+        }
+      } else {
+        console.log(`[2b] Legacy lookup failed: ${legacyResponse.status}`);
+      }
     }
 
-    // Step 3: Get Ranked data
-    console.log(`[3] Looking up ranked data...`);
-    const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`;
-    
-    console.log(`[3] Ranked URL: ${rankedUrl}`);
-    
-    const rankedResponse = await fetch(rankedUrl, {
-      headers: { 'X-Riot-Token': apiKey }
-    });
-
-    console.log(`[3] Ranked API status: ${rankedResponse.status}`);
-
+    // Step 2c: If still no ID, try to get ranked data directly by PUUID (newer endpoint)
     let rank = 'Unranked';
     let tier = '';
     let winRate = 50;
     let wins = 0;
     let losses = 0;
 
-    if (rankedResponse.ok) {
-      const rankedData = await rankedResponse.json();
-      console.log(`[3] Ranked data: ${JSON.stringify(rankedData)}`);
+    if (summonerId) {
+      // Step 3: Get Ranked data by summoner ID
+      console.log(`[3] Looking up ranked data by summoner ID: ${summonerId}`);
+      const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`;
       
-      const soloQueue = rankedData.find(q => q.queueType === 'RANKED_SOLO_5x5');
+      const rankedResponse = await fetch(rankedUrl, {
+        headers: { 'X-Riot-Token': apiKey }
+      });
 
-      if (soloQueue) {
-        tier = soloQueue.tier.charAt(0) + soloQueue.tier.slice(1).toLowerCase();
-        rank = tier;
-        wins = soloQueue.wins;
-        losses = soloQueue.losses;
-        winRate = Math.round((wins / (wins + losses)) * 100);
-        console.log(`[3] Found Solo/Duo: ${rank}, ${wins}W ${losses}L, ${winRate}%`);
-      } else {
-        console.log(`[3] No Solo/Duo queue data found in response`);
+      console.log(`[3] Ranked API status: ${rankedResponse.status}`);
+
+      if (rankedResponse.ok) {
+        const rankedData = await rankedResponse.json();
+        console.log(`[3] Ranked entries found: ${rankedData.length}`);
+        
+        const soloQueue = rankedData.find(q => q.queueType === 'RANKED_SOLO_5x5');
+
+        if (soloQueue) {
+          tier = soloQueue.tier.charAt(0) + soloQueue.tier.slice(1).toLowerCase();
+          rank = tier;
+          wins = soloQueue.wins;
+          losses = soloQueue.losses;
+          winRate = Math.round((wins / (wins + losses)) * 100);
+          console.log(`[3] Found Solo/Duo: ${rank}, ${wins}W ${losses}L, ${winRate}%`);
+        }
       }
     } else {
-      const errorText = await rankedResponse.text();
-      console.log(`[3] Ranked API failed: ${rankedResponse.status} - ${errorText}`);
+      // Try the newer League V4 by PUUID endpoint (if it exists)
+      console.log(`[3] No summoner ID, trying ranked by PUUID...`);
+      const rankedByPuuidUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`;
+      
+      const rankedResponse = await fetch(rankedByPuuidUrl, {
+        headers: { 'X-Riot-Token': apiKey }
+      });
+
+      console.log(`[3] Ranked by PUUID status: ${rankedResponse.status}`);
+
+      if (rankedResponse.ok) {
+        const rankedData = await rankedResponse.json();
+        console.log(`[3] Ranked entries found: ${rankedData.length}`);
+        
+        const soloQueue = rankedData.find(q => q.queueType === 'RANKED_SOLO_5x5');
+
+        if (soloQueue) {
+          tier = soloQueue.tier.charAt(0) + soloQueue.tier.slice(1).toLowerCase();
+          rank = tier;
+          wins = soloQueue.wins;
+          losses = soloQueue.losses;
+          winRate = Math.round((wins / (wins + losses)) * 100);
+          console.log(`[3] Found Solo/Duo: ${rank}, ${wins}W ${losses}L, ${winRate}%`);
+        }
+      }
     }
 
     return res.status(200).json({
@@ -147,8 +161,8 @@ export default async function handler(req, res) {
         name: accountData.gameName,
         tag: accountData.tagLine,
         puuid: puuid,
-        summonerLevel: summonerData.summonerLevel,
-        profileIconId: summonerData.profileIconId,
+        summonerLevel: summonerLevel,
+        profileIconId: profileIconId,
         rank: rank,
         tier: tier,
         wins: wins,
