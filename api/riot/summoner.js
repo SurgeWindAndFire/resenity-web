@@ -23,7 +23,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API key not configured' });
   }
 
-  // Platform for NA server
   const platform = 'na1';
 
   try {
@@ -77,11 +76,35 @@ export default async function handler(req, res) {
     }
 
     const summonerData = await summonerResponse.json();
-    console.log(`[2] Got summoner ID: ${summonerData.id}, Level: ${summonerData.summonerLevel}`);
+    
+    // Log the full summoner response to see the structure
+    console.log(`[2] Full summoner data: ${JSON.stringify(summonerData)}`);
+    
+    // The encrypted summoner ID - try multiple possible field names
+    const summonerId = summonerData.id || summonerData.summonerId || summonerData.encryptedSummonerId;
+    console.log(`[2] Got summoner ID: ${summonerId}, Level: ${summonerData.summonerLevel}`);
+
+    if (!summonerId) {
+      console.log(`[2] ERROR: No summoner ID found in response!`);
+      return res.status(200).json({
+        success: true,
+        data: {
+          name: accountData.gameName,
+          tag: accountData.tagLine,
+          puuid: puuid,
+          summonerLevel: summonerData.summonerLevel || 0,
+          rank: 'Unranked',
+          winRate: 50,
+          wins: 0,
+          losses: 0,
+          note: 'Could not get summoner ID for ranked lookup'
+        }
+      });
+    }
 
     // Step 3: Get Ranked data
     console.log(`[3] Looking up ranked data...`);
-    const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`;
+    const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`;
     
     console.log(`[3] Ranked URL: ${rankedUrl}`);
     
@@ -99,7 +122,7 @@ export default async function handler(req, res) {
 
     if (rankedResponse.ok) {
       const rankedData = await rankedResponse.json();
-      console.log(`[3] Ranked data:`, JSON.stringify(rankedData));
+      console.log(`[3] Ranked data: ${JSON.stringify(rankedData)}`);
       
       const soloQueue = rankedData.find(q => q.queueType === 'RANKED_SOLO_5x5');
 
@@ -111,14 +134,13 @@ export default async function handler(req, res) {
         winRate = Math.round((wins / (wins + losses)) * 100);
         console.log(`[3] Found Solo/Duo: ${rank}, ${wins}W ${losses}L, ${winRate}%`);
       } else {
-        console.log(`[3] No Solo/Duo queue data found`);
+        console.log(`[3] No Solo/Duo queue data found in response`);
       }
     } else {
       const errorText = await rankedResponse.text();
       console.log(`[3] Ranked API failed: ${rankedResponse.status} - ${errorText}`);
     }
 
-    // Return the data
     return res.status(200).json({
       success: true,
       data: {
