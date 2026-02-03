@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { lookupSummoner, normalizeRank } from '../../services/riotService';
+
 const RANKS = [
   "Iron",
   "Bronze", 
@@ -12,6 +15,42 @@ const RANKS = [
 ];
 
 export default function PlayerInput({ player, index, onUpdate, teamColor }) {
+  const [isLooking, setIsLooking] = useState(false);
+  const [lookupError, setLookupError] = useState('');
+
+  const handleLookup = async () => {
+    const name = player.name.trim();
+    
+    if (!name) {
+      setLookupError('Enter a Riot ID first (e.g., Name#TAG)');
+      return;
+    }
+
+    // Parse Riot ID (Name#TAG format)
+    const parts = name.split('#');
+    if (parts.length !== 2) {
+      setLookupError('Use format: Name#TAG');
+      return;
+    }
+
+    const [gameName, tagLine] = parts;
+    
+    setIsLooking(true);
+    setLookupError('');
+
+    const result = await lookupSummoner(gameName, tagLine);
+
+    setIsLooking(false);
+
+    if (result.success) {
+      onUpdate('rank', normalizeRank(result.player.rank));
+      onUpdate('winRate', result.player.winRate);
+      setLookupError('');
+    } else {
+      setLookupError(result.error || 'Player not found');
+    }
+  };
+
   return (
     <div className={`player-input player-${teamColor}`}>
       <div className="player-number">
@@ -19,15 +58,27 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       </div>
       
       <div className="player-fields">
-        <div className="field">
-          <label htmlFor={`name-${teamColor}-${index}`}>Player Name</label>
-          <input
-            type="text"
-            id={`name-${teamColor}-${index}`}
-            value={player.name}
-            onChange={(e) => onUpdate("name", e.target.value)}
-            placeholder="Enter Summoner name"
-          />
+        <div className="field field-name">
+          <label htmlFor={`name-${teamColor}-${index}`}>Riot ID</label>
+          <div className="input-with-button">
+            <input
+              type="text"
+              id={`name-${teamColor}-${index}`}
+              value={player.name}
+              onChange={(e) => onUpdate("name", e.target.value)}
+              placeholder="Name#TAG"
+            />
+            <button 
+              type="button"
+              className="btn btn-lookup"
+              onClick={handleLookup}
+              disabled={isLooking}
+              title="Lookup player stats"
+            >
+              {isLooking ? '...' : '🔍'}
+            </button>
+          </div>
+          {lookupError && <span className="lookup-error">{lookupError}</span>}
         </div>
         
         <div className="field field-small">
