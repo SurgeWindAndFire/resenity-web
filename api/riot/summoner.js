@@ -26,7 +26,6 @@ export default async function handler(req, res) {
   const platform = 'na1';
 
   try {
-    // Step 1: Get PUUID from Riot ID (name#tag)
     console.log(`[1] Looking up account: ${name}#${tag}`);
     const accountUrl = `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(name)}/${encodeURIComponent(tag)}`;
     
@@ -49,7 +48,6 @@ export default async function handler(req, res) {
     const puuid = accountData.puuid;
     console.log(`[1] Got PUUID: ${puuid.substring(0, 20)}...`);
 
-    // Step 2: Get Summoner data using the OLD endpoint that returns the ID
     console.log(`[2] Looking up summoner by PUUID...`);
     const summonerUrl = `https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`;
     
@@ -67,12 +65,10 @@ export default async function handler(req, res) {
       
       summonerLevel = summonerData.summonerLevel || 0;
       profileIconId = summonerData.profileIconId || 0;
-      
-      // Try to find summoner ID in response
+
       summonerId = summonerData.id || summonerData.summonerId || null;
     }
 
-    // Step 2b: If no summoner ID, try the legacy summoner endpoint by name
     if (!summonerId) {
       console.log(`[2b] Trying legacy summoner lookup by name...`);
       const legacyUrl = `https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-name/${encodeURIComponent(name)}`;
@@ -94,7 +90,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // Step 2c: If still no ID, try to get ranked data directly by PUUID (newer endpoint)
     let rank = 'Unranked';
     let tier = '';
     let winRate = 50;
@@ -102,7 +97,6 @@ export default async function handler(req, res) {
     let losses = 0;
 
     if (summonerId) {
-      // Step 3: Get Ranked data by summoner ID
       console.log(`[3] Looking up ranked data by summoner ID: ${summonerId}`);
       const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerId}`;
       
@@ -128,7 +122,6 @@ export default async function handler(req, res) {
         }
       }
     } else {
-      // Try the newer League V4 by PUUID endpoint (if it exists)
       console.log(`[3] No summoner ID, trying ranked by PUUID...`);
       const rankedByPuuidUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-puuid/${puuid}`;
       

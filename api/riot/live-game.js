@@ -26,7 +26,6 @@ export default async function handler(req, res) {
   const platform = 'na1';
 
   try {
-    // Step 1: Get PUUID from Riot ID
     console.log(`[1] Looking up account: ${name}#${tag}`);
     const accountUrl = `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(name)}/${encodeURIComponent(tag)}`;
     
@@ -45,7 +44,6 @@ export default async function handler(req, res) {
     const puuid = accountData.puuid;
     console.log(`[1] Got PUUID: ${puuid.substring(0, 20)}...`);
 
-    // Step 2: Check if player is in an active game
     console.log(`[2] Checking for active game...`);
     const spectatorUrl = `https://${platform}.api.riotgames.com/lol/spectator/v5/active-games/by-summoner/${puuid}`;
     
@@ -68,7 +66,6 @@ export default async function handler(req, res) {
     const gameData = await spectatorResponse.json();
     console.log(`[2] Found active game! Mode: ${gameData.gameMode}`);
 
-    // Step 3: Get all players' data
     const participants = gameData.participants || [];
     console.log(`[3] Found ${participants.length} participants`);
 
@@ -78,10 +75,9 @@ export default async function handler(req, res) {
     for (const participant of participants) {
       const playerPuuid = participant.puuid;
       const playerName = participant.riotId || `${participant.summonerName || 'Unknown'}`;
-      const teamId = participant.teamId; // 100 = blue, 200 = red
+      const teamId = participant.teamId;
       const championId = participant.championId;
 
-      // Get ranked data for this player
       let rank = 'Unranked';
       let winRate = 50;
       let wins = 0;

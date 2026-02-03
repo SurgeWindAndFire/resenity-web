@@ -1,19 +1,25 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
 import { checkLiveGame } from "../services/liveGameService";
 import { calculatePrediction } from "../utils/prediction";
+import { savePrediction } from "../services/predictionService";
 import "../styles/live-game.css";
 
 export default function LiveGame() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   
   const [riotId, setRiotId] = useState("");
   const [isChecking, setIsChecking] = useState(false);
   const [error, setError] = useState("");
   const [gameData, setGameData] = useState(null);
   const [prediction, setPrediction] = useState(null);
+  const [teams, setTeams] = useState({ team1: [], team2: [] });
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
   const handleCheck = async () => {
     const trimmed = riotId.trim();
@@ -35,6 +41,7 @@ export default function LiveGame() {
     setError("");
     setGameData(null);
     setPrediction(null);
+    setSaved(false);
 
     const result = await checkLiveGame(gameName, tagLine);
     
@@ -55,13 +62,13 @@ export default function LiveGame() {
     // Calculate prediction from the live game data
     const team1 = result.blueTeam.map(p => ({
       name: p.name,
-      rank: p.rank,
+      rank: normalizeRank(p.rank),
       winRate: p.winRate
     }));
 
     const team2 = result.redTeam.map(p => ({
       name: p.name,
-      rank: p.rank,
+      rank: normalizeRank(p.rank),
       winRate: p.winRate
     }));
 
@@ -73,14 +80,38 @@ export default function LiveGame() {
       team2.push({ name: "Unknown", rank: "Gold", winRate: 50 });
     }
 
+    setTeams({ team1, team2 });
+
     const pred = calculatePrediction(team1, team2);
     setPrediction(pred);
   };
 
+  const handleSave = async () => {
+    if (!prediction || !currentUser) return;
+    
+    setIsSaving(true);
+    
+    const result = await savePrediction(currentUser.uid, {
+      team1: teams.team1,
+      team2: teams.team2,
+      result: prediction
+    });
+    
+    setIsSaving(false);
+    
+    if (result.success) {
+      setSaved(true);
+    } else {
+      alert("Failed to save prediction. Please try again.");
+    }
+  };
+
   const normalizeRank = (rank) => {
+    if (!rank) return "Gold";
     const validRanks = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Emerald", "Diamond", "Master", "Grandmaster", "Challenger"];
-    if (validRanks.includes(rank)) return rank;
-    return "Unranked";
+    const normalized = rank.charAt(0).toUpperCase() + rank.slice(1).toLowerCase();
+    if (validRanks.includes(normalized)) return normalized;
+    return "Gold";
   };
 
   return (
@@ -165,7 +196,31 @@ export default function LiveGame() {
               </div>
 
               {prediction && (
-                <PredictionResult prediction={prediction} />
+                <>
+                  <PredictionResult prediction={prediction} />
+                  
+                  <div className="save-section">
+                    {saved ? (
+                      <div className="save-success">
+                        <span>✓ Prediction saved!</span>
+                        <button 
+                          className="btn btn-ghost"
+                          onClick={() => navigate("/dashboard/history")}
+                        >
+                          View History
+                        </button>
+                      </div>
+                    ) : (
+                      <button 
+                        className="btn btn-primary"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                      >
+                        {isSaving ? "Saving..." : "Save Prediction"}
+                      </button>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           )}

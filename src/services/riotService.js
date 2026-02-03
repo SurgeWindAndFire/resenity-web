@@ -32,11 +32,9 @@ export async function lookupSummoner(gameName, tagLine, region = 'americas') {
   }
 }
 
-// Convert Riot rank to our rank format
 export function normalizeRank(riotRank) {
   if (!riotRank) return 'Gold';
   
-  // Capitalize first letter, lowercase rest
   const normalized = riotRank.charAt(0).toUpperCase() + riotRank.slice(1).toLowerCase();
   
   const validRanks = [
@@ -53,9 +51,7 @@ export function normalizeRank(riotRank) {
     'Unranked'
   ];
   
-  // Check if it's a valid rank
   if (validRanks.includes(normalized)) {
-    // Map Unranked to Gold as default
     if (normalized === 'Unranked') return 'Gold';
     return normalized;
   }

@@ -1,11 +1,9 @@
-/* History Page */
 .history-page,
 .view-prediction-page {
   padding: 40px 0;
   min-height: calc(100vh - 70px);
 }
 
-/* States */
 .loading-state,
 .error-state,
 .empty-state {
@@ -24,14 +22,12 @@
   margin-top: 20px;
 }
 
-/* Predictions List */
 .predictions-list {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* Prediction Card */
 .prediction-card {
   background: rgba(255, 255, 255, 0.02);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -56,7 +52,6 @@
   color: rgba(232, 238, 252, 0.5);
 }
 
-/* Teams Summary */
 .teams-summary {
   display: flex;
   align-items: center;
@@ -103,7 +98,6 @@
   color: rgba(232, 238, 252, 0.7);
 }
 
-/* Card Actions */
 .prediction-card-actions {
   display: flex;
   gap: 8px;
@@ -125,7 +119,6 @@
   background: rgba(239, 68, 68, 0.1);
 }
 
-/* Teams Detail (View Page) */
 .teams-detail {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -180,14 +173,12 @@
   color: rgba(232, 238, 252, 0.5);
 }
 
-/* Prediction Actions */
 .prediction-actions {
   margin-top: 32px;
   display: flex;
   justify-content: center;
 }
 
-/* Save Section */
 .save-section {
   margin-top: 24px;
   text-align: center;
@@ -205,7 +196,6 @@
   color: #4ade80;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .teams-detail {
     grid-template-columns: 1fr;

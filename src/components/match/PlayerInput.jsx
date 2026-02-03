@@ -50,7 +50,6 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       console.log('Setting rank to:', newRank);
       console.log('Setting winRate to:', newWinRate);
       
-      // Update rank first, then winRate with a small delay to ensure React processes both
       onUpdate('rank', newRank);
       setTimeout(() => {
         onUpdate('winRate', newWinRate);

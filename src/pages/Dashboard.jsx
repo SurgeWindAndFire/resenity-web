@@ -33,13 +33,13 @@ export default function Dashboard() {
               </header>
               <div className="dashboard-actions">
                 <Link to="/dashboard/live-game" className="btn btn-primary">
-                  🎮 Live Game Lookup
+                  Live Game Lookup
                 </Link>
                 <Link to="/dashboard/create-match" className="btn btn-ghost">
-                  ✏️ Manual Match Entry
+                  Manual Match Entry
                 </Link>
                 <Link to="/dashboard/history" className="btn btn-ghost">
-                  📜 View History
+                  View History
                 </Link>
                 <button className="btn btn-ghost" onClick={handleLogout}>
                   Sign Out
