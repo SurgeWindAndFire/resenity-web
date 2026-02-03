@@ -23,41 +23,12 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'API key not configured' });
   }
 
-  // Map regional routing for account API
-  // americas = NA, BR, LAN, LAS, OCE
-  // europe = EUW, EUNE, TR, RU
-  // asia = KR, JP
-  // sea = PH, SG, TH, TW, VN
-  
-  // Map platform for game data API
-  const platformMap = {
-    'NA1': 'na1',
-    'EUW1': 'euw1', 
-    'EUN1': 'eun1',
-    'KR': 'kr',
-    'JP1': 'jp1',
-    'BR1': 'br1',
-    'LA1': 'la1',
-    'LA2': 'la2',
-    'OC1': 'oc1',
-    'TR1': 'tr1',
-    'RU': 'ru'
-  };
-
-  // Guess platform from tag (common patterns)
-  let platform = 'na1'; // default
-  const tagUpper = tag.toUpperCase();
-  
-  if (tagUpper.includes('NA') || tagUpper === 'NA1') platform = 'na1';
-  else if (tagUpper.includes('EUW')) platform = 'euw1';
-  else if (tagUpper.includes('EUNE') || tagUpper.includes('EUN')) platform = 'eun1';
-  else if (tagUpper.includes('KR') || tagUpper === 'KR1') platform = 'kr';
-  else if (tagUpper.includes('JP')) platform = 'jp1';
-  else if (tagUpper.includes('BR')) platform = 'br1';
-  else if (tagUpper.includes('OCE') || tagUpper.includes('OC')) platform = 'oc1';
+  // Platform for NA server
+  const platform = 'na1';
 
   try {
     // Step 1: Get PUUID from Riot ID (name#tag)
+    console.log(`[1] Looking up account: ${name}#${tag}`);
     const accountUrl = `https://${region}.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(name)}/${encodeURIComponent(tag)}`;
     
     const accountResponse = await fetch(accountUrl, {
@@ -65,19 +36,22 @@ export default async function handler(req, res) {
     });
 
     if (!accountResponse.ok) {
+      console.log(`[1] Account API failed: ${accountResponse.status}`);
       if (accountResponse.status === 404) {
         return res.status(404).json({ error: 'Summoner not found' });
       }
       if (accountResponse.status === 403) {
-        return res.status(403).json({ error: 'API key expired or invalid. Please refresh.' });
+        return res.status(403).json({ error: 'API key expired or invalid' });
       }
       throw new Error(`Account API error: ${accountResponse.status}`);
     }
 
     const accountData = await accountResponse.json();
     const puuid = accountData.puuid;
+    console.log(`[1] Got PUUID: ${puuid.substring(0, 20)}...`);
 
     // Step 2: Get Summoner data from PUUID
+    console.log(`[2] Looking up summoner data...`);
     const summonerUrl = `https://${platform}.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/${puuid}`;
     
     const summonerResponse = await fetch(summonerUrl, {
@@ -85,60 +59,63 @@ export default async function handler(req, res) {
     });
 
     if (!summonerResponse.ok) {
-      // If summoner not found on this platform, return basic data
-      if (summonerResponse.status === 404) {
-        return res.status(200).json({
-          success: true,
-          data: {
-            name: accountData.gameName,
-            tag: accountData.tagLine,
-            puuid: puuid,
-            summonerLevel: 0,
-            profileIconId: 0,
-            rank: 'Unranked',
-            tier: '',
-            wins: 0,
-            losses: 0,
-            winRate: 50,
-            note: 'Summoner found but no LoL data on this region'
-          }
-        });
-      }
-      throw new Error(`Summoner API error: ${summonerResponse.status}`);
+      console.log(`[2] Summoner API failed: ${summonerResponse.status}`);
+      return res.status(200).json({
+        success: true,
+        data: {
+          name: accountData.gameName,
+          tag: accountData.tagLine,
+          puuid: puuid,
+          summonerLevel: 0,
+          rank: 'Unranked',
+          winRate: 50,
+          wins: 0,
+          losses: 0,
+          note: 'Summoner data not found'
+        }
+      });
     }
 
     const summonerData = await summonerResponse.json();
+    console.log(`[2] Got summoner ID: ${summonerData.id}, Level: ${summonerData.summonerLevel}`);
 
-    // Step 3: Get Ranked data (this can fail, so we handle it gracefully)
+    // Step 3: Get Ranked data
+    console.log(`[3] Looking up ranked data...`);
+    const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`;
+    
+    console.log(`[3] Ranked URL: ${rankedUrl}`);
+    
+    const rankedResponse = await fetch(rankedUrl, {
+      headers: { 'X-Riot-Token': apiKey }
+    });
+
+    console.log(`[3] Ranked API status: ${rankedResponse.status}`);
+
     let rank = 'Unranked';
     let tier = '';
     let winRate = 50;
     let wins = 0;
     let losses = 0;
 
-    try {
-      const rankedUrl = `https://${platform}.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerData.id}`;
+    if (rankedResponse.ok) {
+      const rankedData = await rankedResponse.json();
+      console.log(`[3] Ranked data:`, JSON.stringify(rankedData));
       
-      const rankedResponse = await fetch(rankedUrl, {
-        headers: { 'X-Riot-Token': apiKey }
-      });
+      const soloQueue = rankedData.find(q => q.queueType === 'RANKED_SOLO_5x5');
 
-      if (rankedResponse.ok) {
-        const rankedData = await rankedResponse.json();
-        const soloQueue = rankedData.find(q => q.queueType === 'RANKED_SOLO_5x5');
-
-        if (soloQueue) {
-          tier = soloQueue.tier.charAt(0) + soloQueue.tier.slice(1).toLowerCase();
-          rank = tier;
-          wins = soloQueue.wins;
-          losses = soloQueue.losses;
-          winRate = Math.round((wins / (wins + losses)) * 100);
-        }
+      if (soloQueue) {
+        tier = soloQueue.tier.charAt(0) + soloQueue.tier.slice(1).toLowerCase();
+        rank = tier;
+        wins = soloQueue.wins;
+        losses = soloQueue.losses;
+        winRate = Math.round((wins / (wins + losses)) * 100);
+        console.log(`[3] Found Solo/Duo: ${rank}, ${wins}W ${losses}L, ${winRate}%`);
+      } else {
+        console.log(`[3] No Solo/Duo queue data found`);
       }
-      // If ranked API fails, we just use defaults (Unranked, 50% WR)
-    } catch (rankedError) {
-      console.log('Ranked data not available:', rankedError.message);
-      // Continue with defaults
+    } else {
+      const errorText = await rankedResponse.text();
+      console.log(`[3] Ranked API failed: ${rankedResponse.status} - ${errorText}`);
     }
 
     // Return the data
