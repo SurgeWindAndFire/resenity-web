@@ -32,11 +32,14 @@ export default function Dashboard() {
                 <h3>Quick Actions</h3>
               </header>
               <div className="dashboard-actions">
-                <Link to="/dashboard/create-match" className="btn btn-primary">
-                  Create New Match
+                <Link to="/dashboard/live-game" className="btn btn-primary">
+                  🎮 Live Game Lookup
+                </Link>
+                <Link to="/dashboard/create-match" className="btn btn-ghost">
+                  ✏️ Manual Match Entry
                 </Link>
                 <Link to="/dashboard/history" className="btn btn-ghost">
-                  View History
+                  📜 View History
                 </Link>
                 <button className="btn btn-ghost" onClick={handleLogout}>
                   Sign Out

@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import CreateMatch from "./pages/CreateMatch";
 import History from "./pages/History";
 import ViewPrediction from "./pages/ViewPrediction";
+import LiveGame from "./pages/LiveGame";
 
 export default function App() {
   return (
@@ -46,6 +47,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <ViewPrediction />
+              </ProtectedRoute>
+            } 
+          />
+          <Route 
+            path="/dashboard/live-game" 
+            element={
+              <ProtectedRoute>
+                <LiveGame />
               </ProtectedRoute>
             } 
           />
