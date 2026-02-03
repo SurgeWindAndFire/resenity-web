@@ -26,7 +26,6 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       return;
     }
 
-    // Parse Riot ID (Name#TAG format)
     const parts = name.split('#');
     if (parts.length !== 2) {
       setLookupError('Use format: Name#TAG');
@@ -40,16 +39,23 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
 
     const result = await lookupSummoner(gameName, tagLine);
     
-    console.log('Lookup result:', result); // DEBUG: Let's see what we get
+    console.log('Lookup result:', result);
 
     setIsLooking(false);
 
     if (result.success) {
-      console.log('Updating rank to:', normalizeRank(result.player.rank)); // DEBUG
-      console.log('Updating winRate to:', result.player.winRate); // DEBUG
+      const newRank = normalizeRank(result.player.rank);
+      const newWinRate = result.player.winRate;
       
-      onUpdate('rank', normalizeRank(result.player.rank));
-      onUpdate('winRate', result.player.winRate);
+      console.log('Setting rank to:', newRank);
+      console.log('Setting winRate to:', newWinRate);
+      
+      // Update rank first, then winRate with a small delay to ensure React processes both
+      onUpdate('rank', newRank);
+      setTimeout(() => {
+        onUpdate('winRate', newWinRate);
+      }, 10);
+      
       setLookupError('');
     } else {
       setLookupError(result.error || 'Player not found');

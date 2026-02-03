@@ -2,9 +2,11 @@ import PlayerInput from "./PlayerInput";
 
 export default function TeamBuilder({ team, setTeam, teamName, teamColor }) {
   const updatePlayer = (index, field, value) => {
-    const newTeam = [...team];
-    newTeam[index] = { ...newTeam[index], [field]: value };
-    setTeam(newTeam);
+    setTeam(prevTeam => {
+      const newTeam = [...prevTeam];
+      newTeam[index] = { ...newTeam[index], [field]: value };
+      return newTeam;
+    });
   };
 
   return (
