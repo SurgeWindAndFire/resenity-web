@@ -5,19 +5,20 @@ export default function Navbar() {
   const { currentUser } = useAuth();
 
   return (
-    <nav className="navbar">
-      <div className="container navbar-container">
-        <Link to="/" className="navbar-brand">
+    <nav className="nav">
+      <div className="container nav-inner">
+        <Link to="/" className="brand">
+          <span className="brand-mark"></span>
           Resenity
         </Link>
         
-        <div className="navbar-links">
+        <div className="nav-links">
           <a href="/#features">Features</a>
           <a href="/#how-it-works">How It Works</a>
           <Link to="/demo">Demo</Link>
         </div>
         
-        <div className="navbar-actions">
+        <div className="nav-actions">
           {currentUser ? (
             <Link to="/dashboard" className="btn btn-primary">
               Dashboard
