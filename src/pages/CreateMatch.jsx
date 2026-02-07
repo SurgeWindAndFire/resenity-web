@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import Navbar from "../components/layout/Navbar";
 import TeamBuilder from "../components/match/TeamBuilder";
 import PredictionResult from "../components/match/PredictionResult";
@@ -15,6 +16,7 @@ const createEmptyTeam = () => Array(5).fill(null).map(() => ({ ...emptyPlayer })
 export default function CreateMatch() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { success, error: showError } = useToast();
   
   const [team1, setTeam1] = useState(createEmptyTeam());
   const [team2, setTeam2] = useState(createEmptyTeam());
@@ -49,8 +51,9 @@ export default function CreateMatch() {
     
     if (result.success) {
       setSaved(true);
+      success("Prediction saved successfully!");
     } else {
-      alert("Failed to save prediction. Please try again.");
+      showError("Failed to save prediction");
     }
   };
 

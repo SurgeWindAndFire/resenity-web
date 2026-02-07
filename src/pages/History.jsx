@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Navbar from "../components/layout/Navbar";
+import { useToast } from "../contexts/ToastContext";
 import { getUserPredictions, deletePrediction } from "../services/predictionServices";
 import { SkeletonCard } from "../components/ui/Skeleton";
 import "../styles/history.css";
 
 export default function History() {
   const { currentUser } = useAuth();
+  const { success, error: showError } = useToast();
   const [predictions, setPredictions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,8 +41,9 @@ export default function History() {
     
     if (result.success) {
       setPredictions(predictions.filter(p => p.id !== predictionId));
+      success("Prediction deleted");
     } else {
-      alert("Failed to delete prediction");
+      showError("Failed to delete prediction");
     }
   };
 

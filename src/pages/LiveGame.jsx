@@ -1,141 +1,251 @@
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { useToast } from "../contexts/ToastContext";
 import Navbar from "../components/layout/Navbar";
-import { getUserPredictions, deletePrediction } from "../services/predictionServices";
-import { SkeletonCard } from "../components/ui/Skeleton";
-import "../styles/history.css";
+import PredictionResult from "../components/match/PredictionResult";
+import { checkLiveGame } from "../services/liveGameService";
+import { calculatePrediction } from "../utils/prediction";
+import { savePrediction } from "../services/predictionServices";
+import Spinner from "../components/ui/Spinner";
+import "../styles/live-game.css";
 
-export default function History() {
+export default function LiveGame() {
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const [predictions, setPredictions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { success, error: showError } = useToast();
+  
+  const [riotId, setRiotId] = useState("");
+  const [isChecking, setIsChecking] = useState(false);
+  const [error, setError] = useState("");
+  const [gameData, setGameData] = useState(null);
+  const [prediction, setPrediction] = useState(null);
+  const [teams, setTeams] = useState({ team1: [], team2: [] });
+  const [isSaving, setIsSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    async function fetchPredictions() {
-      if (!currentUser) return;
-      
-      setLoading(true);
-      const result = await getUserPredictions(currentUser.uid);
-      
-      if (result.success) {
-        setPredictions(result.predictions);
-      } else {
-        setError("Failed to load predictions");
-      }
-      setLoading(false);
-    }
+  const handleCheck = async () => {
+    const trimmed = riotId.trim();
     
-    fetchPredictions();
-  }, [currentUser]);
-
-  const handleDelete = async (predictionId) => {
-    if (!window.confirm("Are you sure you want to delete this prediction?")) {
+    if (!trimmed) {
+      setError("Enter your Riot ID (e.g., Name#TAG)");
       return;
     }
+
+    const parts = trimmed.split('#');
+    if (parts.length !== 2) {
+      setError("Use format: Name#TAG");
+      return;
+    }
+
+    const [gameName, tagLine] = parts;
     
-    const result = await deletePrediction(predictionId);
+    setIsChecking(true);
+    setError("");
+    setGameData(null);
+    setPrediction(null);
+    setSaved(false);
+
+    const result = await checkLiveGame(gameName, tagLine);
+    
+    setIsChecking(false);
+
+    if (!result.success) {
+      setError(result.error || "Failed to check live game");
+      return;
+    }
+
+    if (!result.inGame) {
+      setError("You're not currently in a game. Queue up and try again!");
+      return;
+    }
+
+    setGameData(result);
+
+    const team1 = result.blueTeam.map(p => ({
+      name: p.name,
+      rank: normalizeRank(p.rank),
+      winRate: p.winRate
+    }));
+
+    const team2 = result.redTeam.map(p => ({
+      name: p.name,
+      rank: normalizeRank(p.rank),
+      winRate: p.winRate
+    }));
+
+    while (team1.length < 5) {
+      team1.push({ name: "Unknown", rank: "Gold", winRate: 50 });
+    }
+    while (team2.length < 5) {
+      team2.push({ name: "Unknown", rank: "Gold", winRate: 50 });
+    }
+
+    setTeams({ team1, team2 });
+
+    const pred = calculatePrediction(team1, team2);
+    setPrediction(pred);
+  };
+
+  const handleSave = async () => {
+    if (!prediction || !currentUser) return;
+    
+    setIsSaving(true);
+    
+    const result = await savePrediction(currentUser.uid, {
+      team1: teams.team1,
+      team2: teams.team2,
+      result: prediction
+    });
+    
+    setIsSaving(false);
     
     if (result.success) {
-      setPredictions(predictions.filter(p => p.id !== predictionId));
+      setSaved(true);
+      success("Prediction saved successfully!");
     } else {
-      alert("Failed to delete prediction");
+      showError("Failed to save prediction");
     }
   };
 
-  const formatDate = (timestamp) => {
-    if (!timestamp) return "Unknown date";
-    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
-    });
+  const normalizeRank = (rank) => {
+    if (!rank) return "Gold";
+    const validRanks = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Emerald", "Diamond", "Master", "Grandmaster", "Challenger"];
+    const normalized = rank.charAt(0).toUpperCase() + rank.slice(1).toLowerCase();
+    if (validRanks.includes(normalized)) return normalized;
+    return "Gold";
   };
 
   return (
     <div className="page">
       <Navbar />
-      <main className="history-page">
+      <main className="live-game-page">
         <div className="container">
           <header className="page-header">
             <div className="page-header-content">
-              <h1>Prediction History</h1>
-              <p className="muted">View all your past predictions</p>
+              <h1>Live Game Lookup</h1>
+              <p className="muted">Enter your Riot ID to analyze your current match</p>
             </div>
-            <Link to="/dashboard" className="btn btn-ghost">
+            <button 
+              className="btn btn-ghost"
+              onClick={() => navigate("/dashboard")}
+            >
               ← Back to Dashboard
-            </Link>
+            </button>
           </header>
 
-          {loading ? (
-            <div className="predictions-list">
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
+          <div className="live-game-search">
+            <div className="search-box">
+              <input
+                type="text"
+                value={riotId}
+                onChange={(e) => setRiotId(e.target.value)}
+                placeholder="Enter your Riot ID (e.g., Speedyx512#NA1)"
+                onKeyPress={(e) => e.key === 'Enter' && handleCheck()}
+              />
+              <button 
+                className="btn btn-primary"
+                onClick={handleCheck}
+                disabled={isChecking}
+              >
+                {isChecking ? "Searching..." : "Find My Game"}
+              </button>
             </div>
-          ) : error ? (
-            <div className="error-state">
-              <p>{error}</p>
+            {error && <p className="error-message">{error}</p>}
+          </div>
+
+          {isChecking && (
+            <div className="loading-state">
+              <Spinner size="large" text="Searching for your game..." />
             </div>
-          ) : predictions.length === 0 ? (
-            <div className="empty-state">
-              <h3>No predictions yet</h3>
-              <p className="muted">Create your first match prediction to see it here!</p>
-              <Link to="/dashboard/create-match" className="btn btn-primary">
-                Create Match
-              </Link>
-            </div>
-          ) : (
-            <div className="predictions-list">
-              {predictions.map((prediction) => (
-                <div key={prediction.id} className="prediction-card">
-                  <div className="prediction-card-header">
-                    <span className="prediction-date">
-                      {formatDate(prediction.createdAt)}
-                    </span>
-                    <span className={`confidence-badge ${prediction.result.confidence.toLowerCase()}`}>
-                      {prediction.result.confidence}
-                    </span>
-                  </div>
-                  
-                  <div className="prediction-card-body">
-                    <div className="teams-summary">
-                      <div className="team-summary blue">
-                        <span className="team-name">Blue Team</span>
-                        <span className="team-prob">{prediction.result.team1Probability}%</span>
-                      </div>
-                      <span className="vs">vs</span>
-                      <div className="team-summary red">
-                        <span className="team-name">Red Team</span>
-                        <span className="team-prob">{prediction.result.team2Probability}%</span>
-                      </div>
-                    </div>
-                    
-                    <div className="winner-text">
-                      <strong>{prediction.result.winner}</strong> predicted to win
-                    </div>
-                  </div>
-                  
-                  <div className="prediction-card-actions">
-                    <Link 
-                      to={`/dashboard/prediction/${prediction.id}`} 
-                      className="btn btn-ghost btn-sm"
-                    >
-                      View Details
-                    </Link>
-                    <button 
-                      className="btn btn-ghost btn-sm btn-danger"
-                      onClick={() => handleDelete(prediction.id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
+          )}
+
+          {gameData && (
+            <div className="live-game-results">
+              <div className="game-info">
+                <span className="game-mode">{gameData.gameMode}</span>
+                {gameData.gameLength > 0 && (
+                  <span className="game-time">
+                    {Math.floor(gameData.gameLength / 60)}:{String(gameData.gameLength % 60).padStart(2, '0')} elapsed
+                  </span>
+                )}
+              </div>
+
+              <div className="teams-comparison">
+                <div className="team-card blue">
+                  <h3>Blue Team</h3>
+                  <ul className="player-list">
+                    {gameData.blueTeam.map((player, index) => (
+                      <li key={index} className="player-row">
+                        <span className="player-name">{player.name}</span>
+                        <span className="player-stats">
+                          {normalizeRank(player.rank)} • {player.winRate}%
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              ))}
+
+                <div className="vs-badge">VS</div>
+
+                <div className="team-card red">
+                  <h3>Red Team</h3>
+                  <ul className="player-list">
+                    {gameData.redTeam.map((player, index) => (
+                      <li key={index} className="player-row">
+                        <span className="player-name">{player.name}</span>
+                        <span className="player-stats">
+                          {normalizeRank(player.rank)} • {player.winRate}%
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {prediction && (
+                <>
+                  <PredictionResult prediction={prediction} />
+                  
+                  <div className="save-section">
+                    {saved ? (
+                      <div className="save-success">
+                        <span>✓ Prediction saved!</span>
+                        <button 
+                          className="btn btn-ghost"
+                          onClick={() => navigate("/dashboard/history")}
+                        >
+                          View History
+                        </button>
+                      </div>
+                    ) : (
+                      <button 
+                        className="btn btn-primary"
+                        onClick={handleSave}
+                        disabled={isSaving}
+                      >
+                        {isSaving ? "Saving..." : "Save Prediction"}
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+
+          {!gameData && !isChecking && !error && (
+            <div className="instructions">
+              <h3>How it works</h3>
+              <ol>
+                <li>Start a League of Legends match (Ranked, Normal, etc.)</li>
+                <li>Once you're in the loading screen or in-game, come back here</li>
+                <li>Enter your Riot ID and click "Find My Game"</li>
+                <li>See instant predictions for all 10 players!</li>
+              </ol>
+              <p className="note">
+                Note: Works after champion select ends (loading screen or in-game). 
+                For champion select analysis, a desktop app would be needed.
+              </p>
             </div>
           )}
         </div>
