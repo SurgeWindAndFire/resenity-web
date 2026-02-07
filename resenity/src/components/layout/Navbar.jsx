@@ -8,8 +8,12 @@ export default function Navbar() {
     <nav className="nav">
       <div className="container nav-inner">
         <Link to="/" className="brand">
-          <span className="brand-mark"></span>
-          Resenity
+          <img 
+            src="/ResenityTransparent.png" 
+            alt="Resenity" 
+            className="brand-logo"
+          />
+          <span className="brand-text">Resenity</span>
         </Link>
         
         <div className="nav-links">
