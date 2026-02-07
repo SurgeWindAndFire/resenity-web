@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Navbar from "../components/layout/Navbar";
 import { getUserPredictions, deletePrediction } from "../services/predictionServices";
+import { SkeletonCard } from "../components/ui/Skeleton";
 import "../styles/history.css";
 
 export default function History() {
@@ -71,8 +72,10 @@ export default function History() {
           </header>
 
           {loading ? (
-            <div className="loading-state">
-              <p>Loading predictions...</p>
+            <div className="predictions-list">
+              <SkeletonCard />
+              <SkeletonCard />
+              <SkeletonCard />
             </div>
           ) : error ? (
             <div className="error-state">

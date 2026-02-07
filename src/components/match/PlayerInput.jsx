@@ -85,7 +85,7 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
               disabled={isLooking}
               title="Lookup player stats"
             >
-              {isLooking ? '...' : '🔍'}
+              {isLooking ? <span className="btn-spinner"></span> : '🔍'}
             </button>
           </div>
           {lookupError && <span className="lookup-error">{lookupError}</span>}
