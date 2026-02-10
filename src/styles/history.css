@@ -209,8 +209,49 @@
 
 /* Mobile History Page */
 @media (max-width: 768px) {
-  .prediction-card-body {
+  .history-page {
+    padding: 20px 0;
+  }
+
+  .page-header {
     flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .page-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-header-content h1 {
+    font-size: 24px;
+  }
+
+  .predictions-list {
+    gap: 16px;
+  }
+
+  .prediction-card {
+    padding: 16px;
+  }
+
+  .prediction-card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .prediction-date {
+    font-size: 12px;
+  }
+
+  .confidence-badge {
+    font-size: 11px;
+    padding: 4px 10px;
+  }
+
+  .prediction-card-body {
+    gap: 12px;
   }
 
   .teams-summary {
@@ -226,10 +267,23 @@
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+  }
+
+  .team-prob {
+    font-size: 18px;
+  }
+
+  .winner-text {
+    font-size: 14px;
+    text-align: center;
   }
 
   .prediction-card-actions {
     flex-direction: column;
+    gap: 8px;
   }
 
   .prediction-card-actions .btn {
@@ -238,6 +292,20 @@
   }
 
   .empty-state {
-    padding: 40px 20px;
+    padding: 40px 16px;
+  }
+
+  .empty-state h3 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header-content h1 {
+    font-size: 22px;
+  }
+
+  .team-prob {
+    font-size: 16px;
   }
 }
