@@ -26,3 +26,23 @@
 .dashboard-actions .btn {
   justify-content: center;
 }
+
+/* Mobile Dashboard Page */
+@media (max-width: 768px) {
+  .dashboard-header {
+    text-align: center;
+  }
+
+  .dashboard-actions {
+    flex-direction: column;
+  }
+
+  .dashboard-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .dashboard-content {
+    gap: 20px;
+  }
+}

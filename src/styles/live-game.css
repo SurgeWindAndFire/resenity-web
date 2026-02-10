@@ -176,3 +176,62 @@
     padding: 16px 0;
   }
 }
+
+/* Mobile Live Game Page */
+@media (max-width: 768px) {
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-box input {
+    width: 100%;
+  }
+
+  .search-box .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .teams-comparison {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .vs-badge {
+    padding: 12px 0;
+  }
+
+  .game-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .player-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .player-name {
+    max-width: 100%;
+  }
+
+  .save-section {
+    flex-direction: column;
+  }
+
+  .save-section .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .save-success {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .instructions ol {
+    padding-left: 20px;
+  }
+}

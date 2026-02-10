@@ -449,3 +449,62 @@
     transform: rotate(360deg);
   }
 }
+
+/* Mobile Match Page */
+@media (max-width: 768px) {
+  .teams-container {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .vs-divider {
+    padding: 16px 0;
+  }
+
+  .player-input {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .player-number {
+    align-self: flex-start;
+  }
+
+  .player-fields {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field-name,
+  .field-small {
+    width: 100%;
+  }
+
+  .input-with-button {
+    flex-direction: row;
+  }
+
+  .input-with-button input {
+    flex: 1;
+  }
+
+  .match-actions {
+    flex-direction: column;
+  }
+
+  .match-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .page-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
