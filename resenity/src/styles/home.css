@@ -484,24 +484,35 @@ select {
 /* Mobile Home Page */
 @media (max-width: 768px) {
   .hero {
-    padding-top: 32px;
+    padding-top: 24px;
   }
 
   .hero-grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 24px;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 4px 8px;
+    display: inline-block;
+    max-width: 100%;
+    word-wrap: break-word;
   }
 
   .hero h1 {
-    font-size: 36px;
+    font-size: 28px;
+    line-height: 1.1;
   }
 
   .lead {
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   .hero-cta {
     flex-direction: column;
+    gap: 10px;
   }
 
   .hero-cta .btn {
@@ -511,16 +522,26 @@ select {
 
   .hero-highlights {
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .hero-highlights li {
-    font-size: 12px;
+    font-size: 11px;
     padding: 6px 8px;
+  }
+
+  .hero-note {
+    font-size: 11px;
+  }
+
+  .card {
+    padding: 12px;
   }
 
   .grid-3,
   .grid-4 {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .how-body {
@@ -532,17 +553,17 @@ select {
   }
 
   .section {
-    padding: 48px 0;
+    padding: 40px 0;
   }
 
   .section-header h2 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   .cta {
     flex-direction: column;
     text-align: center;
-    gap: 20px;
+    gap: 16px;
   }
 
   .cta-actions {
@@ -564,16 +585,65 @@ select {
   .footer-links {
     flex-wrap: wrap;
     justify-content: center;
+    gap: 12px;
+  }
+
+  /* Fix card overflow */
+  .card-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip, .badge {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .rows {
+    gap: 6px;
+  }
+
+  .row {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .team-chip {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .chip-row {
+    gap: 6px;
+  }
+
+  .strip-items {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
   .hero h1 {
-    font-size: 28px;
+    font-size: 24px;
   }
 
   .pill {
-    font-size: 12px;
-    padding: 4px 8px;
+    font-size: 10px;
   }
-}   
+
+  .lead {
+    font-size: 13px;
+  }
+
+  .section {
+    padding: 32px 0;
+  }
+}

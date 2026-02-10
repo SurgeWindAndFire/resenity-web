@@ -47,18 +47,30 @@ button {
   font: inherit;
 }
 
+/* Prevent horizontal overflow */
+html, body {
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 /* Mobile Global Styles */
 @media (max-width: 768px) {
   .container {
     padding: 0 16px;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   h1 {
-    font-size: 32px;
+    font-size: 28px;
+    word-wrap: break-word;
   }
 
   h2 {
-    font-size: 24px;
+    font-size: 22px;
   }
 
   h3 {
@@ -72,16 +84,20 @@ button {
 
   .btn-lg {
     padding: 14px 20px;
-    font-size: 16px;
+    font-size: 15px;
   }
 }
 
 @media (max-width: 480px) {
-  h1 {
-    font-size: 28px;
-  }
-
   .container {
     padding: 0 12px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  h2 {
+    font-size: 20px;
   }
 }
