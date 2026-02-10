@@ -12,6 +12,7 @@ import History from "./pages/History";
 import ViewPrediction from "./pages/ViewPrediction";
 import LiveGame from "./pages/LiveGame";
 import Demo from "./pages/Demo";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
   return (
