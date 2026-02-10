@@ -206,3 +206,38 @@
     gap: 12px;
   }
 }
+
+/* Mobile History Page */
+@media (max-width: 768px) {
+  .prediction-card-body {
+    flex-direction: column;
+  }
+
+  .teams-summary {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .teams-summary .vs {
+    display: none;
+  }
+
+  .team-summary {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .prediction-card-actions {
+    flex-direction: column;
+  }
+
+  .prediction-card-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .empty-state {
+    padding: 40px 20px;
+  }
+}
