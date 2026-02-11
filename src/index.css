@@ -101,3 +101,32 @@ html, body {
     font-size: 20px;
   }
 }
+
+/* Page Loader */
+.page-loader {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b0d12;
+}
+
+/* Optimized Images */
+.optimized-image-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-placeholder {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+}
+
+.optimized-image {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.optimized-image.loaded {
+  opacity: 1;
+}
