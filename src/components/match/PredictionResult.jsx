@@ -1,5 +1,5 @@
 import { memo } from "react";
-import "../styles/prediction.css";
+import "../styles/match.css";
 
 function PredictionResult({ prediction }) {
   if (!prediction) return null;
