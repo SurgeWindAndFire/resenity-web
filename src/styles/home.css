@@ -33,7 +33,7 @@
   z-index: 50;
   background: rgba(11, 13, 18, 0.75);
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
 .nav-inner {
@@ -77,7 +77,7 @@
 }
 
 .nav-links a {
-  color: rgba(232, 238, 252, 0.8);
+  color: rgba(232, 238, 252, 0.72);
   text-decoration: none;
 }
 
@@ -97,7 +97,7 @@
   padding: 10px 14px;
   border-radius: 12px;
   text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.09);
   color: inherit;
 }
 
@@ -106,9 +106,9 @@
 }
 
 .btn:focus-visible {
-     outline: 2px solid rgba(125, 211, 252, 0.6);
-     outline-offset: 2px;
-   }
+  outline: 2px solid rgba(125, 211, 252, 0.6);
+  outline-offset: 2px;
+}
 
 .btn-ghost {
   background: transparent;
@@ -129,8 +129,8 @@
   display: inline-flex;
   padding: 6px 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.10);
-  color: rgba(232, 238, 252, 0.85);
+  border: 1px solid rgba(255,255,255,0.09);
+  color: rgba(232, 238, 252, 0.82);
   margin-bottom: 14px;
 }
 
@@ -142,7 +142,7 @@ h1 {
 
 .lead {
   font-size: 16px;
-  color: rgba(232, 238, 252, 0.78);
+  color: rgba(232, 238, 252, 0.74);
   margin: 0 0 18px;
 }
 
@@ -157,7 +157,7 @@ h1 {
 }
 
 .muted {
-  color: rgba(232, 238, 252, 0.78);
+  color: rgba(232, 238, 252, 0.65);
 }
 
 .hero-highlights {
@@ -170,20 +170,20 @@ h1 {
 
 .hero-note {
   font-size: 13px;
-  color: rgba(232, 238, 252, 0.5);
+  color: rgba(232, 238, 252, 0.45);
   margin-top: 16px;
 }
 
 .hero-highlights li {
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.07);
   padding: 8px 10px;
   border-radius: 12px;
-  color: rgba(232, 238, 252, 0.85);
+  color: rgba(232, 238, 252, 0.8);
 }
 
 .card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.09);
   border-radius: 16px;
   padding: 16px;
 }
@@ -197,11 +197,11 @@ h1 {
 }
 
 .chip, .badge {
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.11);
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
-  color: rgba(232, 238, 252, 0.85);
+  color: rgba(232, 238, 252, 0.82);
 }
 
 .section-header h2 {
@@ -259,9 +259,9 @@ h1 {
   gap: 12px;
   align-items: flex-start;
   padding: 14px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 16px;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.025);
 }
 
 .step-num {
@@ -270,13 +270,13 @@ h1 {
   border-radius: 10px;
   display: grid;
   place-items: center;
-  border: 1px solid rgba(255,255,255,0.12);
-  background: rgba(125, 211, 252, 0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(125, 211, 252, 0.08);
 }
 
 .flow {
   border-radius: 14px;
-  border: 1px dashed rgba(255,255,255,0.12);
+  border: 1px dashed rgba(255,255,255,0.10);
 }
 
 .features {
@@ -296,7 +296,7 @@ h1 {
 }
 
 .feature p {
-  color: rgba(232, 238, 252, 0.7);
+  color: rgba(232, 238, 252, 0.65);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -345,7 +345,7 @@ h1 {
 }
 
 .team-chip {
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.09);
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
@@ -354,9 +354,9 @@ h1 {
 .bar-track {
   height: 10px;
   border-radius: 999px;
-  border: 1px solid rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.08);
   overflow: hidden;
-  background: rgba(255,255,255,0.03);
+  background: rgba(255,255,255,0.02);
 }
 
 .bar-fill {
@@ -380,7 +380,7 @@ h1 {
 .chart {
   height: 64px;
   border-radius: 14px;
-  border: 1px dashed rgba(255,255,255,0.12);
+  border: 1px dashed rgba(255,255,255,0.10);
   position: relative;
   overflow: hidden;
 }
@@ -410,13 +410,13 @@ h1 {
 
 label {
   font-size: 12px;
-  color: rgba(232, 238, 252, 0.78);
+  color: rgba(232, 238, 252, 0.72);
 }
 
 select {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.10);
-  color: rgba(232, 238, 252, 0.92);
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(255,255,255,0.11);
+  color: rgba(232, 238, 252, 0.9);
   padding: 10px 12px;
   border-radius: 12px;
 }
@@ -428,8 +428,8 @@ select {
 
 .sk-line, .sk-bar, .sk-chip, .sk-chart {
   border-radius: 12px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
 .sk-line { height: 14px; }
@@ -456,7 +456,7 @@ select {
 
 .footer {
   padding: 28px 0;
-  border-top: 1px solid rgba(255,255,255,0.06);
+  border-top: 1px solid rgba(255,255,255,0.07);
 }
 
 .footer-inner {
@@ -471,7 +471,7 @@ select {
 }
 
 .footer a {
-  color: rgba(232, 238, 252, 0.78);
+  color: rgba(232, 238, 252, 0.72);
   text-decoration: none;
 }
 
@@ -492,23 +492,23 @@ select {
 }
 
 @keyframes fadeInUp {
-     from {
-       opacity: 0;
-       transform: translateY(20px);
-     }
-     to {
-       opacity: 1;
-       transform: translateY(0);
-     }
-   }
-   
-   .mock-card {
-     animation: fadeInUp 0.6s ease-out backwards;
-   }
-   
-   .mock-card:nth-child(1) { animation-delay: 0.1s; }
-   .mock-card:nth-child(2) { animation-delay: 0.2s; }
-   .mock-card:nth-child(3) { animation-delay: 0.3s; }
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.mock-card {
+  animation: fadeInUp 0.6s ease-out backwards;
+}
+
+.mock-card:nth-child(1) { animation-delay: 0.1s; }
+.mock-card:nth-child(2) { animation-delay: 0.2s; }
+.mock-card:nth-child(3) { animation-delay: 0.3s; }
 
 @media (max-width: 768px) {
   .hero {

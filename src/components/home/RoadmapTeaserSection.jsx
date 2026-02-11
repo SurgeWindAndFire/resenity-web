@@ -26,7 +26,7 @@ export default function RoadmapTeaserSection() {
           <RoadmapItem title="Suggestions Page" 
             description="Constructive community feedback is always welcomed when it comes to trying to understand
             what our users really want. To achieve this goal, a dedicated page with potential 'forum-like' features
-            would be an ideal solution to stregthen the gap between the developer-user relationship." />
+            would be an ideal solution to strengthen the gap between the developer-user relationship." />
           <RoadmapItem title="Future Games Support" 
             description="Once we are content with our current goals of being a League of Legends platform, we will
             consider expanding to other games that our users would gladly adore our services for." />
