@@ -1,24 +1,20 @@
 export default function FeaturesSection() {
   const features = [
     {
-      icon: "🎮",
       title: "Live Game Detection",
-      description: "Enter your Riot ID and we'll automatically find your current game and analyze all 10 players instantly."
+      description: "Enter your player ID, and we'll automatically search your live game and analyze everyone in the match as well."
     },
     {
-      icon: "📊",
       title: "Real Player Data",
-      description: "Powered by Riot's official API. Get actual ranks, win rates, and match history — not estimates."
+      description: "Our service uses Riot's official API, so all of your results are real player data, not estimates."
     },
     {
-      icon: "🧠",
       title: "Smart Predictions",
-      description: "Our algorithm analyzes team composition, rank distribution, and win rates to predict match outcomes."
+      description: "Our algorithm factors in team composition, rank distribution, and win rates to accurately predict the outcomes."
     },
     {
-      icon: "💾",
       title: "Save & Track",
-      description: "Save your predictions and build a history. See how your matches turn out over time."
+      description: "Save your predictions to build your history. Use this to see how many of your matches turned out exactly like you predicted."
     }
   ];
 
@@ -28,7 +24,7 @@ export default function FeaturesSection() {
         <div className="section-header">
           <h2>Why Use Resenity?</h2>
           <p className="muted">
-            Everything you need to make smarter decisions in champion select
+            Everything that you might possibly need to make wiser decisions in champion select
           </p>
         </div>
         

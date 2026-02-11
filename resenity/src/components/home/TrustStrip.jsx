@@ -6,7 +6,7 @@ export default function TrustStrip() {
           <li>Built for Competitive Matches</li>
           <li>Data-Driven and Reliable Insights</li>
           <li>Easy to Understand Predictions</li>
-          <li>League Platform 1st, Future Games Coming Soon</li>
+          <li>Competitive Games are our Main Priority</li>
         </ul>
       </div>
     </section>

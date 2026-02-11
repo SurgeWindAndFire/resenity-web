@@ -11,8 +11,8 @@ export default function HeroSection() {
           </div>
           
           <h1 className="hero-title">
-            Predict Match Outcomes<br />
-            <span className="highlight">Before You Play.</span>
+            Know Your Match Outcomes<br />
+            <span className="highlight">Before You Even Play.</span>
           </h1>
           
           <p className="hero-description">
