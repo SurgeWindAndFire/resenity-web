@@ -2,8 +2,10 @@ import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
 import "../styles/dashboard.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Dashboard() {
+  usePageTitle("Dashboard");
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
 

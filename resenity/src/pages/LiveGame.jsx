@@ -9,8 +9,10 @@ import { calculatePrediction } from "../utils/prediction";
 import { savePrediction } from "../services/predictionServices";
 import Spinner from "../components/ui/Spinner";
 import "../styles/live-game.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function LiveGame() {
+  usePageTitle("Live Game Lookup");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { success, error: showError } = useToast();

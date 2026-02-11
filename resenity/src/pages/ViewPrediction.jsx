@@ -5,8 +5,10 @@ import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
 import { getPredictionById, deletePrediction } from "../services/predictionServices";
 import "../styles/history.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function ViewPrediction() {
+  usePageTitle("View Prediction");
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();

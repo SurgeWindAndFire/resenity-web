@@ -6,8 +6,10 @@ import { useToast } from "../contexts/ToastContext";
 import { getUserPredictions, deletePrediction } from "../services/predictionServices";
 import { SkeletonCard } from "../components/ui/Skeleton";
 import "../styles/history.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function History() {
+  usePageTitle("Prediction History");
   const { currentUser } = useAuth();
   const { success, error: showError } = useToast();
   const [predictions, setPredictions] = useState([]);

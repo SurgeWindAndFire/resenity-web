@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import "../styles/auth.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 export default function Signup() {
+  usePageTitle("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
