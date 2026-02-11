@@ -301,23 +301,31 @@ h1 {
   line-height: 1.6;
 }
 
-.strip {
-  padding: 22px 0;
+.trust-strip {
+  background: rgba(125, 211, 252, 0.06);
+  border-top: 1px solid rgba(125, 211, 252, 0.12);
+  border-bottom: 1px solid rgba(125, 211, 252, 0.12);
 }
 
-.strip-inner {
-  border-top: 1px solid rgba(255,255,255,0.06);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  padding: 16px 0;
-}
-
-.strip-items {
+.trust-strip-inner {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: center;
   flex-wrap: wrap;
-  gap: 16px;
-  font-size: 14px;
-  color: rgba(232, 238, 252, 0.7);
+  gap: 20px;
+  padding: 18px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(232, 238, 252, 0.85);
+  letter-spacing: 0.01em;
+}
+
+.trust-strip-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(125, 211, 252, 0.5);
+  flex-shrink: 0;
 }
 
 .mock-stack {
@@ -645,11 +653,16 @@ select {
     gap: 6px;
   }
 
-  .strip-items {
+  .trust-strip-inner {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 12px;
+    gap: 10px;
+    font-size: 14px;
+  }
+
+  .trust-strip-dot {
+    display: none;
   }
 }
 
