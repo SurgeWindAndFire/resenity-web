@@ -8,12 +8,14 @@ import PredictionResult from "../components/match/PredictionResult";
 import { calculatePrediction } from "../utils/prediction";
 import { savePrediction } from "../services/predictionServices";
 import "../styles/match.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 const emptyPlayer = { name: "", rank: "Gold", winRate: 50 };
 
 const createEmptyTeam = () => Array(5).fill(null).map(() => ({ ...emptyPlayer }));
 
 export default function CreateMatch() {
+  usePageTitle("Create Match");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { success, error: showError } = useToast();

@@ -4,6 +4,7 @@ import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
 import { calculatePrediction } from "../utils/prediction";
 import "../styles/demo.css";
+import usePageTitle from "../hooks/usePageTitle";
 
 const DEMO_BLUE_TEAM = [
   { name: "ProPlayer1#NA1", rank: "Diamond", winRate: 58 },
@@ -22,6 +23,7 @@ const DEMO_RED_TEAM = [
 ];
 
 export default function Demo() {
+  usePageTitle("Demo");
   const [prediction, setPrediction] = useState(null);
   const [hasCalculated, setHasCalculated] = useState(false);
 

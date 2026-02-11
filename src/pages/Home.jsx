@@ -9,10 +9,12 @@ import DemoPreviewSection from "../components/home/DemoPreviewSection.jsx";
 import BuiltForSection from "../components/home/BuiltForSection.jsx";
 import RoadmapTeaserSection from "../components/home/RoadmapTeaserSection.jsx";
 import FinalCTASection from "../components/home/FinalCTASection.jsx";
+import usePageTitle from "../hooks/usePageTitle";
 
 import "../styles/home.css";
 
 export default function HomePage() {
+  usePageTitle("");
   return (
     <div id="page" className="page">
       <Navbar />
