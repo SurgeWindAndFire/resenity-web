@@ -27,18 +27,15 @@ function getRankName(value) {
 }
 
 export function calculatePrediction(team1, team2) {
-  // Calculate team averages
   const team1AvgRank = getAverageRank(team1);
   const team2AvgRank = getAverageRank(team2);
   const team1AvgWinRate = getAverageWinRate(team1);
   const team2AvgWinRate = getAverageWinRate(team2);
 
-  // Calculate factors
   const factors = [];
 
-  // Rank difference factor (weighted 50%)
   const rankDiff = team1AvgRank - team2AvgRank;
-  const rankScore = rankDiff * 5; // Each rank tier = 5% difference
+  const rankScore = rankDiff * 5;
 
   if (Math.abs(rankDiff) >= 0.5) {
     factors.push({
@@ -48,7 +45,6 @@ export function calculatePrediction(team1, team2) {
     });
   }
 
-  // Win rate difference factor (weighted 35%)
   const winRateDiff = team1AvgWinRate - team2AvgWinRate;
   const winRateScore = winRateDiff * 0.35;
 
@@ -60,10 +56,9 @@ export function calculatePrediction(team1, team2) {
     });
   }
 
-  // Consistency factor (weighted 15%)
   const team1Variance = calculateVariance(team1.map(p => RANK_VALUES[p.rank]));
   const team2Variance = calculateVariance(team2.map(p => RANK_VALUES[p.rank]));
-  const varianceDiff = team2Variance - team1Variance; // Lower variance is better
+  const varianceDiff = team2Variance - team1Variance;
   const consistencyScore = varianceDiff * 2;
 
   if (Math.abs(varianceDiff) >= 0.5) {
@@ -74,7 +69,6 @@ export function calculatePrediction(team1, team2) {
     });
   }
 
-  // Check for high-rank players
   const team1HasHighRank = team1.some(p => RANK_VALUES[p.rank] >= 8);
   const team2HasHighRank = team2.some(p => RANK_VALUES[p.rank] >= 8);
   
@@ -92,17 +86,14 @@ export function calculatePrediction(team1, team2) {
     });
   }
 
-  // Calculate total score
   const totalScore = rankScore + winRateScore + consistencyScore;
   
-  // Convert to probability (sigmoid-like normalization)
   let team1Probability = 50 + totalScore;
-  team1Probability = Math.max(15, Math.min(85, team1Probability)); // Clamp between 15-85%
+  team1Probability = Math.max(15, Math.min(85, team1Probability));
   team1Probability = Math.round(team1Probability);
   
   const team2Probability = 100 - team1Probability;
 
-  // Determine confidence
   let confidence;
   const probDiff = Math.abs(team1Probability - 50);
   if (probDiff >= 25) {
@@ -113,18 +104,16 @@ export function calculatePrediction(team1, team2) {
     confidence = "Low";
   }
 
-  // Determine winner
   const winner = team1Probability > 50 ? "Blue Team" : 
                  team1Probability < 50 ? "Red Team" : "Tie";
 
-  // Sort factors by impact
   factors.sort((a, b) => b.impact - a.impact);
 
   return {
     team1Probability,
     team2Probability,
     confidence,
-    factors: factors.slice(0, 4), // Top 4 factors
+    factors: factors.slice(0, 4),
     winner
   };
 }

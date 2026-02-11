@@ -7,7 +7,7 @@ export default function PageError({ message = "Something went wrong", onRetry })
   return (
     <div className="page-error">
       <div className="page-error-icon">😕</div>
-      <h3>Oops!</h3>
+      <h3>Something crashed!</h3>
       <p className="muted">{message}</p>
       <div className="page-error-actions">
         {onRetry && (

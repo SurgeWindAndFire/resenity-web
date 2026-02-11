@@ -24,7 +24,7 @@ export default class ErrorBoundary extends Component {
       return (
         <div className="error-boundary">
           <div className="error-boundary-content">
-            <div className="error-icon">⚠️</div>
+            <div className="error-icon"></div>
             <h2>Something went wrong</h2>
             <p className="muted">
               We encountered an unexpected error. Please try again.

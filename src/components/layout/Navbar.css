@@ -140,7 +140,6 @@
   }
 }
 
-/* Extra small screens */
 @media (max-width: 480px) {
   .brand-text {
     font-size: 16px;

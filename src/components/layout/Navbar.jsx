@@ -22,7 +22,6 @@ export default function Navbar() {
           <span className="brand-text">Resenity</span>
         </Link>
 
-        {/* Hamburger Button */}
         <button 
           className={`hamburger ${isMenuOpen ? "active" : ""}`}
           onClick={toggleMenu}
@@ -33,7 +32,6 @@ export default function Navbar() {
           <span className="hamburger-line"></span>
         </button>
 
-        {/* Navigation Links */}
         <div className={`nav-menu ${isMenuOpen ? "open" : ""}`}>
           <div className="nav-links">
             <a href="/#features" onClick={closeMenu}>Features</a>
@@ -59,7 +57,6 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Overlay */}
         {isMenuOpen && <div className="nav-overlay" onClick={closeMenu}></div>}
       </div>
     </nav>

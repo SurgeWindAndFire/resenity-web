@@ -87,7 +87,6 @@
   color: #e8eefc;
 }
 
-/* Mobile */
 @media (max-width: 480px) {
   .toast-container {
     left: 16px;

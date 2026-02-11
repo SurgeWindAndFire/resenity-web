@@ -177,7 +177,6 @@
   }
 }
 
-/* Mobile Live Game Page */
 @media (max-width: 768px) {
   .search-box {
     flex-direction: column;

@@ -76,7 +76,7 @@ export default function ViewPrediction() {
               )}
             </div>
             <Link to="/dashboard/history" className="btn btn-ghost">
-              ← Back to History
+              Back to History
             </Link>
           </header>
 

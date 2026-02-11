@@ -1,14 +1,8 @@
-/* src/index.css
-   Global reset + app shell defaults for Resenity
-*/
-
 :root {
-  /* Keep a clean default font stack */
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  /* Your app is dark-first */
   color-scheme: dark;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -16,7 +10,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Full-screen canvas */
 html,
 body,
 #root {
@@ -26,13 +19,11 @@ body,
   padding: 0;
 }
 
-/* Don’t center the app — let pages control layout */
 body {
   background: #0b0d12;
   color: rgba(232, 238, 252, 0.92);
 }
 
-/* Links: let your page CSS decide styling, keep sane defaults */
 a {
   color: inherit;
   text-decoration: none;
@@ -42,12 +33,10 @@ a:hover {
   text-decoration: none;
 }
 
-/* Buttons: don't force Vite demo styles globally */
 button {
   font: inherit;
 }
 
-/* Prevent horizontal overflow */
 html, body {
   overflow-x: hidden;
 }
@@ -56,7 +45,6 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Mobile Global Styles */
 @media (max-width: 768px) {
   .container {
     padding: 0 16px;
@@ -102,7 +90,6 @@ html, body {
   }
 }
 
-/* Page Loader */
 .page-loader {
   min-height: 100vh;
   display: flex;
@@ -111,7 +98,6 @@ html, body {
   background: #0b0d12;
 }
 
-/* Optimized Images */
 .optimized-image-wrapper {
   position: relative;
   overflow: hidden;

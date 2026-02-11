@@ -46,7 +46,7 @@ export default function Signup() {
     <div className="auth-page">
       <div className="auth-container">
         <h1>Create Account</h1>
-        <p className="muted">Join Resenity and start predicting</p>
+        <p className="muted">Join Resenity and start predicting today!</p>
         
         {error && <div className="auth-error">{error}</div>}
         

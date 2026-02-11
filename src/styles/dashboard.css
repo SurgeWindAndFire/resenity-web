@@ -27,7 +27,6 @@
   justify-content: center;
 }
 
-/* Mobile Dashboard Page */
 @media (max-width: 768px) {
   .dashboard-header {
     text-align: center;

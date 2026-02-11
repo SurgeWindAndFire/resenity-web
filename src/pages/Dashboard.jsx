@@ -25,7 +25,7 @@ export default function Dashboard() {
         <div className="container">
           <header className="dashboard-header">
             <h1>Dashboard</h1>
-            <p className="muted">Welcome back, {currentUser?.email}</p>
+            <p className="muted">Welcome back, {currentUser?.email}!</p>
           </header>
 
           <div className="dashboard-content">
@@ -54,8 +54,8 @@ export default function Dashboard() {
                 <h3>Recent Predictions</h3>
               </header>
               <p className="muted">
-                Your saved predictions will appear here.{" "}
-                <Link to="/dashboard/history">View all →</Link>
+                All of your saved predictions will appear here.{" "}
+                <Link to="/dashboard/history">View all</Link>
               </p>
             </div>
           </div>

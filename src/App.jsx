@@ -6,7 +6,6 @@ import ErrorBoundary from "./components/ui/ErrorBoundary";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Spinner from "./components/ui/Spinner";
 
-// Lazy load pages
 const Home = lazy(() => import("./pages/Home"));
 const Login = lazy(() => import("./pages/Login"));
 const Signup = lazy(() => import("./pages/Signup"));
@@ -18,7 +17,6 @@ const LiveGame = lazy(() => import("./pages/LiveGame"));
 const Demo = lazy(() => import("./pages/Demo"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-// Loading fallback component
 function PageLoader() {
   return (
     <div className="page-loader">

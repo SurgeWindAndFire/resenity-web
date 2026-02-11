@@ -16,7 +16,6 @@ export default function HowItWorksSection() {
   return (
     <section id="how" className="section" aria-label="How it works">
       <div className="container">
-        {/* Header is its own block */}
         <header className="section-header how-head">
           <h2>How Our Service Works</h2>
           <p className="muted">
@@ -24,7 +23,6 @@ export default function HowItWorksSection() {
           </p>
         </header>
 
-        {/* Steps + Example share the same row height */}
         <div className="how-body">
           <ol className="steps" aria-label="Steps">
             <Step

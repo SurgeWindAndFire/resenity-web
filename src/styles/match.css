@@ -450,7 +450,6 @@
   }
 }
 
-/* Mobile Match Page */
 @media (max-width: 768px) {
   .teams-container {
     grid-template-columns: 1fr;

@@ -129,7 +129,7 @@ export default function CreateMatch() {
 
             {!canCalculate && (
               <p className="validation-hint muted">
-                Please fill in all player names to calculate prediction
+                Please fill in all player name fields to calculate prediction
               </p>
             )}
           </div>
@@ -141,7 +141,7 @@ export default function CreateMatch() {
               <div className="save-section">
                 {saved ? (
                   <div className="save-success">
-                    <span>✓ Prediction saved!</span>
+                    <span>Prediction saved!</span>
                     <button 
                       className="btn btn-ghost"
                       onClick={() => navigate("/dashboard/history")}

@@ -58,7 +58,7 @@ export default function LiveGame() {
     }
 
     if (!result.inGame) {
-      setError("You're not currently in a game. Queue up and try again!");
+      setError("You're not currently in a game. Start up a game and try again!");
       return;
     }
 
@@ -142,7 +142,7 @@ export default function LiveGame() {
                 type="text"
                 value={riotId}
                 onChange={(e) => setRiotId(e.target.value)}
-                placeholder="Enter your Riot ID (e.g., Speedyx512#NA1)"
+                placeholder="Enter your Riot ID (e.g., Faker#KR1)"
                 onKeyPress={(e) => e.key === 'Enter' && handleCheck()}
               />
               <button 
@@ -212,7 +212,7 @@ export default function LiveGame() {
                   <div className="save-section">
                     {saved ? (
                       <div className="save-success">
-                        <span>✓ Prediction saved!</span>
+                        <span>Prediction saved!</span>
                         <button 
                           className="btn btn-ghost"
                           onClick={() => navigate("/dashboard/history")}

@@ -17,7 +17,7 @@ function PredictionResult({ prediction }) {
       <header className="result-header">
         <h2>Prediction Result</h2>
         <span className={`confidence-badge ${confidence.toLowerCase()}`}>
-          {confidence} Confidence
+          {confidence} Confidence in Accuracy
         </span>
       </header>
 
@@ -47,7 +47,7 @@ function PredictionResult({ prediction }) {
 
         <div className="winner-announcement">
           <p>
-            <strong>{winner}</strong> is predicted to win
+            <strong>{winner}</strong> is predicted to win the game
           </p>
         </div>
 

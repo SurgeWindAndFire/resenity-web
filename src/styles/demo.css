@@ -112,7 +112,6 @@
   }
 }
 
-/* Mobile Demo Page */
 @media (max-width: 768px) {
   .demo-teams {
     grid-template-columns: 1fr;

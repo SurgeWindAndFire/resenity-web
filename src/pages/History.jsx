@@ -88,7 +88,7 @@ export default function History() {
             </div>
           ) : predictions.length === 0 ? (
             <div className="empty-state">
-              <h3>No predictions yet</h3>
+              <h3>No predictions found</h3>
               <p className="muted">Create your first match prediction to see it here!</p>
               <Link to="/dashboard/create-match" className="btn btn-primary">
                 Create Match
@@ -121,7 +121,7 @@ export default function History() {
                     </div>
                     
                     <div className="winner-text">
-                      <strong>{prediction.result.winner}</strong> predicted to win
+                      <strong>{prediction.result.winner}</strong> predicted to win the game
                     </div>
                   </div>
                   

@@ -7,19 +7,19 @@ import "../styles/demo.css";
 import usePageTitle from "../hooks/usePageTitle";
 
 const DEMO_BLUE_TEAM = [
-  { name: "ProPlayer1#NA1", rank: "Diamond", winRate: 58 },
-  { name: "MidLaner99#NA1", rank: "Platinum", winRate: 52 },
-  { name: "JungleDiff#NA1", rank: "Diamond", winRate: 55 },
-  { name: "BotCarry#NA1", rank: "Emerald", winRate: 49 },
-  { name: "Support4Life#NA1", rank: "Platinum", winRate: 51 }
+  { name: "Hullbreaker#NA1", rank: "Diamond", winRate: 58 },
+  { name: "JGGap#NA1", rank: "Platinum", winRate: 52 },
+  { name: "SonOfFaker#NA1", rank: "Diamond", winRate: 55 },
+  { name: "Pentakill#NA1", rank: "Emerald", winRate: 49 },
+  { name: "FiveManKnockup#NA1", rank: "Platinum", winRate: 51 }
 ];
 
 const DEMO_RED_TEAM = [
-  { name: "Enemy1#NA1", rank: "Platinum", winRate: 48 },
-  { name: "Enemy2#NA1", rank: "Emerald", winRate: 50 },
-  { name: "Enemy3#NA1", rank: "Platinum", winRate: 46 },
-  { name: "Enemy4#NA1", rank: "Gold", winRate: 53 },
-  { name: "Enemy5#NA1", rank: "Emerald", winRate: 47 }
+  { name: "TopGap#NA1", rank: "Platinum", winRate: 48 },
+  { name: "SmiteCannon#NA1", rank: "Emerald", winRate: 50 },
+  { name: "PermaRoam#NA1", rank: "Platinum", winRate: 46 },
+  { name: "FF15#NA1", rank: "Gold", winRate: 53 },
+  { name: "SonOfKeria#NA1", rank: "Emerald", winRate: 47 }
 ];
 
 export default function Demo() {
@@ -41,8 +41,8 @@ export default function Demo() {
           <header className="demo-header">
             <h1>See Resenity in Action</h1>
             <p className="muted">
-              This demo shows how Resenity analyzes teams and predicts match outcomes.
-              Sign up to use real player data and save your predictions!
+              The demonstration exhibits the functionality of Resenity that assesses team performance to forecast match results. 
+              Sign up now to use real player data and start making your own predictions today!
             </p>
           </header>
 
@@ -88,11 +88,11 @@ export default function Demo() {
                 <div className="demo-cta">
                   <h3>Want to analyze your own games?</h3>
                   <p className="muted">
-                    Sign up to use Live Game Lookup with real player data from Riot's API.
+                    Sign up now to use Live Game Lookup with real player data directly from Riot's API.
                   </p>
                   <div className="demo-cta-buttons">
                     <Link to="/signup" className="btn btn-primary">
-                      Create Free Account
+                      Create Account
                     </Link>
                     <Link to="/login" className="btn btn-ghost">
                       Sign In
