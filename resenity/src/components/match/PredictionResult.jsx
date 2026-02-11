@@ -1,4 +1,7 @@
-export default function PredictionResult({ prediction }) {
+import { memo } from "react";
+import "../styles/prediction.css";
+
+function PredictionResult({ prediction }) {
   if (!prediction) return null;
   
   const { 
@@ -17,6 +20,7 @@ export default function PredictionResult({ prediction }) {
           {confidence} Confidence
         </span>
       </header>
+
       <div className="result-content">
         <div className="probability-display">
           <div className="team-prob blue">
@@ -40,11 +44,13 @@ export default function PredictionResult({ prediction }) {
             <span className="prob-value">{team2Probability}%</span>
           </div>
         </div>
+
         <div className="winner-announcement">
           <p>
             <strong>{winner}</strong> is predicted to win
           </p>
         </div>
+
         <div className="factors-section">
           <h3>Key Factors</h3>
           <div className="factors-list">
@@ -64,3 +70,5 @@ export default function PredictionResult({ prediction }) {
     </div>
   );
 }
+
+export default memo(PredictionResult);
