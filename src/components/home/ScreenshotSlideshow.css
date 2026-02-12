@@ -1,19 +1,18 @@
 .slideshow {
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
+  max-width: 100%;
 }
 
 .slideshow-container {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .slideshow-arrow {
   flex-shrink: 0;
-  width: 48px;
-  height: 48px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,22 +20,23 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   color: #e8eefc;
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .slideshow-arrow:hover {
   background: rgba(22, 221, 178, 0.1);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: #16ddb2;
+  color: #16ddb2;
 }
 
 .slideshow-content {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  min-width: 0;
 }
 
 .slideshow-image-wrapper {
@@ -45,6 +45,7 @@
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .slideshow-image {
@@ -56,27 +57,28 @@
 
 .slideshow-info {
   text-align: center;
-  padding: 0 20px;
+  padding: 0 16px;
 }
 
 .slideshow-info h3 {
   font-family: 'Russo One', sans-serif;
-  font-size: 20px;
-  margin-bottom: 8px;
-  color: var(--color-primary);
+  font-size: 18px;
+  margin-bottom: 6px;
+  color: #16ddb2;
 }
 
 .slideshow-info p {
   color: rgba(232, 238, 252, 0.7);
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
+  margin: 0;
 }
 
 .slideshow-dots {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-top: 24px;
+  margin-top: 20px;
 }
 
 .slideshow-dot {
@@ -94,7 +96,7 @@
 }
 
 .slideshow-dot.active {
-  background: var(--color-primary);
+  background: #16ddb2;
   transform: scale(1.2);
 }
 
@@ -106,17 +108,21 @@
   }
 
   .slideshow-info h3 {
-    font-size: 18px;
+    font-size: 16px;
   }
 
   .slideshow-info p {
-    font-size: 14px;
+    font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
   .slideshow-arrow {
     display: none;
+  }
+
+  .slideshow-container {
+    gap: 0;
   }
 
   .slideshow-info {

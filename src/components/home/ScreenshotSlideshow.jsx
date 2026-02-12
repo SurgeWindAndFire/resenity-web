@@ -4,25 +4,25 @@ import "./ScreenshotSlideshow.css";
 const slides = [
   {
     id: 1,
-    image: "/screenshots/ss1.png",
+    image: "/ss1.png",
     title: "Live Game Detection",
     description: "Enter your Riot ID and instantly analyze all 10 players in your current match."
   },
   {
     id: 2,
-    image: "/screenshots/ss2.png",
+    image: "/ss2.png",
     title: "Accurate Predictions",
     description: "Get win probabilities based on real ranks, win rates, and player performance."
   },
   {
     id: 3,
-    image: "/screenshots/ss3.png",
+    image: "/ss3.png",
     title: "Manual Match Entry",
     description: "Analyze any hypothetical matchup by entering player details manually."
   },
   {
     id: 4,
-    image: "/screenshots/ss4.png",
+    image: "/ss4.png",
     title: "Track Your Predictions",
     description: "Save predictions and build your history to see how accurate you are."
   }
