@@ -1,22 +1,191 @@
+.live-game-page {
+  padding: 40px 0;
+  min-height: calc(100vh - 70px);
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-header h1 {
+  margin-bottom: 8px;
+}
+
+.page-header-content .muted {
+  color: rgba(232, 238, 252, 0.6);
+}
+
+.live-game-search {
+  margin-bottom: 40px;
+}
+
+.search-box {
+  display: flex;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-box input {
+  flex: 1;
+  padding: 16px 20px;
+  font-size: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #e8eefc;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: rgba(22, 221, 178, 0.5);
+}
+
+.search-box input::placeholder {
+  color: rgba(232, 238, 252, 0.4);
+}
+
+.search-box .btn {
+  white-space: nowrap;
+  min-width: 120px;
+}
+
+.error-message {
+  text-align: center;
+  color: #f87171;
+  margin-top: 12px;
+}
+
+.search-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.game-info {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.game-mode {
+  background: rgba(22, 221, 178, 0.1);
+  border: 1px solid rgba(22, 221, 178, 0.3);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #16ddb2;
+}
+
+.game-time {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: rgba(232, 238, 252, 0.7);
+}
+
+.teams-comparison {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: start;
+  margin-bottom: 40px;
+}
+
+.team-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.team-card.blue {
+  border-top: 3px solid rgba(59, 130, 246, 0.7);
+}
+
+.team-card.red {
+  border-top: 3px solid rgba(239, 68, 68, 0.7);
+}
+
+.team-card h3 {
+  font-family: 'Russo One', sans-serif;
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.player-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.player-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.player-role {
+  font-size: 11px;
+  font-weight: 600;
+  color: #16ddb2;
+  background: rgba(22, 221, 178, 0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+  min-width: 38px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.player-role-champion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 180px;
+}
+
 .champion-info {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
 .player-champion {
-  font-size: 13px;
-  color: rgba(232, 238, 252, 0.8);
+  font-size: 14px;
+  color: rgba(232, 238, 252, 0.9);
   font-weight: 500;
 }
 
 .mastery-badge {
   font-size: 10px;
   font-weight: 700;
-  padding: 2px 5px;
+  padding: 3px 6px;
   border-radius: 4px;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .mastery-7 {
@@ -41,45 +210,14 @@
 
 .games-played {
   font-size: 11px;
-  color: rgba(232, 238, 252, 0.5);
+  color: rgba(232, 238, 252, 0.45);
   font-style: italic;
 }
 
-.player-row {
-  display: grid;
-  grid-template-columns: minmax(140px, 1fr) 1fr auto;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 8px;
-  transition: background 0.2s ease;
-}
-
-.player-row:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.player-role-champion {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.player-role {
-  font-size: 11px;
-  font-weight: 600;
-  color: #16ddb2;
-  background: rgba(22, 221, 178, 0.1);
-  padding: 4px 8px;
-  border-radius: 4px;
-  min-width: 36px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
 .player-name {
+  flex: 1;
   font-weight: 500;
+  font-size: 14px;
   color: #e8eefc;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -91,23 +229,189 @@
   color: rgba(232, 238, 252, 0.6);
   white-space: nowrap;
   text-align: right;
+  min-width: 120px;
 }
 
-@media (max-width: 768px) {
-  .player-row {
+.vs-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px;
+}
+
+.vs-badge span {
+  font-family: 'Russo One', sans-serif;
+  font-size: 24px;
+  color: rgba(232, 238, 252, 0.4);
+  padding: 12px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.save-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.save-success {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: #16ddb2;
+  font-weight: 500;
+}
+
+.instructions {
+  max-width: 600px;
+  margin: 60px auto;
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.instructions h3 {
+  font-family: 'Russo One', sans-serif;
+  font-size: 22px;
+  margin-bottom: 24px;
+}
+
+.instructions ol {
+  text-align: left;
+  padding-left: 24px;
+  margin-bottom: 24px;
+}
+
+.instructions li {
+  margin-bottom: 14px;
+  color: rgba(232, 238, 252, 0.8);
+  line-height: 1.6;
+}
+
+.instructions li strong {
+  color: #e8eefc;
+}
+
+.instructions .note {
+  font-size: 13px;
+  color: rgba(232, 238, 252, 0.5);
+  font-style: italic;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@media (max-width: 1024px) {
+  .teams-comparison {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: 20px;
+  }
+
+  .vs-badge {
+    padding: 0;
+  }
+
+  .vs-badge span {
+    font-size: 20px;
+    padding: 10px 20px;
   }
 
   .player-role-champion {
-    flex-wrap: wrap;
+    min-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .live-game-page {
+    padding: 24px 0;
   }
 
-  .champion-info {
+  .page-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-header .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-box {
+    flex-direction: column;
+  }
+
+  .search-box input {
     width: 100%;
   }
 
+  .search-box .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .game-info {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .team-card {
+    padding: 16px;
+  }
+
+  .team-card h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .player-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .player-role-champion {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .player-name {
+    flex: 1;
+    min-width: 0;
+  }
+
   .player-stats {
-    text-align: left;
+    min-width: auto;
+  }
+
+  .save-section {
+    flex-direction: column;
+  }
+
+  .save-section .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .save-success {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .instructions {
+    margin: 40px auto;
+    padding: 24px;
+  }
+
+  .instructions h3 {
+    font-size: 18px;
+  }
+
+  .instructions ol {
+    padding-left: 20px;
   }
 }
