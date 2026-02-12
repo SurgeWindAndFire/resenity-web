@@ -13,10 +13,11 @@
 }
 
 .brand-text {
+  font-family: 'Russo One', sans-serif;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 400;
   color: #fff;
-  letter-spacing: -0.02em;
+  letter-spacing: 0.02em;
 }
 
 .hamburger {

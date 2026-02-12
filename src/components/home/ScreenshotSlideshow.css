@@ -1,0 +1,125 @@
+.slideshow {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.slideshow-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.slideshow-arrow {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: #e8eefc;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slideshow-arrow:hover {
+  background: rgba(22, 221, 178, 0.1);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.slideshow-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.slideshow-image-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.slideshow-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.slideshow-info {
+  text-align: center;
+  padding: 0 20px;
+}
+
+.slideshow-info h3 {
+  font-family: 'Russo One', sans-serif;
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: var(--color-primary);
+}
+
+.slideshow-info p {
+  color: rgba(232, 238, 252, 0.7);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.slideshow-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.slideshow-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.slideshow-dot:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.slideshow-dot.active {
+  background: var(--color-primary);
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .slideshow-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+
+  .slideshow-info h3 {
+    font-size: 18px;
+  }
+
+  .slideshow-info p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .slideshow-arrow {
+    display: none;
+  }
+
+  .slideshow-info {
+    padding: 0;
+  }
+}
