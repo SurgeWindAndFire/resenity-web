@@ -496,6 +496,22 @@
   color: #16ddb2;
 }
 
+.player-role-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+}
+
+.field-role {
+  flex: 1;
+  min-width: 0;
+}
+
+.field-champion {
+  flex: 1;
+  min-width: 0;
+}
+
 @media (max-width: 1024px) {
   .teams-container {
     grid-template-columns: 1fr;
@@ -612,5 +628,17 @@
 
   .team-prob .prob-value {
     font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .player-role-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field-role,
+  .field-champion {
+    width: 100%;
   }
 }

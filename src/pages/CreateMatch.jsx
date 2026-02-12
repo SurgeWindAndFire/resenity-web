@@ -18,7 +18,7 @@ const createEmptyTeam = () => ROLES.map((role) => ({
   winRate: 50,
   role: role,
   champion: null,
-  championStats: null
+  championMastery: null
 }));
 
 export default function CreateMatch() {

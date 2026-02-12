@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { lookupSummoner, normalizeRank } from '../../services/riotService';
+import ChampionSelect from './ChampionSelect';
+import { getChampionPrimaryRole } from '../../data/champions';
 
 const RANKS = [
   "Iron",
@@ -64,6 +66,17 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
     }
   };
 
+  const handleChampionChange = (championName) => {
+    onUpdate('champion', championName);
+    
+    if (championName) {
+      const primaryRole = getChampionPrimaryRole(championName);
+      if (primaryRole) {
+        onUpdate('role', primaryRole);
+      }
+    }
+  };
+
   const defaultRole = ROLES[index]?.value || "top";
   const currentRole = player.role || defaultRole;
 
@@ -74,19 +87,30 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       </div>
       
       <div className="player-fields">
-        <div className="field field-role">
-          <label>Role</label>
-          <div className="role-selector">
-            {ROLES.map((role) => (
-              <button
-                key={role.value}
-                type="button"
-                className={`role-btn ${currentRole === role.value ? 'active' : ''}`}
-                onClick={() => onUpdate("role", role.value)}
-              >
-                {role.label}
-              </button>
-            ))}
+        <div className="player-role-row">
+          <div className="field field-role">
+            <label>Role</label>
+            <div className="role-selector">
+              {ROLES.map((role) => (
+                <button
+                  key={role.value}
+                  type="button"
+                  className={`role-btn ${currentRole === role.value ? 'active' : ''}`}
+                  onClick={() => onUpdate("role", role.value)}
+                >
+                  {role.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="field field-champion">
+            <label>Champion</label>
+            <ChampionSelect
+              value={player.champion}
+              onChange={handleChampionChange}
+              placeholder="Search champion..."
+            />
           </div>
         </div>
 
