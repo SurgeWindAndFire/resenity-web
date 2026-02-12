@@ -15,11 +15,11 @@ const RANKS = [
 ];
 
 const ROLES = [
-  { value: "top", label: "Top", icon: "🛡️" },
-  { value: "jungle", label: "Jungle", icon: "🌲" },
-  { value: "mid", label: "Mid", icon: "⚡" },
-  { value: "adc", label: "ADC", icon: "🎯" },
-  { value: "support", label: "Support", icon: "💚" }
+  { value: "top", label: "Top" },
+  { value: "jungle", label: "JG" },
+  { value: "mid", label: "Mid" },
+  { value: "adc", label: "ADC" },
+  { value: "support", label: "Sup" }
 ];
 
 export default function PlayerInput({ player, index, onUpdate, teamColor }) {
@@ -47,8 +47,6 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
 
     const result = await lookupSummoner(gameName, tagLine);
     
-    console.log('Lookup result:', result);
-
     setIsLooking(false);
 
     if (result.success) {
@@ -77,7 +75,7 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       
       <div className="player-fields">
         <div className="field field-role">
-          <label htmlFor={`role-${teamColor}-${index}`}>Role</label>
+          <label>Role</label>
           <div className="role-selector">
             {ROLES.map((role) => (
               <button
@@ -85,60 +83,61 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
                 type="button"
                 className={`role-btn ${currentRole === role.value ? 'active' : ''}`}
                 onClick={() => onUpdate("role", role.value)}
-                title={role.label}
               >
-                <span className="role-icon">{role.icon}</span>
+                {role.label}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="field field-name">
-          <label htmlFor={`name-${teamColor}-${index}`}>Riot ID</label>
-          <div className="input-with-button">
-            <input
-              type="text"
-              id={`name-${teamColor}-${index}`}
-              value={player.name}
-              onChange={(e) => onUpdate("name", e.target.value)}
-              placeholder="Name#TAG"
-            />
-            <button 
-              type="button"
-              className="btn btn-lookup"
-              onClick={handleLookup}
-              disabled={isLooking}
-              title="Lookup player stats"
-            >
-              {isLooking ? <span className="btn-spinner"></span> : '🔍'}
-            </button>
+        <div className="player-stats-row">
+          <div className="field field-name">
+            <label htmlFor={`name-${teamColor}-${index}`}>Riot ID</label>
+            <div className="input-with-button">
+              <input
+                type="text"
+                id={`name-${teamColor}-${index}`}
+                value={player.name}
+                onChange={(e) => onUpdate("name", e.target.value)}
+                placeholder="Name#TAG"
+              />
+              <button 
+                type="button"
+                className="btn-lookup"
+                onClick={handleLookup}
+                disabled={isLooking}
+                title="Lookup player stats"
+              >
+                {isLooking ? <span className="btn-spinner"></span> : '🔍'}
+              </button>
+            </div>
+            {lookupError && <span className="lookup-error">{lookupError}</span>}
           </div>
-          {lookupError && <span className="lookup-error">{lookupError}</span>}
-        </div>
-        
-        <div className="field field-small">
-          <label htmlFor={`rank-${teamColor}-${index}`}>Rank</label>
-          <select
-            id={`rank-${teamColor}-${index}`}
-            value={player.rank}
-            onChange={(e) => onUpdate("rank", e.target.value)}
-          >
-            {RANKS.map(rank => (
-              <option key={rank} value={rank}>{rank}</option>
-            ))}
-          </select>
-        </div>
-        
-        <div className="field field-small">
-          <label htmlFor={`winrate-${teamColor}-${index}`}>Win %</label>
-          <input
-            type="number"
-            id={`winrate-${teamColor}-${index}`}
-            value={player.winRate}
-            onChange={(e) => onUpdate("winRate", Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))}
-            min="0"
-            max="100"
-          />
+          
+          <div className="field field-small">
+            <label htmlFor={`rank-${teamColor}-${index}`}>Rank</label>
+            <select
+              id={`rank-${teamColor}-${index}`}
+              value={player.rank}
+              onChange={(e) => onUpdate("rank", e.target.value)}
+            >
+              {RANKS.map(rank => (
+                <option key={rank} value={rank}>{rank}</option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="field field-small">
+            <label htmlFor={`winrate-${teamColor}-${index}`}>Win %</label>
+            <input
+              type="number"
+              id={`winrate-${teamColor}-${index}`}
+              value={player.winRate}
+              onChange={(e) => onUpdate("winRate", Math.min(100, Math.max(0, parseInt(e.target.value) || 0)))}
+              min="0"
+              max="100"
+            />
+          </div>
         </div>
       </div>
     </div>

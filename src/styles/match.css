@@ -525,23 +525,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  padding: 8px 12px;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(232, 238, 252, 0.6);
+  white-space: nowrap;
 }
 
 .role-btn:hover {
   background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(232, 238, 252, 0.9);
 }
 
 .role-btn.active {
-  background: rgba(22, 221, 178, 0.2);
-  box-shadow: 0 0 0 1px rgba(22, 221, 178, 0.4);
+  background: rgba(22, 221, 178, 0.15);
+  border-color: rgba(22, 221, 178, 0.4);
+  color: #16ddb2;
 }
 
 .role-btn .role-icon {

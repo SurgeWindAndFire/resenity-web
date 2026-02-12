@@ -1,25 +1,34 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
 import PredictionResult from "../components/match/PredictionResult";
 import { calculatePrediction } from "../utils/prediction";
-import "../styles/demo.css";
 import usePageTitle from "../hooks/usePageTitle";
+import "../styles/demo.css";
+
+const ROLE_LABELS = {
+  top: "Top",
+  jungle: "JG",
+  mid: "Mid",
+  adc: "ADC",
+  support: "Sup"
+};
 
 const DEMO_BLUE_TEAM = [
-  { name: "Hullbreaker#NA1", rank: "Diamond", winRate: 58 },
-  { name: "JGGap#NA1", rank: "Platinum", winRate: 52 },
-  { name: "SonOfFaker#NA1", rank: "Diamond", winRate: 55 },
-  { name: "Pentakill#NA1", rank: "Emerald", winRate: 49 },
-  { name: "FiveManKnockup#NA1", rank: "Platinum", winRate: 51 }
+  { name: "Hullbreaker#NA1", rank: "Diamond", winRate: 58, role: "top", champion: null },
+  { name: "JGGap#NA1", rank: "Platinum", winRate: 52, role: "jungle", champion: null },
+  { name: "SonOfFaker#NA1", rank: "Diamond", winRate: 55, role: "mid", champion: null },
+  { name: "Pentakill#NA1", rank: "Emerald", winRate: 49, role: "adc", champion: null },
+  { name: "FiveManKnockup#NA1", rank: "Platinum", winRate: 51, role: "support", champion: null }
 ];
 
 const DEMO_RED_TEAM = [
-  { name: "TopGap#NA1", rank: "Platinum", winRate: 48 },
-  { name: "SmiteCannon#NA1", rank: "Emerald", winRate: 50 },
-  { name: "PermaRoam#NA1", rank: "Platinum", winRate: 46 },
-  { name: "FF15#NA1", rank: "Gold", winRate: 53 },
-  { name: "SonOfKeria#NA1", rank: "Emerald", winRate: 47 }
+  { name: "TopGap#NA1", rank: "Platinum", winRate: 48, role: "top", champion: null },
+  { name: "SmiteCannon#NA1", rank: "Emerald", winRate: 50, role: "jungle", champion: null },
+  { name: "PermaRoam#NA1", rank: "Platinum", winRate: 46, role: "mid", champion: null },
+  { name: "FF15#NA1", rank: "Gold", winRate: 53, role: "adc", champion: null },
+  { name: "SonOfKeria#NA1", rank: "Emerald", winRate: 47, role: "support", champion: null }
 ];
 
 export default function Demo() {
@@ -31,6 +40,11 @@ export default function Demo() {
     const result = calculatePrediction(DEMO_BLUE_TEAM, DEMO_RED_TEAM);
     setPrediction(result);
     setHasCalculated(true);
+  };
+
+  const handleReset = () => {
+    setPrediction(null);
+    setHasCalculated(false);
   };
 
   return (
@@ -50,11 +64,12 @@ export default function Demo() {
             <div className="demo-teams">
               <div className="demo-team blue">
                 <h3>Blue Team</h3>
-                <ul>
+                <ul className="demo-players">
                   {DEMO_BLUE_TEAM.map((player, index) => (
-                    <li key={index}>
-                      <span className="player-name">{player.name}</span>
-                      <span className="player-stats">{player.rank} • {player.winRate}%</span>
+                    <li key={index} className="demo-player">
+                      <span className="demo-role">{ROLE_LABELS[player.role]}</span>
+                      <span className="demo-name">{player.name}</span>
+                      <span className="demo-stats">{player.rank} • {player.winRate}%</span>
                     </li>
                   ))}
                 </ul>
@@ -64,24 +79,31 @@ export default function Demo() {
 
               <div className="demo-team red">
                 <h3>Red Team</h3>
-                <ul>
+                <ul className="demo-players">
                   {DEMO_RED_TEAM.map((player, index) => (
-                    <li key={index}>
-                      <span className="player-name">{player.name}</span>
-                      <span className="player-stats">{player.rank} • {player.winRate}%</span>
+                    <li key={index} className="demo-player">
+                      <span className="demo-role">{ROLE_LABELS[player.role]}</span>
+                      <span className="demo-name">{player.name}</span>
+                      <span className="demo-stats">{player.rank} • {player.winRate}%</span>
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            {!hasCalculated ? (
-              <div className="demo-action">
+            <div className="demo-action">
+              {!hasCalculated ? (
                 <button className="btn btn-primary btn-lg" onClick={handleCalculate}>
                   Calculate Prediction
                 </button>
-              </div>
-            ) : (
+              ) : (
+                <button className="btn btn-ghost" onClick={handleReset}>
+                  Reset Demo
+                </button>
+              )}
+            </div>
+
+            {hasCalculated && prediction && (
               <>
                 <PredictionResult prediction={prediction} />
                 
@@ -104,6 +126,7 @@ export default function Demo() {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }

@@ -95,6 +95,17 @@
   margin-bottom: 8px;
 }
 
+.demo-role {
+  font-size: 12px;
+  font-weight: 600;
+  color: #16ddb2;
+  background: rgba(22, 221, 178, 0.1);
+  padding: 4px 8px;
+  border-radius: 4px;
+  min-width: 36px;
+  text-align: center;
+}
+
 .demo-cta-buttons {
   display: flex;
   gap: 12px;
@@ -103,12 +114,23 @@
 }
 
 @media (max-width: 768px) {
-  .demo-teams {
-    grid-template-columns: 1fr;
+  .demo-player {
+    padding: 10px;
+    gap: 8px;
   }
-  
-  .demo-vs {
-    padding: 16px 0;
+
+  .demo-role {
+    font-size: 11px;
+    min-width: 36px;
+    padding: 3px 6px;
+  }
+
+  .demo-name {
+    font-size: 13px;
+  }
+
+  .demo-stats {
+    font-size: 11px;
   }
 }
 
