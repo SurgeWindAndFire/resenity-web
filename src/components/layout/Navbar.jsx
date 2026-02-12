@@ -1,14 +1,27 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import "./Navbar.css";
 
 export default function Navbar() {
   const { currentUser } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+
+  const handleHashLink = (e, hash) => {
+    closeMenu();
+    
+    if (location.pathname === "/") {
+      e.preventDefault();
+      const element = document.querySelector(hash);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  };
 
   return (
     <nav className="nav">
@@ -34,8 +47,13 @@ export default function Navbar() {
 
         <div className={`nav-menu ${isMenuOpen ? "open" : ""}`}>
           <div className="nav-links">
-            <a href="/#features" onClick={closeMenu}>Features</a>
-            <a href="/#how-it-works" onClick={closeMenu}>How It Works</a>
+            <Link to="/features" onClick={closeMenu}>Features</Link>
+            <a 
+              href="/#how" 
+              onClick={(e) => handleHashLink(e, "#how")}
+            >
+              How It Works
+            </a>
             <Link to="/demo" onClick={closeMenu}>Demo</Link>
           </div>
           

@@ -15,6 +15,7 @@ const History = lazy(() => import("./pages/History"));
 const ViewPrediction = lazy(() => import("./pages/ViewPrediction"));
 const LiveGame = lazy(() => import("./pages/LiveGame"));
 const Demo = lazy(() => import("./pages/Demo"));
+const Features = lazy(() => import("./pages/Features"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function PageLoader() {
@@ -34,6 +35,7 @@ export default function App() {
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/features" element={<Features />} />
                 <Route path="/demo" element={<Demo />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
