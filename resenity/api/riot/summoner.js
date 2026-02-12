@@ -11,7 +11,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { name, tag, region = 'americas' } = req.query;
+  const name = req.query.name || req.query.gameName;
+  const tag = req.query.tag || req.query.tagLine;
+  const region = req.query.region || 'americas';
 
   if (!name || !tag) {
     return res.status(400).json({ error: 'Missing name or tag parameter' });
@@ -65,7 +67,6 @@ export default async function handler(req, res) {
       
       summonerLevel = summonerData.summonerLevel || 0;
       profileIconId = summonerData.profileIconId || 0;
-
       summonerId = summonerData.id || summonerData.summonerId || null;
     }
 
@@ -150,6 +151,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       success: true,
+      puuid: puuid,
       data: {
         name: accountData.gameName,
         tag: accountData.tagLine,
