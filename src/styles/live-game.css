@@ -27,7 +27,7 @@
 .search-box {
   display: flex;
   gap: 12px;
-  max-width: 650px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -95,8 +95,8 @@
 
 .teams-comparison {
   display: grid;
-  grid-template-columns: 1fr 60px 1fr;
-  gap: 16px;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
   align-items: start;
   margin-bottom: 40px;
 }
@@ -163,7 +163,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 200px;
+  min-width: 180px;
 }
 
 .champion-info {
@@ -229,7 +229,7 @@
   color: rgba(232, 238, 252, 0.6);
   white-space: nowrap;
   text-align: right;
-  min-width: 140px;
+  min-width: 120px;
   flex-shrink: 0;
 }
 
