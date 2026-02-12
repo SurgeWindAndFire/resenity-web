@@ -26,7 +26,7 @@ export default function Features() {
           <div className="features-grid">
             <FadeIn delay={100}>
               <div className="feature-card">
-                <div className="feature-icon">🎮</div>
+                <div className="feature-icon"></div>
                 <h3>Live Game Detection</h3>
                 <p>
                   Enter your Riot ID and we'll automatically detect your current game. 
@@ -42,7 +42,7 @@ export default function Features() {
 
             <FadeIn delay={200}>
               <div className="feature-card">
-                <div className="feature-icon">📊</div>
+                <div className="feature-icon"></div>
                 <h3>Real Player Data</h3>
                 <p>
                   We use Riot's official API to fetch accurate, up-to-date player statistics. 
@@ -58,7 +58,7 @@ export default function Features() {
 
             <FadeIn delay={300}>
               <div className="feature-card">
-                <div className="feature-icon">🧠</div>
+                <div className="feature-icon"></div>
                 <h3>Smart Predictions</h3>
                 <p>
                   Our algorithm analyzes team composition, rank distribution, and individual 
@@ -74,7 +74,7 @@ export default function Features() {
 
             <FadeIn delay={400}>
               <div className="feature-card">
-                <div className="feature-icon">💾</div>
+                <div className="feature-icon"></div>
                 <h3>Save & Track</h3>
                 <p>
                   Save your predictions and build a history. Track your accuracy over time 
@@ -90,7 +90,7 @@ export default function Features() {
 
             <FadeIn delay={500}>
               <div className="feature-card">
-                <div className="feature-icon">✏️</div>
+                <div className="feature-icon"></div>
                 <h3>Manual Match Entry</h3>
                 <p>
                   Want to analyze a hypothetical matchup? Enter any 10 players manually 
@@ -106,7 +106,7 @@ export default function Features() {
 
             <FadeIn delay={600}>
               <div className="feature-card coming-soon">
-                <div className="feature-icon">🏆</div>
+                <div className="feature-icon"></div>
                 <h3>Champion Analytics</h3>
                 <span className="coming-soon-badge">Coming Soon</span>
                 <p>
