@@ -15,11 +15,11 @@ const RANKS = [
 ];
 
 const ROLES = [
-  { value: "top", label: "Top" },
-  { value: "jungle", label: "Jungle" },
-  { value: "mid", label: "Mid" },
-  { value: "adc", label: "ADC" },
-  { value: "support", label: "Support" }
+  { value: "top", label: "Top", icon: "🛡️" },
+  { value: "jungle", label: "Jungle", icon: "🌲" },
+  { value: "mid", label: "Mid", icon: "⚡" },
+  { value: "adc", label: "ADC", icon: "🎯" },
+  { value: "support", label: "Support", icon: "💚" }
 ];
 
 export default function PlayerInput({ player, index, onUpdate, teamColor }) {
