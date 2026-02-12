@@ -76,23 +76,41 @@ async function processTeam(players) {
     playersWithRoles.map(async (player) => {
       try {
         const riotIdParts = player.riotId?.split('#') || [];
+        let rank = 'Gold';
+        let winRate = 50;
+        let puuid = player.puuid;
+
         if (riotIdParts.length === 2) {
           const result = await lookupSummoner(riotIdParts[0], riotIdParts[1]);
           if (result.success) {
-            return {
-              ...player,
-              name: player.riotId,
-              rank: normalizeRank(result.player.rank),
-              winRate: result.player.winRate
-            };
+            rank = normalizeRank(result.player.rank);
+            winRate = result.player.winRate;
+          }
+        }
+
+        let championMastery = null;
+        if (puuid && player.championId) {
+          try {
+            const masteryResponse = await fetch(
+              `/api/riot/champion-mastery?puuid=${puuid}&championId=${player.championId}`
+            );
+            if (masteryResponse.ok) {
+              const masteryData = await masteryResponse.json();
+              if (masteryData.success) {
+                championMastery = masteryData.data;
+              }
+            }
+          } catch (masteryError) {
+            console.error('Error fetching mastery:', masteryError);
           }
         }
 
         return {
           ...player,
           name: player.riotId || player.summonerName || 'Unknown',
-          rank: 'Gold',
-          winRate: 50
+          rank,
+          winRate,
+          championMastery
         };
       } catch (error) {
         console.error('Error fetching player stats:', error);
@@ -100,7 +118,8 @@ async function processTeam(players) {
           ...player,
           name: player.riotId || player.summonerName || 'Unknown',
           rank: 'Gold',
-          winRate: 50
+          winRate: 50,
+          championMastery: null
         };
       }
     })

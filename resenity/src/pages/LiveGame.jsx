@@ -19,6 +19,19 @@ const ROLE_LABELS = {
   support: "Sup"
 };
 
+function getMasteryBadge(level) {
+  if (level >= 7) return { label: "M7", className: "mastery-7" };
+  if (level >= 6) return { label: "M6", className: "mastery-6" };
+  if (level >= 5) return { label: "M5", className: "mastery-5" };
+  if (level >= 4) return { label: "M4", className: "mastery-4" };
+  return null;
+}
+
+function formatGamesPlayed(games) {
+  if (games >= 1000) return `${(games / 1000).toFixed(1)}k`;
+  return games.toString();
+}
+
 export default function LiveGame() {
   usePageTitle("Live Game Lookup");
   const navigate = useNavigate();
@@ -164,9 +177,19 @@ export default function LiveGame() {
                       <li key={index} className="player-row">
                         <div className="player-role-champion">
                           <span className="player-role">{ROLE_LABELS[player.role]}</span>
-                          {player.champion && (
-                            <span className="player-champion">{player.champion}</span>
-                          )}
+                          <div className="champion-info">
+                            <span className="player-champion">{player.champion || 'Unknown'}</span>
+                            {player.championMastery && getMasteryBadge(player.championMastery.championLevel) && (
+                              <span className={`mastery-badge ${getMasteryBadge(player.championMastery.championLevel).className}`}>
+                                {getMasteryBadge(player.championMastery.championLevel).label}
+                              </span>
+                            )}
+                            {player.championMastery && player.championMastery.gamesPlayed > 0 && (
+                              <span className="games-played" title="Estimated games on this champion">
+                                {formatGamesPlayed(player.championMastery.gamesPlayed)} games
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <span className="player-name">{player.name}</span>
                         <span className="player-stats">
@@ -186,9 +209,19 @@ export default function LiveGame() {
                       <li key={index} className="player-row">
                         <div className="player-role-champion">
                           <span className="player-role">{ROLE_LABELS[player.role]}</span>
-                          {player.champion && (
-                            <span className="player-champion">{player.champion}</span>
-                          )}
+                          <div className="champion-info">
+                            <span className="player-champion">{player.champion || 'Unknown'}</span>
+                            {player.championMastery && getMasteryBadge(player.championMastery.championLevel) && (
+                              <span className={`mastery-badge ${getMasteryBadge(player.championMastery.championLevel).className}`}>
+                                {getMasteryBadge(player.championMastery.championLevel).label}
+                              </span>
+                            )}
+                            {player.championMastery && player.championMastery.gamesPlayed > 0 && (
+                              <span className="games-played" title="Estimated games on this champion">
+                                {formatGamesPlayed(player.championMastery.gamesPlayed)} games
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <span className="player-name">{player.name}</span>
                         <span className="player-stats">
