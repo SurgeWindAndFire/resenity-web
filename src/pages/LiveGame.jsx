@@ -4,104 +4,91 @@ import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
-import { checkLiveGame } from "../services/liveGameService";
+import Spinner from "../components/ui/Spinner";
+import { fetchLiveGame } from "../services/liveGameService";
 import { calculatePrediction } from "../utils/prediction";
 import { savePrediction } from "../services/predictionServices";
-import Spinner from "../components/ui/Spinner";
-import "../styles/live-game.css";
 import usePageTitle from "../hooks/usePageTitle";
+import "../styles/live-game.css";
+
+const ROLE_LABELS = {
+  top: "Top",
+  jungle: "JG",
+  mid: "Mid",
+  adc: "ADC",
+  support: "Sup"
+};
 
 export default function LiveGame() {
   usePageTitle("Live Game Lookup");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { success, error: showError } = useToast();
-  
+
   const [riotId, setRiotId] = useState("");
-  const [isChecking, setIsChecking] = useState(false);
-  const [error, setError] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState("");
   const [gameData, setGameData] = useState(null);
   const [prediction, setPrediction] = useState(null);
-  const [teams, setTeams] = useState({ team1: [], team2: [] });
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const handleCheck = async () => {
-    const trimmed = riotId.trim();
+  const handleSearch = async (e) => {
+    e.preventDefault();
     
-    if (!trimmed) {
-      setError("Enter your Riot ID (e.g., Name#TAG)");
+    const trimmedId = riotId.trim();
+    if (!trimmedId) {
+      setSearchError("Please enter a Riot ID");
       return;
     }
 
-    const parts = trimmed.split('#');
+    const parts = trimmedId.split('#');
     if (parts.length !== 2) {
-      setError("Use format: Name#TAG");
+      setSearchError("Use format: Name#TAG (e.g., Player#NA1)");
       return;
     }
 
     const [gameName, tagLine] = parts;
-    
-    setIsChecking(true);
-    setError("");
+
+    setIsSearching(true);
+    setSearchError("");
     setGameData(null);
     setPrediction(null);
     setSaved(false);
 
-    const result = await checkLiveGame(gameName, tagLine);
-    
-    setIsChecking(false);
+    const result = await fetchLiveGame(gameName, tagLine);
 
-    if (!result.success) {
-      setError(result.error || "Failed to check live game");
-      return;
+    setIsSearching(false);
+
+    if (result.success) {
+      setGameData(result.game);
+      
+      const predictionResult = calculatePrediction(
+        result.game.blueTeam,
+        result.game.redTeam
+      );
+      setPrediction(predictionResult);
+    } else {
+      setSearchError(result.error);
     }
-
-    if (!result.inGame) {
-      setError("You're not currently in a game. Start up a game and try again!");
-      return;
-    }
-
-    setGameData(result);
-
-    const team1 = result.blueTeam.map(p => ({
-      name: p.name,
-      rank: normalizeRank(p.rank),
-      winRate: p.winRate
-    }));
-
-    const team2 = result.redTeam.map(p => ({
-      name: p.name,
-      rank: normalizeRank(p.rank),
-      winRate: p.winRate
-    }));
-
-    while (team1.length < 5) {
-      team1.push({ name: "Unknown", rank: "Gold", winRate: 50 });
-    }
-    while (team2.length < 5) {
-      team2.push({ name: "Unknown", rank: "Gold", winRate: 50 });
-    }
-
-    setTeams({ team1, team2 });
-
-    const pred = calculatePrediction(team1, team2);
-    setPrediction(pred);
   };
 
   const handleSave = async () => {
-    if (!prediction || !currentUser) return;
-    
+    if (!prediction || !currentUser || !gameData) return;
+
     setIsSaving(true);
-    
+
     const result = await savePrediction(currentUser.uid, {
-      team1: teams.team1,
-      team2: teams.team2,
-      result: prediction
+      team1: gameData.blueTeam,
+      team2: gameData.redTeam,
+      result: prediction,
+      gameId: gameData.gameId,
+      gameMode: gameData.gameMode,
+      source: 'live-game'
     });
-    
+
     setIsSaving(false);
-    
+
     if (result.success) {
       setSaved(true);
       success("Prediction saved successfully!");
@@ -110,12 +97,12 @@ export default function LiveGame() {
     }
   };
 
-  const normalizeRank = (rank) => {
-    if (!rank) return "Gold";
-    const validRanks = ["Iron", "Bronze", "Silver", "Gold", "Platinum", "Emerald", "Diamond", "Master", "Grandmaster", "Challenger"];
-    const normalized = rank.charAt(0).toUpperCase() + rank.slice(1).toLowerCase();
-    if (validRanks.includes(normalized)) return normalized;
-    return "Gold";
+  const formatGameTime = (startTime) => {
+    if (!startTime) return "In Progress";
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   return (
@@ -126,7 +113,7 @@ export default function LiveGame() {
           <header className="page-header">
             <div className="page-header-content">
               <h1>Live Game Lookup</h1>
-              <p className="muted">Enter your Riot ID to analyze your current match</p>
+              <p className="muted">Enter a Riot ID to analyze their current game</p>
             </div>
             <button 
               className="btn btn-ghost"
@@ -136,41 +123,37 @@ export default function LiveGame() {
             </button>
           </header>
 
-          <div className="live-game-search">
+          <form onSubmit={handleSearch} className="live-game-search">
             <div className="search-box">
               <input
                 type="text"
                 value={riotId}
                 onChange={(e) => setRiotId(e.target.value)}
-                placeholder="Enter your Riot ID (e.g., Faker#KR1)"
-                onKeyPress={(e) => e.key === 'Enter' && handleCheck()}
+                placeholder="Enter Riot ID (e.g., Doublelift#NA1)"
+                disabled={isSearching}
               />
               <button 
+                type="submit" 
                 className="btn btn-primary"
-                onClick={handleCheck}
-                disabled={isChecking}
+                disabled={isSearching}
               >
-                {isChecking ? "Searching..." : "Find My Game"}
+                {isSearching ? <Spinner size="small" /> : "Find Game"}
               </button>
             </div>
-            {error && <p className="error-message">{error}</p>}
-          </div>
+            {searchError && <p className="error-message">{searchError}</p>}
+          </form>
 
-          {isChecking && (
-            <div className="loading-state">
-              <Spinner size="large" text="Searching for your game..." />
+          {isSearching && (
+            <div className="search-loading">
+              <Spinner size="large" text="Searching for active game..." />
             </div>
           )}
 
-          {gameData && (
-            <div className="live-game-results">
+          {gameData && !isSearching && (
+            <>
               <div className="game-info">
                 <span className="game-mode">{gameData.gameMode}</span>
-                {gameData.gameLength > 0 && (
-                  <span className="game-time">
-                    {Math.floor(gameData.gameLength / 60)}:{String(gameData.gameLength % 60).padStart(2, '0')} elapsed
-                  </span>
-                )}
+                <span className="game-time">⏱ {formatGameTime(gameData.gameStartTime)}</span>
               </div>
 
               <div className="teams-comparison">
@@ -179,9 +162,15 @@ export default function LiveGame() {
                   <ul className="player-list">
                     {gameData.blueTeam.map((player, index) => (
                       <li key={index} className="player-row">
+                        <div className="player-role-champion">
+                          <span className="player-role">{ROLE_LABELS[player.role]}</span>
+                          {player.champion && (
+                            <span className="player-champion">{player.champion}</span>
+                          )}
+                        </div>
                         <span className="player-name">{player.name}</span>
                         <span className="player-stats">
-                          {normalizeRank(player.rank)} • {player.winRate}%
+                          {player.rank} • {player.winRate}%
                         </span>
                       </li>
                     ))}
@@ -195,9 +184,15 @@ export default function LiveGame() {
                   <ul className="player-list">
                     {gameData.redTeam.map((player, index) => (
                       <li key={index} className="player-row">
+                        <div className="player-role-champion">
+                          <span className="player-role">{ROLE_LABELS[player.role]}</span>
+                          {player.champion && (
+                            <span className="player-champion">{player.champion}</span>
+                          )}
+                        </div>
                         <span className="player-name">{player.name}</span>
                         <span className="player-stats">
-                          {normalizeRank(player.rank)} • {player.winRate}%
+                          {player.rank} • {player.winRate}%
                         </span>
                       </li>
                     ))}
@@ -208,11 +203,11 @@ export default function LiveGame() {
               {prediction && (
                 <>
                   <PredictionResult prediction={prediction} />
-                  
+
                   <div className="save-section">
                     {saved ? (
                       <div className="save-success">
-                        <span>Prediction saved!</span>
+                        <span>✓ Prediction saved!</span>
                         <button 
                           className="btn btn-ghost"
                           onClick={() => navigate("/dashboard/history")}
@@ -232,21 +227,21 @@ export default function LiveGame() {
                   </div>
                 </>
               )}
-            </div>
+            </>
           )}
 
-          {!gameData && !isChecking && !error && (
+          {!gameData && !isSearching && (
             <div className="instructions">
-              <h3>How it works</h3>
+              <h3>How to Use</h3>
               <ol>
-                <li>Start a League of Legends match (Ranked, Normal, etc.)</li>
-                <li>Once you're in the loading screen or in-game, come back here</li>
-                <li>Enter your Riot ID and click "Find My Game"</li>
-                <li>See instant predictions for all 10 players!</li>
+                <li>Enter your Riot ID or any player's Riot ID (e.g., <strong>Doublelift#NA1</strong>)</li>
+                <li>Make sure the player is currently in an active game</li>
+                <li>Click "Find Game" to fetch all players and their stats</li>
+                <li>View the prediction and save it to track accuracy</li>
               </ol>
               <p className="note">
-                Note: Works after champion select ends (loading screen or in-game). 
-                For champion select analysis, a desktop app would be needed.
+                Note: The player must be in an active game for this to work. 
+                Champion select and post-game lobbies are not detected.
               </p>
             </div>
           )}
