@@ -7,18 +7,25 @@ import TeamBuilder from "../components/match/TeamBuilder";
 import PredictionResult from "../components/match/PredictionResult";
 import { calculatePrediction } from "../utils/prediction";
 import { savePrediction } from "../services/predictionServices";
-import "../styles/match.css";
 import usePageTitle from "../hooks/usePageTitle";
+import "../styles/match.css";
 
-const emptyPlayer = { name: "", rank: "Gold", winRate: 50 };
+const ROLES = ["top", "jungle", "mid", "adc", "support"];
 
-const createEmptyTeam = () => Array(5).fill(null).map(() => ({ ...emptyPlayer }));
+const createEmptyTeam = () => ROLES.map((role) => ({ 
+  name: "", 
+  rank: "Gold", 
+  winRate: 50,
+  role: role,
+  champion: null,
+  championStats: null
+}));
 
 export default function CreateMatch() {
-  usePageTitle("Create Match");
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { success, error: showError } = useToast();
+  usePageTitle("Create Match");
   
   const [team1, setTeam1] = useState(createEmptyTeam());
   const [team2, setTeam2] = useState(createEmptyTeam());
@@ -129,7 +136,7 @@ export default function CreateMatch() {
 
             {!canCalculate && (
               <p className="validation-hint muted">
-                Please fill in all player name fields to calculate prediction
+                Please fill in all player names to calculate prediction
               </p>
             )}
           </div>
@@ -141,7 +148,7 @@ export default function CreateMatch() {
               <div className="save-section">
                 {saved ? (
                   <div className="save-success">
-                    <span>Prediction saved!</span>
+                    <span>✓ Prediction saved!</span>
                     <button 
                       className="btn btn-ghost"
                       onClick={() => navigate("/dashboard/history")}

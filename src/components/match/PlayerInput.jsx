@@ -14,6 +14,14 @@ const RANKS = [
   "Challenger"
 ];
 
+const ROLES = [
+  { value: "top", label: "Top" },
+  { value: "jungle", label: "Jungle" },
+  { value: "mid", label: "Mid" },
+  { value: "adc", label: "ADC" },
+  { value: "support", label: "Support" }
+];
+
 export default function PlayerInput({ player, index, onUpdate, teamColor }) {
   const [isLooking, setIsLooking] = useState(false);
   const [lookupError, setLookupError] = useState('');
@@ -47,9 +55,6 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       const newRank = normalizeRank(result.player.rank);
       const newWinRate = result.player.winRate;
       
-      console.log('Setting rank to:', newRank);
-      console.log('Setting winRate to:', newWinRate);
-      
       onUpdate('rank', newRank);
       setTimeout(() => {
         onUpdate('winRate', newWinRate);
@@ -61,6 +66,9 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
     }
   };
 
+  const defaultRole = ROLES[index]?.value || "top";
+  const currentRole = player.role || defaultRole;
+
   return (
     <div className={`player-input player-${teamColor}`}>
       <div className="player-number">
@@ -68,6 +76,23 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
       </div>
       
       <div className="player-fields">
+        <div className="field field-role">
+          <label htmlFor={`role-${teamColor}-${index}`}>Role</label>
+          <div className="role-selector">
+            {ROLES.map((role) => (
+              <button
+                key={role.value}
+                type="button"
+                className={`role-btn ${currentRole === role.value ? 'active' : ''}`}
+                onClick={() => onUpdate("role", role.value)}
+                title={role.label}
+              >
+                <span className="role-icon">{role.icon}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
         <div className="field field-name">
           <label htmlFor={`name-${teamColor}-${index}`}>Riot ID</label>
           <div className="input-with-button">
@@ -105,7 +130,7 @@ export default function PlayerInput({ player, index, onUpdate, teamColor }) {
         </div>
         
         <div className="field field-small">
-          <label htmlFor={`winrate-${teamColor}-${index}`}>Win Rate %</label>
+          <label htmlFor={`winrate-${teamColor}-${index}`}>Win %</label>
           <input
             type="number"
             id={`winrate-${teamColor}-${index}`}
