@@ -140,16 +140,17 @@
 }
 
 .field-role {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 .role-selector {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  padding: 6px;
+  padding: 5px 6px;
 }
 
 .role-btn {
@@ -157,13 +158,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 4px;
+  padding: 6px 4px;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: rgba(232, 238, 252, 0.5);
   white-space: nowrap;
@@ -181,10 +182,15 @@
   color: #16ddb2;
 }
 
-.player-stats-row {
+.player-role-row {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: flex-end;
+}
+
+.field-champion {
+  flex: 1;
+  min-width: 0;
 }
 
 .field {
@@ -235,6 +241,12 @@
 .field-small {
   width: 90px;
   flex-shrink: 0;
+}
+
+.player-stats-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
 }
 
 .input-with-button {
@@ -496,22 +508,6 @@
   color: #16ddb2;
 }
 
-.player-role-row {
-  display: flex;
-  gap: 16px;
-  align-items: flex-end;
-}
-
-.field-role {
-  flex: 1;
-  min-width: 0;
-}
-
-.field-champion {
-  flex: 1;
-  min-width: 0;
-}
-
 @media (max-width: 1024px) {
   .teams-container {
     grid-template-columns: 1fr;
@@ -554,6 +550,16 @@
 
   .player-number {
     align-self: flex-start;
+  }
+
+  .player-role-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field-role,
+  .field-champion {
+    width: 100%;
   }
 
   .player-stats-row {
@@ -611,8 +617,8 @@
 
 @media (max-width: 480px) {
   .role-btn {
-    padding: 10px 2px;
-    font-size: 11px;
+    padding: 8px 2px;
+    font-size: 10px;
   }
 
   .field input,
@@ -628,17 +634,5 @@
 
   .team-prob .prob-value {
     font-size: 28px;
-  }
-}
-
-@media (max-width: 768px) {
-  .player-role-row {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .field-role,
-  .field-champion {
-    width: 100%;
   }
 }
