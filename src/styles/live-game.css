@@ -95,13 +95,10 @@
 
 .teams-comparison {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 20px;
+  grid-template-columns: 1fr 60px 1fr;
+  gap: 16px;
   align-items: start;
   margin-bottom: 40px;
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 .team-card {
