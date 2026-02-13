@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useToast } from "../contexts/ToastContext";
 import { doc, setDoc } from "firebase/firestore";
-import { db } from "../config/firebase";
+import { db } from "../firebase";
 import Navbar from "../components/layout/Navbar";
 import usePageTitle from "../hooks/usePageTitle";
 import "../styles/auth.css";
