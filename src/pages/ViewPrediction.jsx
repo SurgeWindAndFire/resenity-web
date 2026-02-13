@@ -189,7 +189,12 @@ export default function ViewPrediction() {
             <h3>Key Factors</h3>
             <ul className="factors-list">
               {factors.map((factor, i) => (
-                <li key={i}>{factor}</li>
+                <li key={i}>
+                  {typeof factor === 'string' 
+                    ? factor 
+                    : factor.text || `${factor.favor} team: ${factor.impact}`
+                  }
+                </li>
               ))}
             </ul>
           </div>
