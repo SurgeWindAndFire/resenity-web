@@ -55,6 +55,7 @@ export default function Navbar() {
               How It Works
             </a>
             <Link to="/demo" onClick={closeMenu}>Demo</Link>
+            <Link to="/about" onClick={closeMenu}>About</Link>
           </div>
           
           <div className="nav-actions">

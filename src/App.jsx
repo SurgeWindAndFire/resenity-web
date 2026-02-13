@@ -19,6 +19,8 @@ const Demo = lazy(() => import("./pages/Demo"));
 const Features = lazy(() => import("./pages/Features"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Stats = lazy(() => import("./pages/Stats"));
+const About = lazy(() => import("./pages/About"));
+const Suggestions = lazy(() => import("./pages/Suggestions"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function PageLoader() {
@@ -41,6 +43,8 @@ export default function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/features" element={<Features />} />
                   <Route path="/demo" element={<Demo />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/suggestions" element={<Suggestions />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/signup" element={<Signup />} />
                   <Route 
