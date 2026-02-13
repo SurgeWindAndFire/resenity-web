@@ -17,16 +17,20 @@ const COLLECTION_NAME = "predictions";
 
 export async function savePrediction(userId, predictionData) {
   try {
+    const team1Prob = predictionData.result.team1Probability || 50;
+    const team2Prob = predictionData.result.team2Probability || 50;
+    const winner = predictionData.result.winner || (team1Prob >= team2Prob ? "team1" : "team2");
+
     const docRef = await addDoc(collection(db, COLLECTION_NAME), {
       userId,
       team1: predictionData.team1,
       team2: predictionData.team2,
       result: {
-        team1Probability: predictionData.result.team1Probability,
-        team2Probability: predictionData.result.team2Probability,
-        confidence: predictionData.result.confidence,
-        factors: predictionData.result.factors,
-        winner: predictionData.result.winner
+        team1Probability: team1Prob,
+        team2Probability: team2Prob,
+        confidence: predictionData.result.confidence || "Medium",
+        factors: predictionData.result.factors || [],
+        winner: winner
       },
       createdAt: serverTimestamp(),
       outcome: "pending",
