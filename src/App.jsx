@@ -18,6 +18,7 @@ const LiveGame = lazy(() => import("./pages/LiveGame"));
 const Demo = lazy(() => import("./pages/Demo"));
 const Features = lazy(() => import("./pages/Features"));
 const Profile = lazy(() => import("./pages/Profile"));
+const Stats = lazy(() => import("./pages/Stats"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 function PageLoader() {
@@ -87,6 +88,14 @@ export default function App() {
                     element={
                       <ProtectedRoute>
                         <Profile />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/stats" 
+                    element={
+                      <ProtectedRoute>
+                        <Stats />
                       </ProtectedRoute>
                     } 
                   />
