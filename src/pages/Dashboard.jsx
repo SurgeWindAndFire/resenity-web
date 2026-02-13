@@ -1,22 +1,14 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useUser } from "../contexts/UserContext";
 import Navbar from "../components/layout/Navbar";
-import "../styles/dashboard.css";
 import usePageTitle from "../hooks/usePageTitle";
+import "../styles/dashboard.css";
 
 export default function Dashboard() {
   usePageTitle("Dashboard");
-  const { currentUser, logout } = useAuth();
-  const navigate = useNavigate();
-
-  async function handleLogout() {
-    try {
-      await logout();
-      navigate("/");
-    } catch (err) {
-      console.error("Failed to log out:", err);
-    }
-  }
+  const { currentUser } = useAuth();
+  const { username } = useUser();
 
   return (
     <div className="page">
@@ -24,40 +16,33 @@ export default function Dashboard() {
       <main className="dashboard">
         <div className="container">
           <header className="dashboard-header">
-            <h1>Dashboard</h1>
-            <p className="muted">Welcome back, {currentUser?.email}!</p>
+            <div>
+              <h1>Welcome back, {username}!</h1>
+              <p className="muted">What would you like to do today?</p>
+            </div>
+            <Link to="/dashboard/profile" className="btn btn-ghost">
+              Profile
+            </Link>
           </header>
 
-          <div className="dashboard-content">
-            <div className="card">
-              <header className="card-header">
-                <h3>Quick Actions</h3>
-              </header>
-              <div className="dashboard-actions">
-                <Link to="/dashboard/live-game" className="btn btn-primary">
-                  Live Game Lookup
-                </Link>
-                <Link to="/dashboard/create-match" className="btn btn-ghost">
-                  Manual Match Entry
-                </Link>
-                <Link to="/dashboard/history" className="btn btn-ghost">
-                  View History
-                </Link>
-                <button className="btn btn-ghost" onClick={handleLogout}>
-                  Sign Out
-                </button>
-              </div>
-            </div>
+          <div className="dashboard-grid">
+            <Link to="/dashboard/live-game" className="dashboard-card primary">
+              <div className="card-icon">🎮</div>
+              <h2>Live Game Lookup</h2>
+              <p>Analyze an active game in real-time</p>
+            </Link>
 
-            <div className="card">
-              <header className="card-header">
-                <h3>Recent Predictions</h3>
-              </header>
-              <p className="muted">
-                All of your saved predictions will appear here.{" "}
-                <Link to="/dashboard/history">View all</Link>
-              </p>
-            </div>
+            <Link to="/dashboard/create-match" className="dashboard-card">
+              <div className="card-icon">➕</div>
+              <h2>Create Match</h2>
+              <p>Manually enter players for a prediction</p>
+            </Link>
+
+            <Link to="/dashboard/history" className="dashboard-card">
+              <div className="card-icon">📊</div>
+              <h2>History</h2>
+              <p>View your saved predictions</p>
+            </Link>
           </div>
         </div>
       </main>

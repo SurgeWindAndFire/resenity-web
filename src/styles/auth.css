@@ -114,3 +114,9 @@
 .auth-home-link:hover {
   color: rgba(232, 238, 252, 0.8);
 }
+
+.form-hint {
+  font-size: 11px;
+  color: rgba(232, 238, 252, 0.4);
+  margin-top: 4px;
+}
