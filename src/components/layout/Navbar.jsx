@@ -1,8 +1,8 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "../../contexts/AuthContext";
-import { UserProvider } from "./contexts/UserContext";
-import { ToastProvider } from "./contexts/ToastContext";
+import { UserProvider } from "../../contexts/UserContext";
+import { ToastProvider } from "../../contexts/ToastContext";
 import ErrorBoundary from "./components/ui/ErrorBoundary";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import Spinner from "./components/ui/Spinner";
