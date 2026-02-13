@@ -1,0 +1,371 @@
+.view-prediction-page {
+  min-height: 100vh;
+  background: #0b0d12;
+  padding-bottom: 60px;
+}
+
+.view-prediction-page .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-top: 40px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.page-header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.back-btn {
+  background: none;
+  border: none;
+  color: rgba(232, 238, 252, 0.6);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 8px;
+  transition: color 0.2s ease;
+}
+
+.back-btn:hover {
+  color: #16ddb2;
+}
+
+.view-prediction-page .page-header h1 {
+  font-family: 'Russo One', sans-serif;
+  font-size: 28px;
+  color: #e8eefc;
+}
+
+.view-prediction-page .page-header .muted {
+  color: rgba(232, 238, 252, 0.5);
+  font-size: 14px;
+}
+
+.outcome-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.outcome-badge.won {
+  background: rgba(22, 221, 178, 0.1);
+  border: 1px solid rgba(22, 221, 178, 0.3);
+  color: #16ddb2;
+}
+
+.outcome-badge.lost {
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  color: #f87171;
+}
+
+.accuracy-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.accuracy-badge.correct {
+  background: rgba(22, 221, 178, 0.2);
+  color: #16ddb2;
+}
+
+.accuracy-badge.incorrect {
+  background: rgba(248, 113, 113, 0.2);
+  color: #f87171;
+}
+
+.prediction-summary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  margin-bottom: 32px;
+}
+
+.team-probability {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 200px;
+}
+
+.team-probability .team-name {
+  font-size: 14px;
+  color: rgba(232, 238, 252, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.team-probability .probability {
+  font-family: 'Russo One', sans-serif;
+  font-size: 48px;
+  color: rgba(232, 238, 252, 0.5);
+  transition: all 0.3s ease;
+}
+
+.team-probability.winner .probability {
+  color: #16ddb2;
+  text-shadow: 0 0 24px rgba(22, 221, 178, 0.4);
+}
+
+.vs-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.confidence-badge {
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 13px;
+  color: rgba(232, 238, 252, 0.7);
+}
+
+.view-prediction-page .teams-comparison {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.view-prediction-page .team-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.view-prediction-page .team-card.blue {
+  border-top: 3px solid #3b82f6;
+}
+
+.view-prediction-page .team-card.red {
+  border-top: 3px solid #ef4444;
+}
+
+.view-prediction-page .team-card h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  font-family: 'Russo One', sans-serif;
+  font-size: 16px;
+  color: #e8eefc;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.predicted-tag {
+  font-family: -apple-system, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: rgba(22, 221, 178, 0.15);
+  color: #16ddb2;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.players-list {
+  padding: 12px;
+}
+
+.view-prediction-page .player-row {
+  display: grid;
+  grid-template-columns: minmax(100px, auto) 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.view-prediction-page .player-row:last-child {
+  margin-bottom: 0;
+}
+
+.player-role-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.role-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  color: rgba(232, 238, 252, 0.7);
+  text-transform: uppercase;
+}
+
+.champion-name {
+  font-size: 13px;
+  color: rgba(232, 238, 252, 0.6);
+}
+
+.view-prediction-page .player-name {
+  font-weight: 500;
+  font-size: 14px;
+  color: #e8eefc;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.view-prediction-page .player-stats {
+  font-size: 13px;
+  color: rgba(232, 238, 252, 0.5);
+  white-space: nowrap;
+}
+
+.view-prediction-page .vs-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+}
+
+.view-prediction-page .vs-badge span {
+  font-family: 'Russo One', sans-serif;
+  font-size: 20px;
+  color: rgba(232, 238, 252, 0.3);
+  padding: 10px 14px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.factors-section {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.factors-section h3 {
+  font-family: 'Russo One', sans-serif;
+  font-size: 16px;
+  color: #e8eefc;
+  margin-bottom: 16px;
+}
+
+.factors-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.factors-list li {
+  position: relative;
+  padding: 10px 0 10px 24px;
+  color: rgba(232, 238, 252, 0.7);
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.factors-list li:last-child {
+  border-bottom: none;
+}
+
+.factors-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: #16ddb2;
+  font-weight: 600;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.view-prediction-page .loading-container,
+.view-prediction-page .error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  gap: 20px;
+}
+
+.view-prediction-page .error-container h2 {
+  font-family: 'Russo One', sans-serif;
+  font-size: 24px;
+  color: #e8eefc;
+}
+
+@media (max-width: 1024px) {
+  .view-prediction-page .teams-comparison {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .view-prediction-page .vs-badge {
+    padding: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .view-prediction-page .page-header {
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 24px;
+  }
+  
+  .outcome-badge {
+    justify-content: center;
+  }
+  
+  .prediction-summary {
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+  }
+  
+  .team-probability .probability {
+    font-size: 36px;
+  }
+  
+  .view-prediction-page .player-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-buttons .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

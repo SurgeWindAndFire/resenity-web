@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { getPrediction } from "../services/predictionServices";
 import Navbar from "../components/layout/Navbar";
-import PredictionResult from "../components/match/PredictionResult";
-import { getPredictionById, deletePrediction } from "../services/predictionServices";
-import "../styles/history.css";
-import usePageTitle from "../hooks/usePageTitle";
+import Spinner from "../components/ui/Spinner";
+import OutcomeSelector from "../components/prediction/OutcomeSelector";
+import "../styles/view-prediction.css";
 
 export default function ViewPrediction() {
-  usePageTitle("View Prediction");
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
@@ -18,123 +17,199 @@ export default function ViewPrediction() {
 
   useEffect(() => {
     async function fetchPrediction() {
+      if (!currentUser || !id) return;
+      
       setLoading(true);
-      const result = await getPredictionById(id);
+      const result = await getPrediction(id);
       
       if (result.success) {
-        if (result.prediction.userId !== currentUser?.uid) {
-          setError("You don't have permission to view this prediction");
+        if (result.data.userId !== currentUser.uid) {
+          setError("You don't have permission to view this prediction.");
         } else {
-          setPrediction(result.prediction);
+          setPrediction(result.data);
         }
       } else {
-        setError("Prediction not found");
+        setError(result.error);
       }
+      
       setLoading(false);
     }
     
     fetchPrediction();
-  }, [id, currentUser]);
+  }, [currentUser, id]);
 
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this prediction?")) {
-      return;
-    }
-    
-    const result = await deletePrediction(id);
-    
-    if (result.success) {
-      navigate("/dashboard/history");
-    } else {
-      alert("Failed to delete prediction");
-    }
+  const handleOutcomeUpdate = ({ outcome, wasCorrect }) => {
+    setPrediction(prev => ({
+      ...prev,
+      outcome,
+      wasCorrect
+    }));
   };
+
+  if (loading) {
+    return (
+      <div className="view-prediction-page">
+        <Navbar />
+        <main className="container">
+          <div className="loading-container">
+            <Spinner size="large" text="Loading prediction..." />
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error || !prediction) {
+    return (
+      <div className="view-prediction-page">
+        <Navbar />
+        <main className="container">
+          <div className="error-container">
+            <h2>{error || "Prediction not found"}</h2>
+            <Link to="/dashboard/history" className="btn btn-ghost">
+              Back to History
+            </Link>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  const { team1, team2, result, createdAt, outcome, wasCorrect } = prediction;
+  const team1WinProbability = result?.team1Probability || 50;
+  const team2WinProbability = result?.team2Probability || 50;
+  const predictedWinner = result?.winner || "team1";
+  const confidence = result?.confidence || "Medium";
+  const factors = result?.factors || [];
 
   const formatDate = (timestamp) => {
     if (!timestamp) return "Unknown date";
     const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-      hour: "2-digit",
-      minute: "2-digit"
+    return date.toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric', 
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
   return (
-    <div className="page">
+    <div className="view-prediction-page">
       <Navbar />
-      <main className="view-prediction-page">
-        <div className="container">
-          <header className="page-header">
-            <div className="page-header-content">
-              <h1>Prediction Details</h1>
-              {prediction && (
-                <p className="muted">{formatDate(prediction.createdAt)}</p>
+      
+      <main className="container">
+        <div className="page-header">
+          <div className="page-header-content">
+            <button className="back-btn" onClick={() => navigate(-1)}>
+              ← Back
+            </button>
+            <h1>Match Prediction</h1>
+            <p className="muted">{formatDate(createdAt)}</p>
+          </div>
+          
+          {outcome && outcome !== "pending" && (
+            <div className={`outcome-badge ${outcome}`}>
+              {outcome === "won" ? "🏆 Victory" : "💀 Defeat"}
+              {wasCorrect !== null && (
+                <span className={`accuracy-badge ${wasCorrect ? 'correct' : 'incorrect'}`}>
+                  {wasCorrect ? '✓ Predicted' : '✗ Missed'}
+                </span>
               )}
             </div>
-            <Link to="/dashboard/history" className="btn btn-ghost">
-              Back to History
-            </Link>
-          </header>
+          )}
+        </div>
 
-          {loading ? (
-            <div className="loading-state">
-              <p>Loading prediction...</p>
-            </div>
-          ) : error ? (
-            <div className="error-state">
-              <p>{error}</p>
-              <Link to="/dashboard/history" className="btn btn-primary">
-                Go to History
-              </Link>
-            </div>
-          ) : prediction ? (
-            <>
-              <div className="teams-detail">
-                <div className="team-detail blue">
-                  <h3>Blue Team</h3>
-                  <ul className="players-detail-list">
-                    {prediction.team1.map((player, index) => (
-                      <li key={index}>
-                        <span className="player-name">{player.name}</span>
-                        <span className="player-stats">
-                          {player.rank} • {player.winRate}% WR
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                
-                <div className="team-detail red">
-                  <h3>Red Team</h3>
-                  <ul className="players-detail-list">
-                    {prediction.team2.map((player, index) => (
-                      <li key={index}>
-                        <span className="player-name">{player.name}</span>
-                        <span className="player-stats">
-                          {player.rank} • {player.winRate}% WR
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+        <div className="prediction-summary">
+          <div className={`team-probability ${predictedWinner === 'team1' ? 'winner' : ''}`}>
+            <span className="team-name">Blue Team</span>
+            <span className="probability">{team1WinProbability}%</span>
+          </div>
+          
+          <div className="vs-divider">
+            <span className="confidence-badge">{confidence} Confidence</span>
+          </div>
+          
+          <div className={`team-probability ${predictedWinner === 'team2' ? 'winner' : ''}`}>
+            <span className="team-name">Red Team</span>
+            <span className="probability">{team2WinProbability}%</span>
+          </div>
+        </div>
 
-              <PredictionResult prediction={prediction.result} />
-              
-              <div className="prediction-actions">
-                <button 
-                  className="btn btn-ghost btn-danger"
-                  onClick={handleDelete}
-                >
-                  Delete Prediction
-                </button>
-              </div>
-            </>
-          ) : null}
+        <div className="teams-comparison">
+          <div className="team-card blue">
+            <h3>
+              Blue Team
+              {predictedWinner === 'team1' && <span className="predicted-tag">Predicted Winner</span>}
+            </h3>
+            <div className="players-list">
+              {team1.map((player, i) => (
+                <div key={i} className="player-row">
+                  <div className="player-role-info">
+                    {player.role && <span className="role-badge">{player.role}</span>}
+                    {player.champion && <span className="champion-name">{player.champion}</span>}
+                  </div>
+                  <span className="player-name">{player.name || `Player ${i + 1}`}</span>
+                  <span className="player-stats">
+                    {player.rank || "Unranked"} • {player.winRate || 50}% WR
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="vs-badge">
+            <span>VS</span>
+          </div>
+
+          <div className="team-card red">
+            <h3>
+              Red Team
+              {predictedWinner === 'team2' && <span className="predicted-tag">Predicted Winner</span>}
+            </h3>
+            <div className="players-list">
+              {team2.map((player, i) => (
+                <div key={i} className="player-row">
+                  <div className="player-role-info">
+                    {player.role && <span className="role-badge">{player.role}</span>}
+                    {player.champion && <span className="champion-name">{player.champion}</span>}
+                  </div>
+                  <span className="player-name">{player.name || `Player ${i + 1}`}</span>
+                  <span className="player-stats">
+                    {player.rank || "Unranked"} • {player.winRate || 50}% WR
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {factors.length > 0 && (
+          <div className="factors-section">
+            <h3>Key Factors</h3>
+            <ul className="factors-list">
+              {factors.map((factor, i) => (
+                <li key={i}>{factor}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <OutcomeSelector
+          predictionId={id}
+          currentOutcome={outcome}
+          predictedWinner={predictedWinner}
+          wasCorrect={wasCorrect}
+          onOutcomeUpdate={handleOutcomeUpdate}
+        />
+
+        <div className="action-buttons">
+          <Link to="/dashboard/history" className="btn btn-ghost">
+            View All Predictions
+          </Link>
+          <Link to="/dashboard/stats" className="btn btn-primary">
+            View My Stats
+          </Link>
         </div>
       </main>
     </div>
