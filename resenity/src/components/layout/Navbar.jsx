@@ -1,82 +1,111 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../../contexts/AuthContext";
-import "./Navbar.css";
+import { lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import { UserProvider } from "./contexts/UserContext";
+import { ToastProvider } from "./contexts/ToastContext";
+import ErrorBoundary from "./components/ui/ErrorBoundary";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
+import Spinner from "./components/ui/Spinner";
 
-export default function Navbar() {
-  const { currentUser } = useAuth();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const location = useLocation();
+const Home = lazy(() => import("./pages/Home"));
+const Login = lazy(() => import("./pages/Login"));
+const Signup = lazy(() => import("./pages/Signup"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const CreateMatch = lazy(() => import("./pages/CreateMatch"));
+const History = lazy(() => import("./pages/History"));
+const ViewPrediction = lazy(() => import("./pages/ViewPrediction"));
+const LiveGame = lazy(() => import("./pages/LiveGame"));
+const Demo = lazy(() => import("./pages/Demo"));
+const Features = lazy(() => import("./pages/Features"));
+const Profile = lazy(() => import("./pages/Profile"));
+const Stats = lazy(() => import("./pages/Stats"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const closeMenu = () => setIsMenuOpen(false);
-
-  const handleHashLink = (e, hash) => {
-    closeMenu();
-    
-    if (location.pathname === "/") {
-      e.preventDefault();
-      const element = document.querySelector(hash);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
-
+function PageLoader() {
   return (
-    <nav className="nav">
-      <div className="container nav-inner">
-        <Link to="/" className="brand" onClick={closeMenu}>
-          <img 
-            src="/ResenityWhite.png" 
-            alt="Resenity" 
-            className="brand-logo"
-          />
-          <span className="brand-text">Resenity</span>
-        </Link>
+    <div className="page-loader">
+      <Spinner size="large" text="Loading..." />
+    </div>
+  );
+}
 
-        <button 
-          className={`hamburger ${isMenuOpen ? "active" : ""}`}
-          onClick={toggleMenu}
-          aria-label="Toggle menu"
-        >
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-          <span className="hamburger-line"></span>
-        </button>
-
-        <div className={`nav-menu ${isMenuOpen ? "open" : ""}`}>
-          <div className="nav-links">
-            <Link to="/features" onClick={closeMenu}>Features</Link>
-            <a 
-              href="/#how" 
-              onClick={(e) => handleHashLink(e, "#how")}
-            >
-              How It Works
-            </a>
-            <Link to="/demo" onClick={closeMenu}>Demo</Link>
-          </div>
-          
-          <div className="nav-actions">
-            {currentUser ? (
-              <Link to="/dashboard" className="btn btn-primary" onClick={closeMenu}>
-                Dashboard
-              </Link>
-            ) : (
-              <>
-                <Link to="/login" className="btn btn-ghost" onClick={closeMenu}>
-                  Sign In
-                </Link>
-                <Link to="/signup" className="btn btn-primary" onClick={closeMenu}>
-                  Get Started
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-
-        {isMenuOpen && <div className="nav-overlay" onClick={closeMenu}></div>}
-      </div>
-    </nav>
+export default function App() {
+  return (
+    <ErrorBoundary>
+      <Router>
+        <AuthProvider>
+          <UserProvider>
+            <ToastProvider>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/features" element={<Features />} />
+                  <Route path="/demo" element={<Demo />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route 
+                    path="/dashboard" 
+                    element={
+                      <ProtectedRoute>
+                        <Dashboard />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/create-match" 
+                    element={
+                      <ProtectedRoute>
+                        <CreateMatch />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/history" 
+                    element={
+                      <ProtectedRoute>
+                        <History />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/prediction/:id" 
+                    element={
+                      <ProtectedRoute>
+                        <ViewPrediction />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/live-game" 
+                    element={
+                      <ProtectedRoute>
+                        <LiveGame />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/profile" 
+                    element={
+                      <ProtectedRoute>
+                        <Profile />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route 
+                    path="/dashboard/stats" 
+                    element={
+                      <ProtectedRoute>
+                        <Stats />
+                      </ProtectedRoute>
+                    } 
+                  />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </ToastProvider>
+          </UserProvider>
+        </AuthProvider>
+      </Router>
+    </ErrorBoundary>
   );
 }
