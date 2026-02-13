@@ -78,7 +78,9 @@ export default function ViewPrediction() {
   const { team1, team2, result, createdAt, outcome, wasCorrect } = prediction;
   const team1WinProbability = result?.team1Probability || 50;
   const team2WinProbability = result?.team2Probability || 50;
-  const predictedWinner = result?.winner || "team1";
+  
+  const predictedWinner = result?.winner || (team1WinProbability >= team2WinProbability ? "team1" : "team2");
+  
   const confidence = result?.confidence || "Medium";
   const factors = result?.factors || [];
 
