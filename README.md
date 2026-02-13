@@ -41,7 +41,7 @@ reasoning (Plans for multiple competitive titles are coming soon in the future).
 
 ---
 
-## 🛠️ Tech Stack
+## Technologies Used
 
 **Frontend**:
 - React 19 (Vite)
@@ -58,7 +58,7 @@ reasoning (Plans for multiple competitive titles are coming soon in the future).
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 20+ and npm
