@@ -40,10 +40,21 @@ export async function createUserProfile(uid, data) {
 
 export async function updateUserProfile(uid, data) {
   try {
-    await updateDoc(doc(db, "users", uid), {
-      ...data,
-      updatedAt: new Date().toISOString()
-    });
+    const userRef = doc(db, "users", uid);
+    const userDoc = await getDoc(userRef);
+    
+    if (userDoc.exists()) {
+      await updateDoc(userRef, {
+        ...data,
+        updatedAt: new Date().toISOString()
+      });
+    } else {
+      await setDoc(userRef, {
+        ...data,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      });
+    }
     
     return { success: true };
   } catch (error) {
