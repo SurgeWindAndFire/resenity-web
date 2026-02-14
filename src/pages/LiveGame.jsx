@@ -6,6 +6,7 @@ import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
 import Spinner from "../components/ui/Spinner";
 import { fetchLiveGame } from "../services/liveGameService";
+import { getDeepAnalysis } from "../services/riotService";
 import { calculatePrediction } from "../utils/prediction";
 import { savePrediction } from "../services/predictionServices";
 import usePageTitle from "../hooks/usePageTitle";
@@ -45,6 +46,10 @@ export default function LiveGame() {
   const [prediction, setPrediction] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [deepAnalysisData, setDeepAnalysisData] = useState(null);
+  const [analysisProgress, setAnalysisProgress] = useState(0);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -68,6 +73,8 @@ export default function LiveGame() {
     setGameData(null);
     setPrediction(null);
     setSaved(false);
+    setDeepAnalysisData(null);
+    setAnalysisProgress(0);
 
     const result = await fetchLiveGame(gameName, tagLine);
 
@@ -86,6 +93,101 @@ export default function LiveGame() {
     }
   };
 
+  const handleDeepAnalysis = async () => {
+    if (!gameData) return;
+    
+    setIsAnalyzing(true);
+    setAnalysisProgress(0);
+    
+    try {
+      const allPlayers = [
+        ...gameData.blueTeam.map(p => ({ ...p, teamSide: 'blue' })),
+        ...gameData.redTeam.map(p => ({ ...p, teamSide: 'red' }))
+      ];
+      
+      const analysisResults = [];
+      
+      for (let i = 0; i < allPlayers.length; i++) {
+        const player = allPlayers[i];
+        
+        if (player.puuid && player.championId) {
+          try {
+            const response = await fetch(
+              `/api/riot/match-history?puuid=${encodeURIComponent(player.puuid)}&championId=${player.championId}&count=20`
+            );
+            const data = await response.json();
+            
+            analysisResults.push({
+              playerName: player.name,
+              champion: player.champion,
+              teamSide: player.teamSide,
+              ...(data.success ? data.data : {
+                championGames: 0,
+                championWins: 0,
+                championWinRate: 50
+              })
+            });
+          } catch (err) {
+            analysisResults.push({
+              playerName: player.name,
+              champion: player.champion,
+              teamSide: player.teamSide,
+              championGames: 0,
+              championWins: 0,
+              championWinRate: 50
+            });
+          }
+        } else {
+          analysisResults.push({
+            playerName: player.name,
+            champion: player.champion,
+            teamSide: player.teamSide,
+            championGames: 0,
+            championWins: 0,
+            championWinRate: 50
+          });
+        }
+        
+        setAnalysisProgress(Math.round(((i + 1) / allPlayers.length) * 100));
+        
+        if (i < allPlayers.length - 1) {
+          await new Promise(resolve => setTimeout(resolve, 200));
+        }
+      }
+      
+      setDeepAnalysisData(analysisResults);
+      
+      const blueTeamWithAnalysis = gameData.blueTeam.map(player => {
+        const analysis = analysisResults.find(
+          a => a.playerName === player.name && a.teamSide === 'blue'
+        );
+        return { ...player, deepAnalysis: analysis };
+      });
+      
+      const redTeamWithAnalysis = gameData.redTeam.map(player => {
+        const analysis = analysisResults.find(
+          a => a.playerName === player.name && a.teamSide === 'red'
+        );
+        return { ...player, deepAnalysis: analysis };
+      });
+      
+      const newPrediction = calculatePrediction(
+        blueTeamWithAnalysis,
+        redTeamWithAnalysis,
+        true
+      );
+      
+      setPrediction(newPrediction);
+      success("Deep analysis complete!");
+      
+    } catch (err) {
+      showError("Failed to complete deep analysis");
+      console.error("Deep analysis error:", err);
+    }
+    
+    setIsAnalyzing(false);
+  };
+
   const handleSave = async () => {
     if (!prediction || !currentUser || !gameData) return;
 
@@ -97,7 +199,8 @@ export default function LiveGame() {
       result: prediction,
       gameId: gameData.gameId,
       gameMode: gameData.gameMode,
-      source: 'live-game'
+      source: 'live-game',
+      deepAnalysisUsed: prediction.deepAnalysisUsed || false
     });
 
     setIsSaving(false);
@@ -116,6 +219,27 @@ export default function LiveGame() {
     const minutes = Math.floor(elapsed / 60);
     const seconds = elapsed % 60;
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  const getChampionWinRateDisplay = (playerName, teamSide) => {
+    if (!deepAnalysisData) return null;
+    
+    const analysis = deepAnalysisData.find(
+      a => a.playerName === playerName && a.teamSide === teamSide
+    );
+    
+    if (!analysis || analysis.championGames < 1) return null;
+    
+    const { championWinRate, championGames } = analysis;
+    const colorClass = championWinRate >= 55 ? 'win-rate-good' : 
+                       championWinRate <= 45 ? 'win-rate-bad' : 
+                       'win-rate-neutral';
+    
+    return (
+      <span className={`champion-win-rate ${colorClass}`} title="Champion-specific win rate">
+        {championWinRate}% ({championGames}g)
+      </span>
+    );
   };
 
   return (
@@ -167,6 +291,9 @@ export default function LiveGame() {
               <div className="game-info">
                 <span className="game-mode">{gameData.gameMode}</span>
                 <span className="game-time">⏱ {formatGameTime(gameData.gameStartTime)}</span>
+                {prediction?.deepAnalysisUsed && (
+                  <span className="deep-analysis-badge">🔬 Deep Analysis</span>
+                )}
               </div>
 
               <div className="teams-comparison">
@@ -189,6 +316,7 @@ export default function LiveGame() {
                                 {formatGamesPlayed(player.championMastery.gamesPlayed)} games
                               </span>
                             )}
+                            {getChampionWinRateDisplay(player.name, 'blue')}
                           </div>
                         </div>
                         <span className="player-name">{player.name}</span>
@@ -221,6 +349,7 @@ export default function LiveGame() {
                                 {formatGamesPlayed(player.championMastery.gamesPlayed)} games
                               </span>
                             )}
+                            {getChampionWinRateDisplay(player.name, 'red')}
                           </div>
                         </div>
                         <span className="player-name">{player.name}</span>
@@ -232,6 +361,45 @@ export default function LiveGame() {
                   </ul>
                 </div>
               </div>
+
+              {!deepAnalysisData && !isAnalyzing && (
+                <div className="deep-analysis-section">
+                  <button 
+                    className="btn btn-secondary deep-analysis-btn"
+                    onClick={handleDeepAnalysis}
+                  >
+                    🔬 Run Deep Analysis
+                  </button>
+                  <p className="deep-analysis-info">
+                    Fetches champion-specific win rates from recent ranked games for more accurate predictions.
+                    <br />
+                    <span className="muted">This may take 10-20 seconds.</span>
+                  </p>
+                </div>
+              )}
+
+              {/* Deep Analysis Progress */}
+              {isAnalyzing && (
+                <div className="deep-analysis-progress">
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill" 
+                      style={{ width: `${analysisProgress}%` }}
+                    />
+                  </div>
+                  <p className="progress-text">
+                    Analyzing players... {analysisProgress}%
+                  </p>
+                </div>
+              )}
+
+              {/* Deep Analysis Complete Badge */}
+              {deepAnalysisData && !isAnalyzing && (
+                <div className="deep-analysis-complete">
+                  <span className="complete-badge">✓ Deep Analysis Complete</span>
+                  <p className="muted">Champion-specific win rates have been factored into the prediction.</p>
+                </div>
+              )}
 
               {prediction && (
                 <>
@@ -270,6 +438,7 @@ export default function LiveGame() {
                 <li>Enter your Riot ID or any player's Riot ID (e.g., <strong>Doublelift#NA1</strong>)</li>
                 <li>Make sure the player is currently in an active game</li>
                 <li>Click "Find Game" to fetch all players and their stats</li>
+                <li>Optionally run <strong>Deep Analysis</strong> for champion-specific win rates</li>
                 <li>View the prediction and save it to track accuracy</li>
               </ol>
               <p className="note">

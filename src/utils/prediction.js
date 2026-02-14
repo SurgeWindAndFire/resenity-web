@@ -31,10 +31,11 @@ function normalizeRankForCalc(rank) {
   return "Gold";
 }
 
-function calculateTeamScore(team) {
+function calculateTeamScore(team, useDeepAnalysis = false) {
   let totalRankScore = 0;
   let totalWinRate = 0;
   let totalMasteryBonus = 0;
+  let totalChampionWinRateBonus = 0;
   
   team.forEach(player => {
     const normalizedRank = normalizeRankForCalc(player.rank);
@@ -54,18 +55,41 @@ function calculateTeamScore(team) {
       else if (gamesPlayed >= 20) totalMasteryBonus += 1;
       else if (gamesPlayed >= 10) totalMasteryBonus += 0.5;
     }
+    
+    if (useDeepAnalysis && player.deepAnalysis) {
+      const champWinRate = player.deepAnalysis.championWinRate || 50;
+      const champGames = player.deepAnalysis.championGames || 0;
+      
+      if (champGames >= 5) {
+        const winRateDiff = champWinRate - 50;
+        totalChampionWinRateBonus += (winRateDiff / 10);
+
+        if (champWinRate >= 60 && champGames >= 10) {
+          totalChampionWinRateBonus += 1;
+        } else if (champWinRate >= 55 && champGames >= 10) {
+          totalChampionWinRateBonus += 0.5;
+        }
+
+        if (champWinRate <= 40 && champGames >= 10) {
+          totalChampionWinRateBonus -= 1;
+        } else if (champWinRate <= 45 && champGames >= 10) {
+          totalChampionWinRateBonus -= 0.5;
+        }
+      }
+    }
   });
   
   const avgRank = totalRankScore / team.length;
   const avgWinRate = totalWinRate / team.length;
   const masteryBonus = totalMasteryBonus / team.length;
+  const championWinRateBonus = totalChampionWinRateBonus / team.length;
   
-  const score = (avgRank * 4) + (avgWinRate * 0.4) + (masteryBonus * 2);
+  const score = (avgRank * 4) + (avgWinRate * 0.4) + (masteryBonus * 2) + (championWinRateBonus * 3);
   
-  return { avgRank, avgWinRate, masteryBonus, score };
+  return { avgRank, avgWinRate, masteryBonus, championWinRateBonus, score };
 }
 
-function generateFactors(team1Stats, team2Stats, team1, team2) {
+function generateFactors(team1Stats, team2Stats, team1, team2, useDeepAnalysis = false) {
   const factors = [];
 
   const rankDiff = team1Stats.avgRank - team2Stats.avgRank;
@@ -101,6 +125,17 @@ function generateFactors(team1Stats, team2Stats, team1, team2) {
     });
   }
 
+  if (useDeepAnalysis) {
+    const champWinRateDiff = team1Stats.championWinRateBonus - team2Stats.championWinRateBonus;
+    if (Math.abs(champWinRateDiff) >= 0.5) {
+      const advantageTeam = champWinRateDiff > 0 ? "blue" : "red";
+      factors.push({
+        team: advantageTeam,
+        text: "Better champion-specific win rates"
+      });
+    }
+  }
+
   const allPlayers = [
     ...team1.map(p => ({ ...p, team: "blue" })),
     ...team2.map(p => ({ ...p, team: "red" }))
@@ -118,6 +153,27 @@ function generateFactors(team1Stats, team2Stats, team1, team2) {
     }
   });
 
+  if (useDeepAnalysis) {
+    allPlayers.forEach(player => {
+      if (player.deepAnalysis && player.deepAnalysis.championGames >= 5) {
+        const { championWinRate, championGames } = player.deepAnalysis;
+        
+        if (championWinRate >= 60) {
+          factors.push({
+            team: player.team,
+            text: `${player.champion} specialist (${championWinRate}% WR over ${championGames} games)`
+          });
+        } else if (championWinRate <= 40 && championGames >= 10) {
+          const oppositeTeam = player.team === "blue" ? "red" : "blue";
+          factors.push({
+            team: oppositeTeam,
+            text: `${player.name} struggles on ${player.champion} (${championWinRate}% WR)`
+          });
+        }
+      }
+    });
+  }
+
   allPlayers.forEach(player => {
     const normalizedRank = normalizeRankForCalc(player.rank);
     if (RANK_VALUES[normalizedRank] >= 8) {
@@ -128,7 +184,7 @@ function generateFactors(team1Stats, team2Stats, team1, team2) {
     }
   });
   
-  return factors.slice(0, 6);
+  return factors.slice(0, 8);
 }
 
 function formatGames(games) {
@@ -136,9 +192,9 @@ function formatGames(games) {
   return games.toString();
 }
 
-export function calculatePrediction(team1, team2) {
-  const team1Stats = calculateTeamScore(team1);
-  const team2Stats = calculateTeamScore(team2);
+export function calculatePrediction(team1, team2, useDeepAnalysis = false) {
+  const team1Stats = calculateTeamScore(team1, useDeepAnalysis);
+  const team2Stats = calculateTeamScore(team2, useDeepAnalysis);
   
   const totalScore = team1Stats.score + team2Stats.score;
   const team1Probability = Math.round((team1Stats.score / totalScore) * 100);
@@ -154,13 +210,14 @@ export function calculatePrediction(team1, team2) {
     confidence = "low";
   }
   
-  const factors = generateFactors(team1Stats, team2Stats, team1, team2);
+  const factors = generateFactors(team1Stats, team2Stats, team1, team2, useDeepAnalysis);
   
   return {
     team1Probability,
     team2Probability,
     predictedWinner: team1Probability >= team2Probability ? "blue" : "red",
     confidence,
-    factors
+    factors,
+    deepAnalysisUsed: useDeepAnalysis
   };
 }
