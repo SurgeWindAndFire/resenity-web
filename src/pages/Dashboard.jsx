@@ -33,13 +33,13 @@ export default function Dashboard() {
             </Link>
 
             <Link to="/dashboard/create-match" className="dashboard-card">
-              <div className="card-icon">➕</div>
+              <div className="card-icon"></div>
               <h2>Create Match</h2>
               <p>Manually enter players for a prediction</p>
             </Link>
 
             <Link to="/dashboard/history" className="dashboard-card">
-              <div className="card-icon">📊</div>
+              <div className="card-icon"></div>
               <h2>History</h2>
               <p>View your saved predictions</p>
             </Link>
