@@ -64,95 +64,93 @@ export default function Profile() {
   };
 
   return (
-    <div className="page">
+    <div className="profile-page">
       <Navbar />
-      <main className="profile-page">
-        <div className="container">
-          <header className="page-header">
-            <div className="page-header-content">
-              <h1>Profile</h1>
-              <p className="muted">Manage your account settings</p>
+      <main className="container">
+        <div className="profile-header">
+          <div className="profile-header-content">
+            <h1>Profile</h1>
+            <p className="muted">Manage your account settings</p>
+          </div>
+          <button 
+            className="btn btn-ghost"
+            onClick={() => navigate("/dashboard")}
+          >
+            ← Back to Dashboard
+          </button>
+        </div>
+
+        <div className="profile-content">
+          <div className="profile-card">
+            <div className="profile-avatar">
+              <span>{(userProfile?.username || currentUser?.email || "U")[0].toUpperCase()}</span>
             </div>
-            <button 
-              className="btn btn-ghost"
-              onClick={() => navigate("/dashboard")}
-            >
-              ← Back to Dashboard
-            </button>
-          </header>
 
-          <div className="profile-content">
-            <div className="profile-card">
-              <div className="profile-avatar">
-                <span>{(userProfile?.username || "U")[0].toUpperCase()}</span>
-              </div>
-
-              <div className="profile-info">
-                <div className="profile-field">
-                  <label>Username</label>
-                  {isEditing ? (
-                    <div className="edit-username">
-                      <input
-                        type="text"
-                        value={newUsername}
-                        onChange={(e) => setNewUsername(e.target.value)}
-                        placeholder="Enter new username"
-                        maxLength={20}
-                        autoFocus
-                      />
-                      <div className="edit-actions">
-                        <button 
-                          className="btn btn-primary btn-sm"
-                          onClick={handleSaveUsername}
-                          disabled={isSaving}
-                        >
-                          {isSaving ? "Saving..." : "Save"}
-                        </button>
-                        <button 
-                          className="btn btn-ghost btn-sm"
-                          onClick={() => {
-                            setIsEditing(false);
-                            setNewUsername(userProfile?.username || "");
-                          }}
-                          disabled={isSaving}
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="profile-value-row">
-                      <span className="profile-value">{userProfile?.username || "Not set"}</span>
+            <div className="profile-info">
+              <div className="profile-field">
+                <label>Username</label>
+                {isEditing ? (
+                  <div className="edit-username">
+                    <input
+                      type="text"
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      placeholder="Enter new username"
+                      maxLength={20}
+                      autoFocus
+                    />
+                    <div className="edit-actions">
+                      <button 
+                        className="btn btn-primary btn-sm"
+                        onClick={handleSaveUsername}
+                        disabled={isSaving}
+                      >
+                        {isSaving ? "Saving..." : "Save"}
+                      </button>
                       <button 
                         className="btn btn-ghost btn-sm"
-                        onClick={() => setIsEditing(true)}
+                        onClick={() => {
+                          setIsEditing(false);
+                          setNewUsername(userProfile?.username || "");
+                        }}
+                        disabled={isSaving}
                       >
-                        Edit
+                        Cancel
                       </button>
                     </div>
-                  )}
-                </div>
+                  </div>
+                ) : (
+                  <div className="profile-value-row">
+                    <span className="profile-value">{userProfile?.username || "Not set"}</span>
+                    <button 
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                )}
+              </div>
 
-                <div className="profile-field">
-                  <label>Email</label>
-                  <span className="profile-value">{currentUser?.email}</span>
-                </div>
+              <div className="profile-field">
+                <label>Email</label>
+                <span className="profile-value">{currentUser?.email}</span>
+              </div>
 
-                <div className="profile-field">
-                  <label>Member Since</label>
-                  <span className="profile-value">{formatDate(userProfile?.createdAt)}</span>
-                </div>
+              <div className="profile-field">
+                <label>Member Since</label>
+                <span className="profile-value">{formatDate(userProfile?.createdAt)}</span>
               </div>
             </div>
+          </div>
 
-            <div className="profile-actions">
-              <button 
-                className="btn btn-danger"
-                onClick={handleLogout}
-              >
-                Sign Out
-              </button>
-            </div>
+          <div className="profile-actions">
+            <button 
+              className="btn btn-danger btn-full"
+              onClick={handleLogout}
+            >
+              Sign Out
+            </button>
           </div>
         </div>
       </main>
