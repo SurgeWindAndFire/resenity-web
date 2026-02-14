@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useUser } from "../contexts/UserContext";
-import { getSuggestions, submitSuggestion, upvoteSuggestion } from "../services/suggestionsService";
+import { getSuggestions, submitSuggestion, upvoteSuggestion, deleteSuggestion } from "../services/suggestionsService";
 import { useToast } from "../contexts/ToastContext";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
 import Spinner from "../components/ui/Spinner";
 import "../styles/suggestions.css";
+
+const ADMIN_UID = "fcevRuPpMNSzzLRcfzmfPK8DZcA3";
 
 export default function Suggestions() {
   const { currentUser } = useAuth();
@@ -23,6 +25,8 @@ export default function Suggestions() {
     description: "",
     category: "feature"
   });
+
+  const isAdmin = currentUser?.uid === ADMIN_UID;
 
   useEffect(() => {
     fetchSuggestions();
@@ -53,9 +57,15 @@ export default function Suggestions() {
     }
     
     setSubmitting(true);
+    
+    const displayName = userData?.username || 
+                        currentUser.displayName || 
+                        currentUser.email?.split('@')[0] || 
+                        "User";
+    
     const result = await submitSuggestion(
       currentUser.uid,
-      userData?.username || "Anonymous",
+      displayName,
       formData
     );
     
@@ -97,6 +107,23 @@ export default function Suggestions() {
     }
   }
 
+  async function handleDelete(suggestionId) {
+    if (!isAdmin) return;
+    
+    if (!window.confirm("Are you sure you want to delete this suggestion?")) {
+      return;
+    }
+    
+    const result = await deleteSuggestion(suggestionId);
+    
+    if (result.success) {
+      setSuggestions(prev => prev.filter(s => s.id !== suggestionId));
+      addToast("Suggestion deleted", "success");
+    } else {
+      addToast("Failed to delete suggestion", "error");
+    }
+  }
+
   const filteredSuggestions = suggestions.filter(s => {
     if (filter === "all") return true;
     return s.category === filter;
@@ -109,6 +136,32 @@ export default function Suggestions() {
     { value: "other", label: "Other", icon: "💬" }
   ];
 
+  if (!currentUser) {
+    return (
+      <div className="suggestions-page">
+        <Navbar />
+        
+        <main className="container">
+          <div className="login-prompt">
+            <div className="login-prompt-icon">💡</div>
+            <h1>Community Suggestions</h1>
+            <p>Sign in to view and submit suggestions for Resenity</p>
+            <div className="login-prompt-actions">
+              <Link to="/login" className="btn btn-primary">
+                Sign In
+              </Link>
+              <Link to="/signup" className="btn btn-ghost">
+                Create Account
+              </Link>
+            </div>
+          </div>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="suggestions-page">
       <Navbar />
@@ -119,18 +172,12 @@ export default function Suggestions() {
             <h1>Community Suggestions</h1>
             <p className="muted">Help shape the future of Resenity</p>
           </div>
-          {currentUser ? (
-            <button 
-              className="btn btn-primary"
-              onClick={() => setShowForm(!showForm)}
-            >
-              {showForm ? "Cancel" : "+ New Suggestion"}
-            </button>
-          ) : (
-            <Link to="/login" className="btn btn-primary">
-              Sign in to Suggest
-            </Link>
-          )}
+          <button 
+            className="btn btn-primary"
+            onClick={() => setShowForm(!showForm)}
+          >
+            {showForm ? "Cancel" : "+ New Suggestion"}
+          </button>
         </div>
 
         {showForm && (
@@ -178,13 +225,16 @@ export default function Suggestions() {
               />
             </div>
             
-            <button 
-              type="submit" 
-              className="btn btn-primary"
-              disabled={submitting}
-            >
-              {submitting ? "Submitting..." : "Submit Suggestion"}
-            </button>
+            <div className="form-footer">
+              <span className="posting-as">Posting as: <strong>{userData?.username || currentUser.displayName || currentUser.email?.split('@')[0]}</strong></span>
+              <button 
+                type="submit" 
+                className="btn btn-primary"
+                disabled={submitting}
+              >
+                {submitting ? "Submitting..." : "Submit Suggestion"}
+              </button>
+            </div>
           </form>
         )}
 
@@ -223,7 +273,9 @@ export default function Suggestions() {
                 key={suggestion.id}
                 suggestion={suggestion}
                 currentUser={currentUser}
+                isAdmin={isAdmin}
                 onUpvote={handleUpvote}
+                onDelete={handleDelete}
                 categories={categories}
               />
             ))}
@@ -236,10 +288,11 @@ export default function Suggestions() {
   );
 }
 
-function SuggestionCard({ suggestion, currentUser, onUpvote, categories }) {
-  const { id, title, description, category, username, upvotes, upvoteCount, createdAt, status } = suggestion;
+function SuggestionCard({ suggestion, currentUser, isAdmin, onUpvote, onDelete, categories }) {
+  const { id, title, description, category, username, userId, upvotes, upvoteCount, createdAt, status } = suggestion;
   const hasUpvoted = currentUser && upvotes?.includes(currentUser.uid);
   const categoryInfo = categories.find(c => c.value === category) || categories[3];
+  const isCreator = userId === ADMIN_UID;
   
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
@@ -273,10 +326,25 @@ function SuggestionCard({ suggestion, currentUser, onUpvote, categories }) {
         <p className="suggestion-description">{description}</p>
         
         <div className="suggestion-footer">
-          <span className="suggestion-author">by {username}</span>
+          <span className="suggestion-author">
+            by <strong>{username}</strong>
+            {isCreator && <span className="admin-badge">Admin</span>}
+          </span>
           <span className="suggestion-date">{formatDate(createdAt)}</span>
+          
+          {isAdmin && (
+            <button 
+              className="delete-suggestion-btn"
+              onClick={() => onDelete(id)}
+              title="Delete suggestion"
+            >
+              🗑️
+            </button>
+          )}
         </div>
       </div>
     </div>
   );
 }
+
+export { ADMIN_UID };
