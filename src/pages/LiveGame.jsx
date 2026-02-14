@@ -6,7 +6,6 @@ import Navbar from "../components/layout/Navbar";
 import PredictionResult from "../components/match/PredictionResult";
 import Spinner from "../components/ui/Spinner";
 import { fetchLiveGame } from "../services/liveGameService";
-import { getDeepAnalysis } from "../services/riotService";
 import { calculatePrediction } from "../utils/prediction";
 import { savePrediction } from "../services/predictionServices";
 import usePageTitle from "../hooks/usePageTitle";
@@ -221,7 +220,7 @@ export default function LiveGame() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const getChampionWinRateDisplay = (playerName, teamSide) => {
+  const getChampionWinRate = (playerName, teamSide) => {
     if (!deepAnalysisData) return null;
     
     const analysis = deepAnalysisData.find(
@@ -230,15 +229,52 @@ export default function LiveGame() {
     
     if (!analysis || analysis.championGames < 1) return null;
     
-    const { championWinRate, championGames } = analysis;
-    const colorClass = championWinRate >= 55 ? 'win-rate-good' : 
-                       championWinRate <= 45 ? 'win-rate-bad' : 
-                       'win-rate-neutral';
+    return {
+      winRate: analysis.championWinRate,
+      games: analysis.championGames
+    };
+  };
+
+  const renderPlayerRow = (player, index, teamSide) => {
+    const masteryBadge = player.championMastery ? getMasteryBadge(player.championMastery.championLevel) : null;
+    const masteryGames = player.championMastery?.gamesPlayed;
+    const championWR = getChampionWinRate(player.name, teamSide);
     
+    let wrClass = 'neutral';
+    if (championWR) {
+      if (championWR.winRate >= 55) wrClass = 'good';
+      else if (championWR.winRate <= 45) wrClass = 'bad';
+    }
+
     return (
-      <span className={`champion-win-rate ${colorClass}`} title="Champion-specific win rate">
-        {championWinRate}% ({championGames}g)
-      </span>
+      <li key={index} className="player-row">
+        <div className="player-top-row">
+          <span className="player-role">{ROLE_LABELS[player.role]}</span>
+          <span className="player-champion">{player.champion || 'Unknown'}</span>
+          {masteryBadge && (
+            <span className={`mastery-badge ${masteryBadge.className}`}>
+              {masteryBadge.label}
+            </span>
+          )}
+          {masteryGames > 0 && (
+            <span className="mastery-games">
+              {formatGamesPlayed(masteryGames)} mastery pts
+            </span>
+          )}
+        </div>
+        
+        <div className="player-bottom-row">
+          <span className="player-name">{player.name}</span>
+          <span className="player-stats">
+            {player.rank} • {player.winRate}% WR
+          </span>
+          {championWR && (
+            <span className={`champion-wr ${wrClass}`}>
+              <span className="champion-wr-label">Champ:</span> {championWR.winRate}% ({championWR.games} games)
+            </span>
+          )}
+        </div>
+      </li>
     );
   };
 
@@ -300,31 +336,9 @@ export default function LiveGame() {
                 <div className="team-card blue">
                   <h3>Blue Team</h3>
                   <ul className="player-list">
-                    {gameData.blueTeam.map((player, index) => (
-                      <li key={index} className="player-row">
-                        <div className="player-role-champion">
-                          <span className="player-role">{ROLE_LABELS[player.role]}</span>
-                          <div className="champion-info">
-                            <span className="player-champion">{player.champion || 'Unknown'}</span>
-                            {player.championMastery && getMasteryBadge(player.championMastery.championLevel) && (
-                              <span className={`mastery-badge ${getMasteryBadge(player.championMastery.championLevel).className}`}>
-                                {getMasteryBadge(player.championMastery.championLevel).label}
-                              </span>
-                            )}
-                            {player.championMastery && player.championMastery.gamesPlayed > 0 && (
-                              <span className="games-played" title="Estimated games on this champion">
-                                {formatGamesPlayed(player.championMastery.gamesPlayed)} games
-                              </span>
-                            )}
-                            {getChampionWinRateDisplay(player.name, 'blue')}
-                          </div>
-                        </div>
-                        <span className="player-name">{player.name}</span>
-                        <span className="player-stats">
-                          {player.rank} • {player.winRate}%
-                        </span>
-                      </li>
-                    ))}
+                    {gameData.blueTeam.map((player, index) => 
+                      renderPlayerRow(player, index, 'blue')
+                    )}
                   </ul>
                 </div>
 
@@ -333,31 +347,9 @@ export default function LiveGame() {
                 <div className="team-card red">
                   <h3>Red Team</h3>
                   <ul className="player-list">
-                    {gameData.redTeam.map((player, index) => (
-                      <li key={index} className="player-row">
-                        <div className="player-role-champion">
-                          <span className="player-role">{ROLE_LABELS[player.role]}</span>
-                          <div className="champion-info">
-                            <span className="player-champion">{player.champion || 'Unknown'}</span>
-                            {player.championMastery && getMasteryBadge(player.championMastery.championLevel) && (
-                              <span className={`mastery-badge ${getMasteryBadge(player.championMastery.championLevel).className}`}>
-                                {getMasteryBadge(player.championMastery.championLevel).label}
-                              </span>
-                            )}
-                            {player.championMastery && player.championMastery.gamesPlayed > 0 && (
-                              <span className="games-played" title="Estimated games on this champion">
-                                {formatGamesPlayed(player.championMastery.gamesPlayed)} games
-                              </span>
-                            )}
-                            {getChampionWinRateDisplay(player.name, 'red')}
-                          </div>
-                        </div>
-                        <span className="player-name">{player.name}</span>
-                        <span className="player-stats">
-                          {player.rank} • {player.winRate}%
-                        </span>
-                      </li>
-                    ))}
+                    {gameData.redTeam.map((player, index) => 
+                      renderPlayerRow(player, index, 'red')
+                    )}
                   </ul>
                 </div>
               </div>
@@ -378,7 +370,6 @@ export default function LiveGame() {
                 </div>
               )}
 
-              {/* Deep Analysis Progress */}
               {isAnalyzing && (
                 <div className="deep-analysis-progress">
                   <div className="progress-bar">
@@ -393,7 +384,6 @@ export default function LiveGame() {
                 </div>
               )}
 
-              {/* Deep Analysis Complete Badge */}
               {deepAnalysisData && !isAnalyzing && (
                 <div className="deep-analysis-complete">
                   <span className="complete-badge">✓ Deep Analysis Complete</span>
