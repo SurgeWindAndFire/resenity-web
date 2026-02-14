@@ -155,16 +155,16 @@ export default function Features() {
             <FadeIn delay={900}>
               <div className="feature-card coming-soon">
                 <div className="feature-icon"></div>
-                <h3>Champion Win Rates</h3>
+                <h3>Multi-Region Support</h3>
                 <span className="coming-soon-badge">Coming Soon</span>
                 <p>
-                  Factor in champion-specific win rates for each player to make 
-                  predictions even more accurate.
+                  Expand your predictions across different regions. Support for EUW, 
+                  EUNE, KR, and other servers coming soon.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Per-champion statistics</li>
-                  <li>Seasonal performance data</li>
-                  <li>One-trick detection</li>
+                  <li>All major regions supported</li>
+                  <li>Cross-region comparisons</li>
+                  <li>Region-specific analytics</li>
                 </ul>
               </div>
             </FadeIn>

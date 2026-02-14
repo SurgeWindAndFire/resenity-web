@@ -1,15 +1,30 @@
-import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useUser } from "../../contexts/UserContext";
 import "./Navbar.css";
 
 export default function Navbar() {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const { userProfile } = useUser();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
+  const userMenuRef = useRef(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const closeMenu = () => setIsMenuOpen(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setIsUserMenuOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleHashLink = (e, hash) => {
     closeMenu();
@@ -21,6 +36,23 @@ export default function Navbar() {
         element.scrollIntoView({ behavior: "smooth" });
       }
     }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await logout();
+      setIsUserMenuOpen(false);
+      closeMenu();
+      navigate("/");
+    } catch (err) {
+      console.error("Failed to sign out:", err);
+    }
+  };
+
+  const getUserInitial = () => {
+    if (userProfile?.username) return userProfile.username[0].toUpperCase();
+    if (currentUser?.email) return currentUser.email[0].toUpperCase();
+    return "U";
   };
 
   return (
@@ -61,9 +93,55 @@ export default function Navbar() {
           
           <div className="nav-actions">
             {currentUser ? (
-              <Link to="/dashboard" className="btn btn-primary" onClick={closeMenu}>
-                Dashboard
-              </Link>
+              <div className="user-menu-container" ref={userMenuRef}>
+                <button 
+                  className="user-menu-trigger"
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                >
+                  <span className="user-avatar">{getUserInitial()}</span>
+                  <span className="user-name">
+                    {userProfile?.username || currentUser.email?.split('@')[0]}
+                  </span>
+                  <span className={`dropdown-arrow ${isUserMenuOpen ? 'open' : ''}`}>▾</span>
+                </button>
+                
+                {isUserMenuOpen && (
+                  <div className="user-dropdown">
+                    <Link 
+                      to="/dashboard" 
+                      className="dropdown-item"
+                      onClick={() => { setIsUserMenuOpen(false); closeMenu(); }}
+                    >
+                      <span className="dropdown-icon">📊</span>
+                      Dashboard
+                    </Link>
+                    <Link 
+                      to="/dashboard/profile" 
+                      className="dropdown-item"
+                      onClick={() => { setIsUserMenuOpen(false); closeMenu(); }}
+                    >
+                      <span className="dropdown-icon">👤</span>
+                      Profile
+                    </Link>
+                    <Link 
+                      to="/dashboard/stats" 
+                      className="dropdown-item"
+                      onClick={() => { setIsUserMenuOpen(false); closeMenu(); }}
+                    >
+                      <span className="dropdown-icon">📈</span>
+                      My Stats
+                    </Link>
+                    <div className="dropdown-divider"></div>
+                    <button 
+                      className="dropdown-item sign-out"
+                      onClick={handleSignOut}
+                    >
+                      <span className="dropdown-icon">🚪</span>
+                      Sign Out
+                    </button>
+                  </div>
+                )}
+              </div>
             ) : (
               <>
                 <Link to="/login" className="btn btn-ghost" onClick={closeMenu}>

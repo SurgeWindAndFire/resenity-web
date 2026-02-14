@@ -144,10 +144,12 @@ function generateFactors(team1Stats, team2Stats, team1, team2, useDeepAnalysis =
   allPlayers.forEach(player => {
     if (player.championMastery && player.championMastery.championLevel >= 7) {
       const gamesPlayed = player.championMastery.gamesPlayed || 0;
-      if (gamesPlayed >= 50) {
+      const championName = player.champion || player.championMastery?.championName;
+      
+      if (gamesPlayed >= 50 && championName) {
         factors.push({
           team: player.team,
-          text: `${player.champion} one-trick (${formatGames(gamesPlayed)} games)`
+          text: `${championName} one-trick (${formatGames(gamesPlayed)} games)`
         });
       }
     }
@@ -157,17 +159,20 @@ function generateFactors(team1Stats, team2Stats, team1, team2, useDeepAnalysis =
     allPlayers.forEach(player => {
       if (player.deepAnalysis && player.deepAnalysis.championGames >= 5) {
         const { championWinRate, championGames } = player.deepAnalysis;
+        const championName = player.champion || player.deepAnalysis?.champion;
+        
+        if (!championName) return;
         
         if (championWinRate >= 60) {
           factors.push({
             team: player.team,
-            text: `${player.champion} specialist (${championWinRate}% WR over ${championGames} games)`
+            text: `${championName} specialist (${championWinRate}% WR over ${championGames} games)`
           });
         } else if (championWinRate <= 40 && championGames >= 10) {
           const oppositeTeam = player.team === "blue" ? "red" : "blue";
           factors.push({
             team: oppositeTeam,
-            text: `${player.name} struggles on ${player.champion} (${championWinRate}% WR)`
+            text: `${player.name} struggles on ${championName} (${championWinRate}% WR)`
           });
         }
       }
