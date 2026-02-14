@@ -55,6 +55,7 @@ export default function Navbar() {
               How It Works
             </a>
             <Link to="/demo" onClick={closeMenu}>Demo</Link>
+            <Link to="/suggestions" onClick={closeMenu}>Suggestions</Link>
             <Link to="/about" onClick={closeMenu}>About</Link>
           </div>
           
@@ -69,7 +70,7 @@ export default function Navbar() {
                   Sign In
                 </Link>
                 <Link to="/signup" className="btn btn-primary" onClick={closeMenu}>
-                  Get Started
+                  Sign Up
                 </Link>
               </>
             )}

@@ -4,6 +4,7 @@ import {
   getDocs, 
   getDoc,
   updateDoc,
+  deleteDoc,
   doc, 
   query, 
   orderBy,
@@ -19,7 +20,7 @@ export async function submitSuggestion(userId, username, suggestionData) {
   try {
     const docRef = await addDoc(collection(db, COLLECTION_NAME), {
       userId,
-      username: username || "Anonymous",
+      username: username || "User",
       title: suggestionData.title,
       description: suggestionData.description,
       category: suggestionData.category || "feature",
@@ -87,6 +88,28 @@ export async function upvoteSuggestion(suggestionId, userId) {
     }
   } catch (error) {
     console.error("Error upvoting suggestion:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deleteSuggestion(suggestionId) {
+  try {
+    const docRef = doc(db, COLLECTION_NAME, suggestionId);
+    await deleteDoc(docRef);
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting suggestion:", error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updateSuggestionStatus(suggestionId, status) {
+  try {
+    const docRef = doc(db, COLLECTION_NAME, suggestionId);
+    await updateDoc(docRef, { status });
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating suggestion status:", error);
     return { success: false, error: error.message };
   }
 }
