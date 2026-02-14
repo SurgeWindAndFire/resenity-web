@@ -107,8 +107,13 @@ export default function Suggestions() {
     }
   }
 
-  async function handleDelete(suggestionId) {
-    if (!isAdmin) return;
+  async function handleDelete(suggestionId, suggestionUserId) {
+    const canDelete = isAdmin || currentUser?.uid === suggestionUserId;
+    
+    if (!canDelete) {
+      addToast("You don't have permission to delete this", "error");
+      return;
+    }
     
     if (!window.confirm("Are you sure you want to delete this suggestion?")) {
       return;
@@ -293,6 +298,9 @@ function SuggestionCard({ suggestion, currentUser, isAdmin, onUpvote, onDelete, 
   const hasUpvoted = currentUser && upvotes?.includes(currentUser.uid);
   const categoryInfo = categories.find(c => c.value === category) || categories[3];
   const isCreator = userId === ADMIN_UID;
+  const isOwner = currentUser?.uid === userId;
+
+  const canDelete = isAdmin || isOwner;
   
   const formatDate = (timestamp) => {
     if (!timestamp) return "";
@@ -332,11 +340,11 @@ function SuggestionCard({ suggestion, currentUser, isAdmin, onUpvote, onDelete, 
           </span>
           <span className="suggestion-date">{formatDate(createdAt)}</span>
           
-          {isAdmin && (
+          {canDelete && (
             <button 
               className="delete-suggestion-btn"
-              onClick={() => onDelete(id)}
-              title="Delete suggestion"
+              onClick={() => onDelete(id, userId)}
+              title={isOwner && !isAdmin ? "Delete your suggestion" : "Delete suggestion"}
             >
               🗑️
             </button>

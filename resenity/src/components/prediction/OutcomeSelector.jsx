@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { updatePredictionOutcome, clearPredictionOutcome } from "../../services/predictionServices";
+import { updatePredictionOutcome } from "../../services/predictionServices";
 import "./OutcomeSelector.css";
 
 export default function OutcomeSelector({ 
@@ -9,88 +9,72 @@ export default function OutcomeSelector({
   wasCorrect,
   onOutcomeUpdate 
 }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [selectedOutcome, setSelectedOutcome] = useState(currentOutcome);
+  
+  const isLocked = currentOutcome && currentOutcome !== "pending";
+  
   const handleOutcomeSelect = async (outcome) => {
-    if (currentOutcome === outcome) {
-      setLoading(true);
-      setError(null);
-      
-      const result = await clearPredictionOutcome(predictionId);
-      
-      if (result.success) {
-        onOutcomeUpdate({ outcome: "pending", wasCorrect: null });
-      } else {
-        setError("Failed to update. Please try again.");
-      }
-      
-      setLoading(false);
-      return;
-    }
+    if (isLocked || isUpdating) return;
     
-    setLoading(true);
-    setError(null);
+    if (outcome === selectedOutcome) return;
     
-    const result = await updatePredictionOutcome(predictionId, outcome, predictedWinner);
+    setIsUpdating(true);
+    setSelectedOutcome(outcome);
+    
+    const wasCorrectResult = 
+      (outcome === "won" && predictedWinner === "team1") ||
+      (outcome === "lost" && predictedWinner === "team2");
+    
+    const result = await updatePredictionOutcome(predictionId, outcome, wasCorrectResult);
+    
+    setIsUpdating(false);
     
     if (result.success) {
-      onOutcomeUpdate({ outcome, wasCorrect: result.wasCorrect });
+      onOutcomeUpdate?.({ outcome, wasCorrect: wasCorrectResult });
     } else {
-      setError("Failed to update. Please try again.");
+      setSelectedOutcome(currentOutcome);
     }
-    
-    setLoading(false);
   };
-
-  const isPending = !currentOutcome || currentOutcome === "pending";
-
+  
   return (
-    <div className="outcome-selector">
+    <div className={`outcome-selector ${isLocked ? 'locked' : ''}`}>
       <div className="outcome-header">
         <h3>Match Result</h3>
-        <p className="outcome-subtitle">
-          {isPending 
-            ? "How did the game end?" 
-            : "Click again to change"}
-        </p>
+        {isLocked ? (
+          <p className="outcome-locked-message">Result recorded</p>
+        ) : (
+          <p className="outcome-subtitle">Select the outcome of your match</p>
+        )}
       </div>
       
       <div className="outcome-buttons">
         <button
-          className={`outcome-btn won ${currentOutcome === "won" ? "selected" : ""}`}
+          className={`outcome-btn won ${selectedOutcome === "won" ? "selected" : ""}`}
           onClick={() => handleOutcomeSelect("won")}
-          disabled={loading}
+          disabled={isUpdating || isLocked}
         >
           <span className="outcome-icon">🏆</span>
           <span className="outcome-label">We Won</span>
         </button>
         
         <button
-          className={`outcome-btn lost ${currentOutcome === "lost" ? "selected" : ""}`}
+          className={`outcome-btn lost ${selectedOutcome === "lost" ? "selected" : ""}`}
           onClick={() => handleOutcomeSelect("lost")}
-          disabled={loading}
+          disabled={isUpdating || isLocked}
         >
           <span className="outcome-icon">💀</span>
           <span className="outcome-label">We Lost</span>
         </button>
       </div>
       
-      {error && <p className="outcome-error">{error}</p>}
-      
-      {!isPending && wasCorrect !== null && (
-        <div className={`prediction-accuracy ${wasCorrect ? "correct" : "incorrect"}`}>
-          {wasCorrect ? (
-            <>
-              <span className="accuracy-icon">✓</span>
-              <span>Resenity predicted correctly!</span>
-            </>
-          ) : (
-            <>
-              <span className="accuracy-icon">✗</span>
-              <span>Resenity missed this one</span>
-            </>
-          )}
+      {isLocked && wasCorrect !== null && (
+        <div className={`prediction-accuracy ${wasCorrect ? 'correct' : 'incorrect'}`}>
+          <span className="accuracy-icon">{wasCorrect ? '✓' : '✗'}</span>
+          {wasCorrect 
+            ? "Resenity predicted correctly!" 
+            : "Resenity missed this one"
+          }
         </div>
       )}
     </div>
