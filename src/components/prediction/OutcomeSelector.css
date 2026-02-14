@@ -23,6 +23,12 @@
   color: rgba(232, 238, 252, 0.5);
 }
 
+.outcome-locked-message {
+  font-size: 14px;
+  color: rgba(232, 238, 252, 0.5);
+  font-style: italic;
+}
+
 .outcome-buttons {
   display: flex;
   gap: 16px;
@@ -106,6 +112,26 @@
 
 .outcome-btn.lost.selected .outcome-label {
   color: #f87171;
+}
+
+.outcome-selector.locked .outcome-btn:not(.selected) {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.outcome-selector.locked .outcome-btn.selected {
+  opacity: 1;
+  cursor: default;
+  transform: none;
+}
+
+.outcome-selector.locked .outcome-btn.selected:hover {
+  transform: none;
+  box-shadow: 0 0 24px rgba(22, 221, 178, 0.25);
+}
+
+.outcome-selector.locked .outcome-btn.lost.selected:hover {
+  box-shadow: 0 0 24px rgba(248, 113, 113, 0.25);
 }
 
 .outcome-error {
