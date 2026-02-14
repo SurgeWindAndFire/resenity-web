@@ -13,7 +13,7 @@ const ADMIN_UID = "fcevRuPpMNSzzLRcfzmfPK8DZcA3";
 
 export default function Suggestions() {
   const { currentUser } = useAuth();
-  const { userData } = useUser();
+  const { username } = useUser();
   const { addToast } = useToast();
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -58,14 +58,9 @@ export default function Suggestions() {
     
     setSubmitting(true);
     
-    const displayName = userData?.username || 
-                        currentUser.displayName || 
-                        currentUser.email?.split('@')[0] || 
-                        "User";
-    
     const result = await submitSuggestion(
       currentUser.uid,
-      displayName,
+      username,
       formData
     );
     
@@ -146,7 +141,7 @@ export default function Suggestions() {
         
         <main className="container">
           <div className="login-prompt">
-            <div className="login-prompt-icon"></div>
+            <div className="login-prompt-icon">💡</div>
             <h1>Community Suggestions</h1>
             <p>Sign in to view and submit suggestions for Resenity</p>
             <div className="login-prompt-actions">
@@ -229,7 +224,7 @@ export default function Suggestions() {
             </div>
             
             <div className="form-footer">
-              <span className="posting-as">Posting as: <strong>{userData?.username || currentUser.displayName || currentUser.email?.split('@')[0]}</strong></span>
+              <span className="posting-as">Posting as: <strong>{username}</strong></span>
               <button 
                 type="submit" 
                 className="btn btn-primary"

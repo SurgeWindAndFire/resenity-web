@@ -109,7 +109,7 @@ export default function Navbar() {
                       className="dropdown-item"
                       onClick={() => { setIsUserMenuOpen(false); closeMenu(); }}
                     >
-                      <span className="dropdown-icon">📊</span>
+                      <span className="dropdown-icon"></span>
                       Dashboard
                     </Link>
                     <Link 
@@ -117,7 +117,7 @@ export default function Navbar() {
                       className="dropdown-item"
                       onClick={() => { setIsUserMenuOpen(false); closeMenu(); }}
                     >
-                      <span className="dropdown-icon">👤</span>
+                      <span className="dropdown-icon"></span>
                       Profile
                     </Link>
                     <Link 
@@ -125,7 +125,7 @@ export default function Navbar() {
                       className="dropdown-item"
                       onClick={() => { setIsUserMenuOpen(false); closeMenu(); }}
                     >
-                      <span className="dropdown-icon">📈</span>
+                      <span className="dropdown-icon"></span>
                       My Stats
                     </Link>
                     <div className="dropdown-divider"></div>
@@ -133,7 +133,7 @@ export default function Navbar() {
                       className="dropdown-item sign-out"
                       onClick={handleSignOut}
                     >
-                      <span className="dropdown-icon">🚪</span>
+                      <span className="dropdown-icon"></span>
                       Sign Out
                     </button>
                   </div>
