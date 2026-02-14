@@ -27,21 +27,21 @@ export default function Dashboard() {
 
           <div className="dashboard-grid">
             <Link to="/dashboard/live-game" className="dashboard-card primary">
-              <div className="card-icon">🎮</div>
-              <h2>Live Game Lookup</h2>
-              <p>Analyze an active game in real-time</p>
+              <div className="card-icon"></div>
+              <h2>Live Game Search</h2>
+              <p>Analyze and make predictions on games in real-time</p>
             </Link>
 
             <Link to="/dashboard/create-match" className="dashboard-card">
               <div className="card-icon"></div>
               <h2>Create Match</h2>
-              <p>Manually enter players for a prediction</p>
+              <p>Manually enter players to make predictions on hypothetical/future matches</p>
             </Link>
 
             <Link to="/dashboard/history" className="dashboard-card">
               <div className="card-icon"></div>
               <h2>History</h2>
-              <p>View your saved predictions</p>
+              <p>View your saved predictions and accuracy stats</p>
             </Link>
           </div>
         </div>

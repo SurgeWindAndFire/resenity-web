@@ -437,6 +437,15 @@
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
 
+.instructions .note2 {
+  font-size: 13px;
+  color: rgba(232, 238, 252, 0.5);
+  font-style: bold;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 @media (max-width: 1024px) {
   .teams-comparison {
     grid-template-columns: 1fr;

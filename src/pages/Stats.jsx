@@ -77,9 +77,9 @@ export default function Stats() {
 
         {!hasData ? (
           <div className="empty-stats">
-            <div className="empty-icon">📊</div>
-            <h2>No predictions yet</h2>
-            <p>Start making predictions to see your accuracy stats!</p>
+            <div className="empty-icon"></div>
+            <h2>No Predictions Available</h2>
+            <p>Make a prediction today to get insight on your accuracy stats!</p>
             <div className="empty-actions">
               <Link to="/dashboard/create-match" className="btn btn-primary">Create Match</Link>
               <Link to="/dashboard/live-game" className="btn btn-ghost">Live Game Lookup</Link>

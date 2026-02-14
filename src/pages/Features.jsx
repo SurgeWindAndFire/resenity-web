@@ -17,8 +17,8 @@ export default function Features() {
             <header className="features-hero">
               <h1>Everything You Need to<br /><span className="highlight">Predict with Confidence</span></h1>
               <p className="lead">
-                Resenity combines real-time data from Riot's API with smart analytics 
-                to give you the edge before every match.
+                Resenity combines real-time data from Riot's official data with our trusted analytics
+                and prediction algorithm so you can get the upper hand during every match.
               </p>
             </header>
           </FadeIn>
@@ -29,12 +29,12 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Live Game Detection</h3>
                 <p>
-                  Enter your Riot ID and we'll automatically detect your current game. 
-                  All 10 players are analyzed instantly — no manual input required.
+                  Enter your Player ID and we'll automatically detect your current match. 
+                  All 10 players are analyzed instantly, so you don't have to hurry up to input data.
                 </p>
                 <ul className="feature-benefits">
                   <li>Works in loading screen or in-game</li>
-                  <li>Fetches all players automatically</li>
+                  <li>Fetches every player in lobby automatically</li>
                   <li>Real-time rank and win rate data</li>
                 </ul>
               </div>
@@ -45,13 +45,14 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Real Player Data</h3>
                 <p>
-                  We use Riot's official API to fetch accurate, up-to-date player statistics. 
-                  No estimates, no outdated data — just the facts.
+                  We use data from Riot's official API to fetch accurate and fresh player data.
+                  No longer do you have to worry about estimates when we straight up show you
+                  the facts.
                 </p>
                 <ul className="feature-benefits">
                   <li>Official Riot Games API</li>
-                  <li>Current season ranks</li>
-                  <li>Accurate win rates</li>
+                  <li>Current Season Ranks</li>
+                  <li>Accurate and Precise Win Rates</li>
                 </ul>
               </div>
             </FadeIn>
@@ -61,13 +62,14 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Smart Predictions</h3>
                 <p>
-                  Our algorithm analyzes team composition, rank distribution, and individual 
-                  win rates to calculate accurate win probabilities.
+                  Our service's algorithm factors in rank distribution, team composition, and
+                  individual win rates to give our users the most accurate predicitions and 
+                  win probabilities for their matches.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Team rank comparison</li>
-                  <li>Win rate analysis</li>
-                  <li>Champion mastery detection</li>
+                  <li>Team Rank Comparison</li>
+                  <li>Win Rate Analysis</li>
+                  <li>Champion Mastery Detection</li>
                 </ul>
               </div>
             </FadeIn>
@@ -77,13 +79,13 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Accuracy Tracking</h3>
                 <p>
-                  Mark your matches as won or lost to track Resenity's prediction accuracy. 
-                  See exactly how often we get it right.
+                  After your matches, mark your predictions as either right or wrong to track Resenity's accuracy. 
+                  See how often we stand up to our users when it comes to making accurate predictions.
                 </p>
                 <ul className="feature-benefits">
-                  <li>One-click outcome recording</li>
-                  <li>Correct/incorrect indicators</li>
-                  <li>Historical accuracy data</li>
+                  <li>One-click Outcome Recording</li>
+                  <li>Right/Wrong Indicators</li>
+                  <li>Historical Accuracy Data</li>
                 </ul>
               </div>
             </FadeIn>
@@ -93,13 +95,14 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Stats Dashboard</h3>
                 <p>
-                  View your complete prediction statistics with detailed breakdowns 
-                  by confidence level and recent performance trends.
+                  Want to see how accurate your predictions are?
+                  View your complete prediction statistics that breaks down the details
+                  whether it be confidence level and recent perfomance trends.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Overall accuracy percentage</li>
-                  <li>Confidence-based breakdown</li>
-                  <li>Recent form tracking</li>
+                  <li>Overall Accuracy Percentage</li>
+                  <li>Confidence-based Breakdown</li>
+                  <li>Recent Form Tracking</li>
                 </ul>
               </div>
             </FadeIn>
@@ -109,13 +112,13 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Prediction History</h3>
                 <p>
-                  Save your predictions and build a complete history. Filter by outcome 
-                  and quickly access past match details.
+                  Save your predictions and start viewing your predictions. You can filter your
+                  outcomes so you can quickly find the past matches you would like to view.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Unlimited saved predictions</li>
-                  <li>Filter by status</li>
-                  <li>Detailed match breakdowns</li>
+                  <li>Unlimited Saved Predictions</li>
+                  <li>Filter by Status</li>
+                  <li>Detailed Match Breakdowns</li>
                 </ul>
               </div>
             </FadeIn>
@@ -125,13 +128,14 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Manual Match Entry</h3>
                 <p>
-                  Want to analyze a hypothetical matchup? Enter any 10 players manually 
-                  to see who would have the advantage.
+                  Want to analyze how you'd matchup against Faker (or any other scenario)?
+                  Manually input 10 players of any caliber to see who will come out on top
+                  and acheive victory.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Analyze any matchup</li>
-                  <li>Test team compositions</li>
-                  <li>Pre-game planning</li>
+                  <li>Analyze Any Matchup</li>
+                  <li>Test Team Compositions</li>
+                  <li>Pre-game Planning</li>
                 </ul>
               </div>
             </FadeIn>
@@ -141,13 +145,14 @@ export default function Features() {
                 <div className="feature-icon"></div>
                 <h3>Community Suggestions</h3>
                 <p>
-                  Help shape the future of Resenity. Submit feature ideas, report bugs, 
-                  and upvote suggestions from other users.
+                  Want to shape the future of Resenity? Submit your
+                  ideas and suggestions of all caliber on our Suggestions page to gain
+                  recognition as well as upvoting others who deserve our attention as well.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Submit feedback directly</li>
-                  <li>Upvote community ideas</li>
-                  <li>Track feature requests</li>
+                  <li>Submit Feedback Directly</li>
+                  <li>Upvote Community Ideas</li>
+                  <li>Track Feature Requests</li>
                 </ul>
               </div>
             </FadeIn>
@@ -158,13 +163,14 @@ export default function Features() {
                 <h3>Multi-Region Support</h3>
                 <span className="coming-soon-badge">Coming Soon</span>
                 <p>
-                  Expand your predictions across different regions. Support for EUW, 
-                  EUNE, KR, and other servers coming soon.
+                  Our service is only operable on NA servers. We plan
+                  to roll out our service for EUW, EUNE, KR, and others
+                  in the future.
                 </p>
                 <ul className="feature-benefits">
-                  <li>All major regions supported</li>
-                  <li>Cross-region comparisons</li>
-                  <li>Region-specific analytics</li>
+                  <li>All Major Regions Supported</li>
+                  <li>Cross-region Comparisons</li>
+                  <li>Region-specific Analytics</li>
                 </ul>
               </div>
             </FadeIn>
@@ -173,7 +179,7 @@ export default function Features() {
           <FadeIn>
             <div className="features-cta">
               <h2>Ready to Get Started?</h2>
-              <p className="muted">Create a free account and start predicting your matches today.</p>
+              <p className="muted">Create an account and start predicting your matches today.</p>
               <div className="cta-buttons">
                 <Link to="/signup" className="btn btn-primary">Sign Up Today</Link>
                 <Link to="/demo" className="btn btn-ghost">Try the Demo</Link>
