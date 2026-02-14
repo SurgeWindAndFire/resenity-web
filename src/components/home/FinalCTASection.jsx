@@ -1,20 +1,21 @@
+import { Link } from "react-router-dom";
+
 export default function FinalCTASection() {
   return (
     <section className="section" aria-label="Final call to action">
       <div className="container">
         <div className="card cta">
           <div>
-            <h2>Ready to take your game to the next level?</h2>
-            <p className="muted">Test out our platform now, then save predictions when you're ready.</p>
+            <h2>Ready to predict your next match?</h2>
+            <p className="muted">Join thousands of players making smarter decisions in champion select.</p>
           </div>
-
           <div className="cta-actions">
-            <a className="btn btn-primary" href="#demo">
-              Try our service
-            </a>
-            <a className="btn btn-ghost" href="/login">
-              Sign in
-            </a>
+            <Link to="/demo" className="btn btn-primary">
+              Try Demo
+            </Link>
+            <Link to="/signup" className="btn btn-ghost">
+              Sign Up Today
+            </Link>
           </div>
         </div>
       </div>

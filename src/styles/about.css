@@ -47,55 +47,7 @@
   margin-bottom: 16px;
 }
 
-.about-section p:last-child {
-  margin-bottom: 0;
-}
-
-.how-it-works-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-top: 32px;
-}
-
-.how-step {
-  text-align: center;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
-  transition: all 0.3s ease;
-}
-
-.how-step:hover {
-  border-color: rgba(22, 221, 178, 0.3);
-  transform: translateY(-4px);
-}
-
-.step-number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: linear-gradient(135deg, #16ddb2, #0fa890);
-  border-radius: 50%;
-  font-family: 'Russo One', sans-serif;
-  font-size: 20px;
-  color: #0b0d12;
-  margin-bottom: 16px;
-}
-
-.how-step h3 {
-  font-family: 'Russo One', sans-serif;
-  font-size: 18px;
-  color: #e8eefc;
-  margin-bottom: 8px;
-}
-
-.how-step p {
-  font-size: 14px;
-  color: rgba(232, 238, 252, 0.6);
+.about-section p:last-of-type {
   margin-bottom: 0;
 }
 
@@ -150,6 +102,10 @@
   margin-bottom: 16px;
 }
 
+.creator-info p {
+  margin-bottom: 16px;
+}
+
 .creator-links {
   display: flex;
   gap: 16px;
@@ -162,11 +118,14 @@
   border-color: rgba(22, 221, 178, 0.2);
 }
 
+.cta-section p {
+  margin-bottom: 24px;
+}
+
 .cta-buttons {
   display: flex;
   gap: 16px;
   justify-content: center;
-  margin-top: 32px;
 }
 
 .btn-large {
@@ -174,7 +133,42 @@
   font-size: 16px;
 }
 
-/* Responsive */
+.roadmap-card {
+  position: relative;
+}
+
+.roadmap-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.roadmap-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.roadmap-status.planned {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.roadmap-status.future {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+}
+
+.roadmap-status.completed {
+  background: rgba(22, 221, 178, 0.15);
+  color: #16ddb2;
+}
+
 @media (max-width: 768px) {
   .about-hero {
     padding: 60px 0 40px;
@@ -193,10 +187,6 @@
     font-size: 24px;
   }
   
-  .how-it-works-grid {
-    grid-template-columns: 1fr;
-  }
-  
   .creator-links {
     flex-direction: column;
   }
@@ -213,5 +203,10 @@
   .cta-buttons .btn {
     width: 100%;
     justify-content: center;
+  }
+  
+  .roadmap-card .card-header {
+    flex-direction: column;
+    gap: 8px;
   }
 }

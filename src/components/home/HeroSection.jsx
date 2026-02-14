@@ -25,10 +25,10 @@ export default function HeroSection() {
             
             <div className="hero-cta">
               <Link to="/signup" className="btn btn-primary">
-                Get Started Free
+                Sign Up Today
               </Link>
-              <Link to="/login" className="btn btn-ghost">
-                Sign In
+              <Link to="/demo" className="btn btn-ghost">
+                Try Demo
               </Link>
             </div>
             

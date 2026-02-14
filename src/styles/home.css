@@ -786,3 +786,40 @@ select {
     padding: 32px 0;
   }
 }
+
+.roadmap-card {
+  position: relative;
+}
+
+.roadmap-card .card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.roadmap-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+.roadmap-status.planned {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.roadmap-status.future {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+}
+
+.roadmap-status.completed {
+  background: rgba(22, 221, 178, 0.15);
+  color: #16ddb2;
+}
