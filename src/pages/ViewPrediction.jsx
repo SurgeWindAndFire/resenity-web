@@ -96,6 +96,30 @@ export default function ViewPrediction() {
     });
   };
 
+  const parseFactor = (factor) => {
+    if (typeof factor === 'string') {
+      const lowerFactor = factor.toLowerCase();
+      let favor = null;
+      if (lowerFactor.includes('blue') || lowerFactor.includes('team 1')) {
+        favor = 'blue';
+      } else if (lowerFactor.includes('red') || lowerFactor.includes('team 2')) {
+        favor = 'red';
+      }
+      return { text: factor, favor };
+    }
+
+    const favor = factor.favor?.toLowerCase() === 'blue' || factor.favor === 'team1' 
+      ? 'blue' 
+      : factor.favor?.toLowerCase() === 'red' || factor.favor === 'team2'
+        ? 'red'
+        : null;
+    
+    return { 
+      text: factor.text || `${factor.favor} team: ${factor.impact}`,
+      favor 
+    };
+  };
+
   return (
     <div className="view-prediction-page">
       <Navbar />
@@ -189,16 +213,19 @@ export default function ViewPrediction() {
         {factors.length > 0 && (
           <div className="factors-section">
             <h3>Key Factors</h3>
-            <ul className="factors-list">
-              {factors.map((factor, i) => (
-                <li key={i}>
-                  {typeof factor === 'string' 
-                    ? factor 
-                    : factor.text || `${factor.favor} team: ${factor.impact}`
-                  }
-                </li>
-              ))}
-            </ul>
+            <div className="factors-tags">
+              {factors.map((factor, i) => {
+                const { text, favor } = parseFactor(factor);
+                return (
+                  <span 
+                    key={i} 
+                    className={`factor-tag ${favor || ''}`}
+                  >
+                    {text}
+                  </span>
+                );
+              })}
+            </div>
           </div>
         )}
 
