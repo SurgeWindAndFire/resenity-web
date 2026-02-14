@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { useUser } from "../contexts/UserContext";
-import { getSuggestions, submitSuggestion, upvoteSuggestion, deleteSuggestion } from "../services/suggestionsService";
+import { getSuggestions, submitSuggestion, voteSuggestion, deleteSuggestion } from "../services/suggestionsService";
 import { useToast } from "../contexts/ToastContext";
 import Navbar from "../components/layout/Navbar";
 import Footer from "../components/layout/Footer";
@@ -80,30 +80,28 @@ export default function Suggestions() {
     setSubmitting(false);
   }
 
-  async function handleUpvote(suggestionId) {
+  async function handleVote(suggestionId, voteType) {
     if (!currentUser) {
-      addToast("Please sign in to upvote", "error");
+      addToast("Please sign in to vote", "error");
       return;
     }
     
-    const result = await upvoteSuggestion(suggestionId, currentUser.uid);
+    const result = await voteSuggestion(suggestionId, currentUser.uid, voteType);
     
     if (result.success) {
       setSuggestions(prev => prev.map(s => {
         if (s.id === suggestionId) {
-          const hasUpvoted = s.upvotes?.includes(currentUser.uid);
           return {
             ...s,
-            upvotes: hasUpvoted 
-              ? s.upvotes.filter(id => id !== currentUser.uid)
-              : [...(s.upvotes || []), currentUser.uid],
-            upvoteCount: hasUpvoted ? s.upvoteCount - 1 : s.upvoteCount + 1
+            upvotes: result.upvotes,
+            downvotes: result.downvotes,
+            score: result.score
           };
         }
         return s;
       }));
     } else {
-      addToast("Failed to upvote", "error");
+      addToast("Failed to vote", "error");
     }
   }
 
@@ -268,8 +266,8 @@ export default function Suggestions() {
         ) : filteredSuggestions.length === 0 ? (
           <div className="empty-state">
             <div className="empty-icon"></div>
-            <h2>No Suggestions Yet</h2>
-            <p>Be the first one to share a groundbreaking idea!</p>
+            <h2>No suggestions yet</h2>
+            <p>Be the first to share your groundbreaking ideas!</p>
           </div>
         ) : (
           <div className="suggestions-list">
@@ -279,7 +277,7 @@ export default function Suggestions() {
                 suggestion={suggestion}
                 currentUser={currentUser}
                 isAdmin={isAdmin}
-                onUpvote={handleUpvote}
+                onVote={handleVote}
                 onDelete={handleDelete}
                 categories={categories}
               />
@@ -293,13 +291,14 @@ export default function Suggestions() {
   );
 }
 
-function SuggestionCard({ suggestion, currentUser, isAdmin, onUpvote, onDelete, categories }) {
-  const { id, title, description, category, username, userId, upvotes, upvoteCount, createdAt, status } = suggestion;
-  const hasUpvoted = currentUser && upvotes?.includes(currentUser.uid);
+function SuggestionCard({ suggestion, currentUser, isAdmin, onVote, onDelete, categories }) {
+  const { id, title, description, category, username, userId, upvotes = [], downvotes = [], score = 0, createdAt, status } = suggestion;
+  
+  const hasUpvoted = currentUser && upvotes.includes(currentUser.uid);
+  const hasDownvoted = currentUser && downvotes.includes(currentUser.uid);
   const categoryInfo = categories.find(c => c.value === category) || categories[3];
   const isCreator = userId === ADMIN_UID;
   const isOwner = currentUser?.uid === userId;
-
   const canDelete = isAdmin || isOwner;
   
   const formatDate = (timestamp) => {
@@ -310,13 +309,25 @@ function SuggestionCard({ suggestion, currentUser, isAdmin, onUpvote, onDelete, 
 
   return (
     <div className="suggestion-card">
-      <button 
-        className={`upvote-btn ${hasUpvoted ? 'upvoted' : ''}`}
-        onClick={() => onUpvote(id)}
-      >
-        <span className="upvote-arrow">▲</span>
-        <span className="upvote-count">{upvoteCount || 0}</span>
-      </button>
+      <div className="vote-buttons">
+        <button 
+          className={`vote-btn upvote ${hasUpvoted ? 'active' : ''}`}
+          onClick={() => onVote(id, "up")}
+          title="Upvote"
+        >
+          ▲
+        </button>
+        <span className={`vote-score ${score > 0 ? 'positive' : score < 0 ? 'negative' : ''}`}>
+          {score}
+        </span>
+        <button 
+          className={`vote-btn downvote ${hasDownvoted ? 'active' : ''}`}
+          onClick={() => onVote(id, "down")}
+          title="Downvote"
+        >
+          ▼
+        </button>
+      </div>
       
       <div className="suggestion-content">
         <div className="suggestion-header">

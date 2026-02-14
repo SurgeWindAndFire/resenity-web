@@ -24,7 +24,7 @@ export default function Footer() {
           <div className="footer-column">
             <h4>Community</h4>
             <Link to="/suggestions">Suggestions</Link>
-            <a href="https://github.com/SurgeWindAndFire/resenity-web" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <a href="https://github.com/SurgeWindAndFire/Resenity" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
           
           <div className="footer-column">
