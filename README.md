@@ -19,7 +19,7 @@ If you are developing a production application, we recommend using TypeScript wi
 
 > The Straightfoward insight for the future of competitive gaming.
 
-**Live Demo**: [resenity-web.vercel.app](https://resenity-web.vercel.app/) 🚀
+**Live Website**: [resenity-web.vercel.app](https://resenity-web.vercel.app/) 
 
 ## What is Resenity?
 
@@ -34,10 +34,21 @@ reasoning (Plans for multiple competitive titles are coming soon in the future).
 
 ## Features
 
-- **Win Probability** — Fast, reliable match outcome predictions
-- **Explainable Insights** — Understand exactly why one team has an edge
-- **Match History** — Save predictions and learn patterns over time
-- **No Login Required** — Try the demo instantly, save results later
+### Core Features
+- **Live Game Detection** — Enter your Player ID and the service automatically detects 10 players in lobby in real-time
+- **Win Probability** — Quick, dependable match outcome predictions based on our algorithm and verifiable data
+- **Explainable Insights** — Understand exactly why one team is more likely to win (win rate, rank, champion mastery)
+- **Prediction History** — Save your predictions and track your accuracy of your own or other's matches over time
+- **Stats Dashboard** — View your prediction accuracy with easy-to-read and trustworthy details
+
+### Deep Analysis
+- **Champion-Specific Win Rates** — Fetch recent ranked matches to calculate win rates on specific champions in ranked matches
+- **One-Trick Detection** — Identify which players acheived high levels of mastery on their champions (or only play that champion)
+- **Key Factors** — Visual indicators and important details influencing the decision of the prediction
+
+### Community
+- **Suggestions System** — Submit feature requests, report issues and bugs within the service, and upvote community ideas
+- **User Profiles** — Customize your username and unlock the ability to track member history
 
 ---
 
@@ -45,8 +56,14 @@ reasoning (Plans for multiple competitive titles are coming soon in the future).
 
 **Frontend**:
 - React 19 (Vite)
+- React Router (For navigation purposes)
 - CSS3 (Custom design system)
-- Component-based architecture
+- Component-based architecture (Contains reusable UI components)
+
+**Backend**:
+- Firebase Authentication - User accounts with email/password setup
+- Cloud Firestore - Storage for predictions, user profiles, and suggestions/feedback
+- Riot Game API - Live game data, summoner info, champion mastery, match history
 
 **Deployment**:
 - Vercel (CI/CD)
@@ -56,6 +73,33 @@ reasoning (Plans for multiple competitive titles are coming soon in the future).
 - Firestore (prediction storage)
 - Prediction algorithms (weighted Elo scoring)
 
+---
+
+## Project Structure
+```
+resenity/
+├── api/riot/                 # Vercel serverless functions
+│   ├── summoner.js           # Player lookup
+│   ├── live-game.js          # Active game detection
+│   ├── champion-mastery.js   # Mastery data
+│   └── match-history.js      # Deep analysis data
+├── src/
+│   ├── components/           # Reusable UI components
+│   │   ├── auth/             # Protected routes
+│   │   ├── home/             # Landing page sections
+│   │   ├── layout/           # Navbar, Footer
+│   │   ├── match/            # Team builder, champion select
+│   │   ├── prediction/       # Outcome selector
+│   │   └── ui/               # Spinner, Toast, Skeleton
+│   ├── contexts/             # React contexts (Auth, User, Toast)
+│   ├── hooks/                # Custom hooks
+│   ├── pages/                # Route pages
+│   ├── services/             # API service functions
+│   ├── styles/               # Page-specific CSS
+│   └── utils/                # Prediction algorithm
+├── public/                   # Static assets
+└── package.json
+```
 ---
 
 ## Getting Started
@@ -86,7 +130,13 @@ npm run preview
 
 ## Roadmap
 
-TBD
+### PLANNED
+
+- Multi-Region Support (EUW, EUNE, KR, etc.)
+- Team Composition Analysis
+- Track Performance Trends over time
+- A Standalone Desktop App that makes accessing the service easier
+- A Mobile App Version (Low Priority)
 
 ## Contact
 
@@ -101,3 +151,10 @@ MIT License
 ---
 
 **Built with focus on clean code, UX, and scalability.** 
+
+---
+
+## Disclaimer
+
+Resenity isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.
+
