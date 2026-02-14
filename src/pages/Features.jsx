@@ -67,7 +67,7 @@ export default function Features() {
                 <ul className="feature-benefits">
                   <li>Team rank comparison</li>
                   <li>Win rate analysis</li>
-                  <li>Confidence scoring</li>
+                  <li>Champion mastery detection</li>
                 </ul>
               </div>
             </FadeIn>
@@ -75,20 +75,52 @@ export default function Features() {
             <FadeIn delay={400}>
               <div className="feature-card">
                 <div className="feature-icon"></div>
-                <h3>Save & Track</h3>
+                <h3>Accuracy Tracking</h3>
                 <p>
-                  Save your predictions and build a history. Track your accuracy over time 
-                  and see how often Resenity gets it right.
+                  Mark your matches as won or lost to track Resenity's prediction accuracy. 
+                  See exactly how often we get it right.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Prediction history</li>
-                  <li>Quick access to past matches</li>
-                  <li>Track your insights</li>
+                  <li>One-click outcome recording</li>
+                  <li>Correct/incorrect indicators</li>
+                  <li>Historical accuracy data</li>
                 </ul>
               </div>
             </FadeIn>
 
             <FadeIn delay={500}>
+              <div className="feature-card">
+                <div className="feature-icon"></div>
+                <h3>Stats Dashboard</h3>
+                <p>
+                  View your complete prediction statistics with detailed breakdowns 
+                  by confidence level and recent performance trends.
+                </p>
+                <ul className="feature-benefits">
+                  <li>Overall accuracy percentage</li>
+                  <li>Confidence-based breakdown</li>
+                  <li>Recent form tracking</li>
+                </ul>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={600}>
+              <div className="feature-card">
+                <div className="feature-icon"></div>
+                <h3>Prediction History</h3>
+                <p>
+                  Save your predictions and build a complete history. Filter by outcome 
+                  and quickly access past match details.
+                </p>
+                <ul className="feature-benefits">
+                  <li>Unlimited saved predictions</li>
+                  <li>Filter by status</li>
+                  <li>Detailed match breakdowns</li>
+                </ul>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={700}>
               <div className="feature-card">
                 <div className="feature-icon"></div>
                 <h3>Manual Match Entry</h3>
@@ -104,19 +136,35 @@ export default function Features() {
               </div>
             </FadeIn>
 
-            <FadeIn delay={600}>
-              <div className="feature-card coming-soon">
+            <FadeIn delay={800}>
+              <div className="feature-card">
                 <div className="feature-icon"></div>
-                <h3>Champion Analytics</h3>
-                <span className="coming-soon-badge">Coming Soon</span>
+                <h3>Community Suggestions</h3>
                 <p>
-                  Factor in champion picks, win rates, and playstyles for even more 
-                  accurate predictions.
+                  Help shape the future of Resenity. Submit feature ideas, report bugs, 
+                  and upvote suggestions from other users.
                 </p>
                 <ul className="feature-benefits">
-                  <li>Champion win rates</li>
-                  <li>Role-based analysis</li>
-                  <li>Playstyle insights</li>
+                  <li>Submit feedback directly</li>
+                  <li>Upvote community ideas</li>
+                  <li>Track feature requests</li>
+                </ul>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={900}>
+              <div className="feature-card coming-soon">
+                <div className="feature-icon"></div>
+                <h3>Champion Win Rates</h3>
+                <span className="coming-soon-badge">Coming Soon</span>
+                <p>
+                  Factor in champion-specific win rates for each player to make 
+                  predictions even more accurate.
+                </p>
+                <ul className="feature-benefits">
+                  <li>Per-champion statistics</li>
+                  <li>Seasonal performance data</li>
+                  <li>One-trick detection</li>
                 </ul>
               </div>
             </FadeIn>
@@ -127,7 +175,7 @@ export default function Features() {
               <h2>Ready to Get Started?</h2>
               <p className="muted">Create a free account and start predicting your matches today.</p>
               <div className="cta-buttons">
-                <Link to="/signup" className="btn btn-primary">Get Started Free</Link>
+                <Link to="/signup" className="btn btn-primary">Sign Up Today</Link>
                 <Link to="/demo" className="btn btn-ghost">Try the Demo</Link>
               </div>
             </div>
