@@ -55,8 +55,8 @@ export default function Demo() {
           <header className="demo-header">
             <h1>See Resenity in Action</h1>
             <p className="muted">
-              The demonstration exhibits the functionality of Resenity that assesses team performance to forecast match results. 
-              Sign up now to use real player data and start making your own predictions today!
+              The demonstration is a showcase of how Resenity performs when it assesses team performance to calculate predictions. 
+              Sign up today to be able to use real player data to make your own predictions today!
             </p>
           </header>
 
@@ -108,9 +108,9 @@ export default function Demo() {
                 <PredictionResult prediction={prediction} />
                 
                 <div className="demo-cta">
-                  <h3>Want to analyze your own games?</h3>
+                  <h3>Want to start analyzing your own games?</h3>
                   <p className="muted">
-                    Sign up now to use Live Game Lookup with real player data directly from Riot's API.
+                    Sign up now to use Live Game Search with real and trustworthy player data.
                   </p>
                   <div className="demo-cta-buttons">
                     <Link to="/signup" className="btn btn-primary">

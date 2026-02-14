@@ -136,7 +136,7 @@ export default function ViewPrediction() {
           
           {outcome && outcome !== "pending" && (
             <div className={`outcome-badge ${outcome}`}>
-              {outcome === "won" ? "🏆 Victory" : "💀 Defeat"}
+              {outcome === "won" ? "Victory" : "Defeat"}
               {wasCorrect !== null && (
                 <span className={`accuracy-badge ${wasCorrect ? 'correct' : 'incorrect'}`}>
                   {wasCorrect ? '✓ Predicted' : '✗ Missed'}

@@ -105,7 +105,7 @@ export default function History() {
           </div>
           <div className="header-actions">
             <Link to="/dashboard/stats" className="btn btn-ghost">
-              📊 View Stats
+              View Stats
             </Link>
             <Link to="/dashboard/create-match" className="btn btn-primary">
               + New Match
@@ -161,9 +161,9 @@ export default function History() {
 
         {predictions.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">📋</div>
+            <div className="empty-icon"></div>
             <h2>No predictions yet</h2>
-            <p>Start analyzing matches to build your prediction history!</p>
+            <p>Analyze a live match or create a match to start viewing your predictions!</p>
             <div className="empty-actions">
               <Link to="/dashboard/create-match" className="btn btn-primary">Create Match</Link>
               <Link to="/dashboard/live-game" className="btn btn-ghost">Live Game Lookup</Link>
@@ -209,7 +209,7 @@ function PredictionCard({ prediction, formatDate, onDelete, deleting }) {
           <div className="prediction-badges">
             {!isPending && (
               <span className={`outcome-pill ${outcome}`}>
-                {outcome === "won" ? "🏆 Won" : "💀 Lost"}
+                {outcome === "won" ? "Won" : "Lost"}
               </span>
             )}
             {wasCorrect !== null && (
@@ -218,7 +218,7 @@ function PredictionCard({ prediction, formatDate, onDelete, deleting }) {
               </span>
             )}
             {isPending && (
-              <span className="outcome-pill pending">⏳ Pending</span>
+              <span className="outcome-pill pending">Pending</span>
             )}
           </div>
         </div>

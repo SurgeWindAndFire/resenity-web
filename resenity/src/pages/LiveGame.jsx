@@ -328,7 +328,7 @@ export default function LiveGame() {
                 <span className="game-mode">{gameData.gameMode}</span>
                 <span className="game-time">⏱ {formatGameTime(gameData.gameStartTime)}</span>
                 {prediction?.deepAnalysisUsed && (
-                  <span className="deep-analysis-badge">🔬 Deep Analysis</span>
+                  <span className="deep-analysis-badge">Deep Analysis</span>
                 )}
               </div>
 
@@ -360,12 +360,12 @@ export default function LiveGame() {
                     className="btn btn-secondary deep-analysis-btn"
                     onClick={handleDeepAnalysis}
                   >
-                    🔬 Run Deep Analysis
+                    Run Deep Analysis
                   </button>
                   <p className="deep-analysis-info">
-                    Fetches champion-specific win rates from recent ranked games for more accurate predictions.
+                    Will fetch extra data via champion-specific win rates from player's recent ranked games to make a more accurate prediction.
                     <br />
-                    <span className="muted">This may take 10-20 seconds.</span>
+                    <span className="muted">Will take 10-20 seconds to retrieve data.</span>
                   </p>
                 </div>
               )}
@@ -423,17 +423,21 @@ export default function LiveGame() {
 
           {!gameData && !isSearching && (
             <div className="instructions">
-              <h3>How to Use</h3>
+              <h3>How to use the Feature</h3>
               <ol>
-                <li>Enter your Riot ID or any player's Riot ID (e.g., <strong>Doublelift#NA1</strong>)</li>
-                <li>Make sure the player is currently in an active game</li>
+                <li>Enter your Player ID or any player's ID (e.g., <strong>Doublelift#NA1</strong>)</li>
+                <li>Make sure the player is currently in an active ranked match</li>
                 <li>Click "Find Game" to fetch all players and their stats</li>
                 <li>Optionally run <strong>Deep Analysis</strong> for champion-specific win rates</li>
-                <li>View the prediction and save it to track accuracy</li>
+                <li>View the prediction and save it to history to track accuracy</li>
               </ol>
               <p className="note">
-                Note: The player must be in an active game for this to work. 
-                Champion select and post-game lobbies are not detected.
+                Note: The player must be in an active match for this to work. 
+                Any phase before the match (Champion select, Post-Game, etc.) will not detect a match in session.
+              </p>
+              <p className="note2">
+                As of February 2026, This service only works for players located on the NA server. Check our features
+                page for more updates on this subject.
               </p>
             </div>
           )}

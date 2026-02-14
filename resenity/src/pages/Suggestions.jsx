@@ -135,10 +135,10 @@ export default function Suggestions() {
   });
 
   const categories = [
-    { value: "feature", label: "Feature Request", icon: "✨" },
-    { value: "improvement", label: "Improvement", icon: "🔧" },
-    { value: "bug", label: "Bug Report", icon: "🐛" },
-    { value: "other", label: "Other", icon: "💬" }
+    { value: "feature", label: "Feature Request" },
+    { value: "improvement", label: "Improvement" },
+    { value: "bug", label: "Bug Report" },
+    { value: "other", label: "Other" }
   ];
 
   if (!currentUser) {
@@ -148,7 +148,7 @@ export default function Suggestions() {
         
         <main className="container">
           <div className="login-prompt">
-            <div className="login-prompt-icon">💡</div>
+            <div className="login-prompt-icon"></div>
             <h1>Community Suggestions</h1>
             <p>Sign in to view and submit suggestions for Resenity</p>
             <div className="login-prompt-actions">
@@ -267,9 +267,9 @@ export default function Suggestions() {
           </div>
         ) : filteredSuggestions.length === 0 ? (
           <div className="empty-state">
-            <div className="empty-icon">💡</div>
-            <h2>No suggestions yet</h2>
-            <p>Be the first to share your ideas!</p>
+            <div className="empty-icon"></div>
+            <h2>No Suggestions Yet</h2>
+            <p>Be the first one to share a groundbreaking idea!</p>
           </div>
         ) : (
           <div className="suggestions-list">

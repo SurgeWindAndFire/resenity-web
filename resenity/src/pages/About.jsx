@@ -25,13 +25,20 @@ export default function About() {
           <div className="about-section">
             <h2>Our Mission</h2>
             <p>
-              Resenity was born from a simple frustration: the information overload players 
-              face in champion select. Instead of manually checking each player's stats across 
-              multiple websites, we bring everything together into one clear, actionable prediction.
+              An idea for a service was born out of a desire to let all competitive players know the numbers and 
+              statistics behind their future decision-making for their upcoming ambitions in their next match.
+              However, their main conflict resides in the fact that all this valuable information is stored behind an
+              abundance of websites, leading to increases in players frustrations and worries over how to collect
+              all this data and apply it to a singular match.
             </p>
             <p>
-              Our goal is to help every League of Legends player—from casual to competitive—make 
-              smarter decisions before their games even start. No more guessing, no more doubt.
+              Luckily, the call for an answer comes into picture when Resenity arrives on the scene.
+            </p>
+            <p>
+              Resenity's goal is to help every competitive player, whether they lean on the more casual side or not,
+              to better understand their data by combining every meaningful metric into a singular, powerful service,
+              helping players make better informed decisions before their matches even start. Now is not the time to              
+              play the guessing game, but rather the game of determination.
             </p>
           </div>
         </section>
@@ -86,16 +93,18 @@ export default function About() {
               <div className="creator-info">
                 <h3>Built with passion for competitive gaming</h3>
                 <p>
-                  Resenity is a personal project that demonstrates full-stack development skills 
-                  including React, Firebase, and third-party API integration with Riot Games.
+                  Resenity is a personal project of the creator who wishes to create meaningful and creative
+                  solutions to problems no one could have ever thought of, but are glad that they have existence anyways.
+                  No funds or donations are ever used to create these projects, but strictly out of curiosity, adrenaline,
+                  and enthusiasm.
                 </p>
                 <p>
-                  This platform is continuously evolving based on community feedback. Have an idea? 
-                  Check out our Suggestions page and let your voice be heard!
+                  This platform will continuously get better over time based on demand and community feedback. Have an idea?
+                  Check out the Suggestions page below and let your voice be known!
                 </p>
                 <div className="creator-links">
                   <a 
-                    href="https://github.com/SurgeWindAndFire/resenity-web" 
+                    href="https://github.com/SurgeWindAndFire/Resenity" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="btn btn-ghost"
@@ -115,7 +124,7 @@ export default function About() {
         <section className="container">
           <div className="about-section cta-section">
             <h2>Ready to predict smarter?</h2>
-            <p>Join Resenity and start making data-driven decisions in champion select.</p>
+            <p>Join Resenity and start making data-driven decisions in champion select immediately!</p>
             <div className="cta-buttons">
               <Link to="/signup" className="btn btn-primary btn-large">
                 Sign Up Today
