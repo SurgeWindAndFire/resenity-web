@@ -264,39 +264,61 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 16px;
   padding: 24px;
+  margin-bottom: 32px;
 }
 
 .factors-section h3 {
   font-family: 'Russo One', sans-serif;
   font-size: 16px;
   color: #e8eefc;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
-.factors-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.factors-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.factors-list li {
-  position: relative;
-  padding: 10px 0 10px 24px;
-  color: rgba(232, 238, 252, 0.7);
-  font-size: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+.factor-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(232, 238, 252, 0.85);
+  transition: all 0.2s ease;
 }
 
-.factors-list li:last-child {
-  border-bottom: none;
+.factor-tag:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-1px);
 }
 
-.factors-list li::before {
-  content: "→";
-  position: absolute;
-  left: 0;
-  color: #16ddb2;
-  font-weight: 600;
+.factor-tag.blue {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.3);
+  color: #93c5fd;
+}
+
+.factor-tag.blue:hover {
+  background: rgba(59, 130, 246, 0.18);
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+.factor-tag.red {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.factor-tag.red:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: rgba(239, 68, 68, 0.4);
 }
 
 .action-buttons {
@@ -358,6 +380,15 @@
   .view-prediction-page .player-row {
     grid-template-columns: 1fr;
     gap: 6px;
+  }
+  
+  .factors-tags {
+    gap: 8px;
+  }
+  
+  .factor-tag {
+    padding: 8px 14px;
+    font-size: 12px;
   }
   
   .action-buttons {
