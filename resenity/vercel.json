@@ -2,7 +2,6 @@
   "installCommand": "npm ci",
   "buildCommand": "npx vite build",
   "outputDirectory": "dist",
-  "rootDirectory": "resenity",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/" }
