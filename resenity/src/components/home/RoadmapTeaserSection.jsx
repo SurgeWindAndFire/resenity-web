@@ -15,7 +15,7 @@ export default function RoadmapTeaserSection() {
     <section className="section" aria-label="Coming next">
       <div className="container">
         <header className="section-header">
-          <h2>What's Next for Resenity</h2>
+          <h2>What's Next for Resenity?</h2>
           <p className="muted">Our roadmap for upcoming features and improvements</p>
         </header>
         <div className="grid-3" role="list">
